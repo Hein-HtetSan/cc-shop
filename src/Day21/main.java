@@ -13,8 +13,8 @@ import java.sql.SQLException;
 public class main {
     public static void main(String args[]) throws ClassNotFoundException, SQLException{
         Manipulation.selectData();
-        Manipulation.InsertData();
-        Manipulation.updateData();
-        Manipulation.deleteData();
+//        Manipulation.InsertData();
+//        Manipulation.updateData();
+//        Manipulation.deleteData();
     }
 }
