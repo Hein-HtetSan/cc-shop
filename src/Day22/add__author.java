@@ -23,6 +23,7 @@ public class add__author extends javax.swing.JFrame {
         initComponents(); // built in init call method
         con = (Connection) Config.getConnection(); // 1.get connection with db
         authorData(); // call authorData method
+        btnUpdate.setEnabled(false); // set update button disabled
     }
     
     // to show author data 
@@ -94,6 +95,11 @@ public class add__author extends javax.swing.JFrame {
         });
 
         btnUpdate.setText("Update");
+        btnUpdate.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnUpdateActionPerformed(evt);
+            }
+        });
 
         btnDelete.setText("Delete");
         btnDelete.addActionListener(new java.awt.event.ActionListener() {
@@ -206,6 +212,8 @@ public class add__author extends javax.swing.JFrame {
                 pst.close();
                 authorData();
                 status.setText("Delete Done");
+                btnUpdate.setEnabled(false); // set update btn disable
+                btnSave.setEnabled(true); // set save btn enable
             } catch (SQLException ex) {
                 Logger.getLogger(add__author.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -213,16 +221,43 @@ public class add__author extends javax.swing.JFrame {
     }//GEN-LAST:event_btnDeleteActionPerformed
 
     private void btnSelectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSelectActionPerformed
+        btnSave.setEnabled(false); // set save button disable
         if(tableAuthor.getSelectedRow() >= 0){
             int row = tableAuthor.getSelectedRow();
             txtName.setText(tableAuthor.
                     getModel().
                     getValueAt(row, 1)
                     .toString());
+            btnUpdate.setEnabled(true); // set update btn enable
         }else{
             status.setText("Please select row first");
         }
     }//GEN-LAST:event_btnSelectActionPerformed
+
+    private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
+        if("".equals(txtName.getText())){
+            status.setText("No Input");
+        }else{
+            try {
+                int row = tableAuthor.getSelectedRow();
+                String id = tableAuthor.getModel()
+                        .getValueAt(row, 0)
+                        .toString();
+                int int_id = Integer.parseInt(id);
+                String query = "UPDATE author SET name = ? WHERE id =" + int_id;
+                pst = (PreparedStatement) con.prepareStatement(query);
+                pst.setString(1, txtName.getText());
+                pst.execute();
+                authorData();
+                btnUpdate.setEnabled(false);
+                btnSave.setEnabled(true);
+                status.setText("Update Done");
+                txtName.setText("");
+            } catch (SQLException ex) {
+                Logger.getLogger(add__author.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }//GEN-LAST:event_btnUpdateActionPerformed
 
     /**
      * @param args the command line arguments
