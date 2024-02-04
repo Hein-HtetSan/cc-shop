@@ -25,6 +25,7 @@ public class library_modified extends javax.swing.JFrame {
         con = (Connection) Config.getConnection();
         getAuthors();
         getCategory();
+        getBooks();
     }
     
     // get all authores
@@ -69,6 +70,32 @@ public class library_modified extends javax.swing.JFrame {
         }
         
     }
+    
+    private final void getBooks(){
+        try {
+            String query = "SELECT book.*, book.name as bookname, author.name as authorname,"
+                    + "category.name as categoryname"
+                    + " FROM book left join author on author.id = book.author_id"
+                    + "left join category on category.id = book.category_id";
+            stmt = (PreparedStatement) con.prepareStatement(query);
+            rs = (ResultSetImpl) stmt.executeQuery();
+            DefaultTableModel tm = (DefaultTableModel) tblBook.getModel();
+            tblBook.setRowHeight(40);
+            tblBook.setModel(tm);
+            tm.setRowCount(0);
+            int i=1;
+            while(rs.next()){
+                Object obj[] = {i, rs.getInt("id"), rs.getString("bookname"),
+                rs.getString("authorname"), rs.getString("categoryname")};
+                tm.addRow(obj);
+                i++;
+            }
+            stmt.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(library_modified.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -80,10 +107,6 @@ public class library_modified extends javax.swing.JFrame {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
         jPanel5 = new javax.swing.JPanel();
         jLabel16 = new javax.swing.JLabel();
         jTextField10 = new javax.swing.JTextField();
@@ -103,56 +126,30 @@ public class library_modified extends javax.swing.JFrame {
         btnAddCategory3 = new javax.swing.JButton();
         jButton9 = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        tblBook = new javax.swing.JTable();
         jScrollPane2 = new javax.swing.JScrollPane();
         tableAuthor = new javax.swing.JTable();
         jScrollPane3 = new javax.swing.JScrollPane();
         tblcategory = new javax.swing.JTable();
         jPanel6 = new javax.swing.JPanel();
-        jLabel21 = new javax.swing.JLabel();
-        jLabel22 = new javax.swing.JLabel();
-        jLabel23 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
+        jLabel7 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jPanel1.setBackground(new java.awt.Color(0, 51, 255));
         jPanel1.setForeground(new java.awt.Color(0, 0, 204));
 
-        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Day22/imgs/Fa-Team-Fontawesome-Regular-FontAwesome-Regular-Window-Maximize.24.png"))); // NOI18N
-
-        jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Day22/imgs/Fa-Team-Fontawesome-Regular-FontAwesome-Regular-Window-Restore.24.png"))); // NOI18N
-
-        jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Day22/imgs/Pictogrammers-Material-Window-minimize.24.png"))); // NOI18N
-
-        jLabel4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Day22/imgs/Pictogrammers-Material-Close-box-outline.24.png"))); // NOI18N
-
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jLabel1)
-                .addGap(18, 18, 18)
-                .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(34, 34, 34))
+            .addGap(0, 905, Short.MAX_VALUE)
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(24, Short.MAX_VALUE)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
-                    .addComponent(jLabel2)
-                    .addComponent(jLabel3)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel4)
-                        .addGap(2, 2, 2)))
-                .addGap(15, 15, 15))
+            .addGap(0, 65, Short.MAX_VALUE)
         );
 
         jPanel5.setBackground(new java.awt.Color(0, 51, 153));
@@ -295,7 +292,7 @@ public class library_modified extends javax.swing.JFrame {
                 .addGap(201, 201, 201))
         );
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        tblBook.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null},
                 {null, null, null, null, null},
@@ -306,7 +303,7 @@ public class library_modified extends javax.swing.JFrame {
                 "No", "Book ID", "Book Title", "Author", "Category"
             }
         ));
-        jScrollPane1.setViewportView(jTable1);
+        jScrollPane1.setViewportView(tblBook);
 
         tableAuthor.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -336,36 +333,34 @@ public class library_modified extends javax.swing.JFrame {
 
         jPanel6.setBackground(new java.awt.Color(51, 51, 255));
 
-        jLabel21.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Day22/imgs/Colebemis-Feather-User.48.png"))); // NOI18N
-        jLabel21.setText("jLabel2");
+        jLabel5.setText("0");
 
-        jLabel22.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Day22/imgs/Iconsmind-Outline-Books-2.32.png"))); // NOI18N
+        jLabel6.setText("0");
 
-        jLabel23.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Day22/imgs/Pictogrammers-Material-Card-text-outline.48.png"))); // NOI18N
-        jLabel23.setText("jLabel2");
+        jLabel7.setText("0");
 
         javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
         jPanel6.setLayout(jPanel6Layout);
         jPanel6Layout.setHorizontalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel6Layout.createSequentialGroup()
-                .addGap(32, 32, 32)
-                .addComponent(jLabel21, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(jLabel22, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(jLabel23, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(67, 67, 67)
+                .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(45, 45, 45)
+                .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(51, 51, 51)
+                .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(428, Short.MAX_VALUE))
         );
         jPanel6Layout.setVerticalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel6Layout.createSequentialGroup()
-                .addContainerGap(18, Short.MAX_VALUE)
-                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jLabel23)
-                    .addComponent(jLabel22, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel21))
-                .addGap(17, 17, 17))
+                .addContainerGap()
+                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(71, 71, 71))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -391,7 +386,7 @@ public class library_modified extends javax.swing.JFrame {
                 .addGap(0, 0, 0)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -499,29 +494,25 @@ public class library_modified extends javax.swing.JFrame {
     private javax.swing.JButton jButton9;
     private javax.swing.JComboBox<String> jComboBox7;
     private javax.swing.JComboBox<String> jComboBox8;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel17;
     private javax.swing.JLabel jLabel18;
     private javax.swing.JLabel jLabel19;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel20;
-    private javax.swing.JLabel jLabel21;
-    private javax.swing.JLabel jLabel22;
-    private javax.swing.JLabel jLabel23;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
-    private javax.swing.JTable jTable1;
     private javax.swing.JTextField jTextField10;
     private javax.swing.JTextField jTextField11;
     private javax.swing.JTextField jTextField12;
     private javax.swing.JTable tableAuthor;
+    private javax.swing.JTable tblBook;
     private javax.swing.JTable tblcategory;
     private javax.swing.JTextField txtAuthor3;
     private javax.swing.JTextField txtCategory3;
