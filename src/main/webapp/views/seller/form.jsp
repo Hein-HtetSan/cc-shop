@@ -1,8 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@ page import="java.util.*" %>
-<%@ page import="Models.*" %>
+
 <!DOCTYPE html>
 <html>
 	<head>
@@ -89,19 +88,13 @@
 	     	<div class="input">
 		        <select name="business" id="business">
 		        	<option value="1" selected>Choose Business</option>
-		        	  <% 
-					    List<Business> businessTypes = (List<Business>) request.getAttribute("businessTypes");
-					    if (businessTypes != null) {
-					        for (Business business : businessTypes) {
-					    %>
-					    <option value="<%= business.getId() %>"><%= business.getName() %></option>
-					    <% 
-					        }
-					    }
-					    %>
+		        	<c:forEach items="${businesses}" var="business">
+					    <option value="${business.id}">${business.name}</option>
+					</c:forEach>
 		        </select>
 		        <span class="spin"></span>
 	     	</div>
+	     	
 	       <div class="input">
 		        <label for="emails">Email</label>
 		        <input type="email" name="email" id="emails">

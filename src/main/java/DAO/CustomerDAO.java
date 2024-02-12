@@ -51,7 +51,6 @@ public class CustomerDAO {
 		return customer;
 	}
 	
-	// dddddddddddddddddddddd
 	// get by customer name
 	public Customer getByName(String name) throws SQLException {
 		Customer customer = new Customer();
