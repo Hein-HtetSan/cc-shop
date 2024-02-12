@@ -34,14 +34,16 @@ public class SellerController extends HttpServlet {
 
     // Get Method
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-    	try {
-    		List<Business> businessTypes =  businessDAO.get();
-			request.setAttribute("businessTypes",businessTypes);
-			dispatcher = request.getRequestDispatcher("views/seller/form.jsp");
-            dispatcher.forward(request, response);
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
+    	    		List<Business> businesses;
+					try {
+						businesses = businessDAO.get();
+						request.setAttribute("businesses",businesses);
+						dispatcher = request.getRequestDispatcher("views/seller/form.jsp");
+			            dispatcher.forward(request, response);
+					} catch (SQLException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
     }
     
     
