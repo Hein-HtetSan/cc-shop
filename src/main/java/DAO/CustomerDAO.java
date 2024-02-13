@@ -177,7 +177,5 @@ public class CustomerDAO {
 			System.out.println("Image " + user.getImage());
 			System.out.println("--------------------------");
 		}
-	}
-
-	
+	}	
 }
