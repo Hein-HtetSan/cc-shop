@@ -12,8 +12,15 @@ public class Seller {
 	private String name;
 	private int business_id;
 	private String company;
+	private String bname;
 	
 	
+	public String getBname() {
+		return bname;
+	}
+	public void setBname(String bname) {
+		this.bname = bname;
+	}
 	public int getBusiness_id() {
 		return business_id;
 	}

@@ -12,13 +12,8 @@
 	</servlet>
 	
 	<servlet-mapping>
-	    <servlet-name>AdminController</servlet-name>
-	    <url-pattern>/loginAdmin</url-pattern>
-	</servlet-mapping>
-	
-	<servlet-mapping> 
 		<servlet-name>AdminController</servlet-name>
-		<url-pattern>/registerAdmin</url-pattern>
+		<url-pattern>/AdminController</url-pattern>
 	</servlet-mapping>
 	
 	<!-- End of Admin Section -->

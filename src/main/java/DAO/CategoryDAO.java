@@ -12,7 +12,7 @@ public class CategoryDAO {
 	PreparedStatement stmt = null; // declare prepare statement
 	
 	// category data access object model ( constructor work first)
-	CategoryDAO() throws ClassNotFoundException, SQLException{
+	public CategoryDAO() throws ClassNotFoundException, SQLException{
 		con = Config.config.getConnections();
 	}
 	

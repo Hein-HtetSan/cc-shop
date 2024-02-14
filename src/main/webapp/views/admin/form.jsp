@@ -52,7 +52,7 @@
     <div class="overbox">
        <div class="material-button alt-2"><span class="shape"></span></div>
        <div class="title">REGISTER as Admin</div>
- 		<form action="${pageContext.request.contextPath}/registerAdmin" method="post">
+ 		<form action="${pageContext.request.contextPath}/AdminController" method="post">
  			<input type="hidden" name="action" value="register">
 	       <div class="input">
 	          <label for="name">Username</label>
