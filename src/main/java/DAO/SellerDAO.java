@@ -17,22 +17,28 @@ public class SellerDAO {
 	}
 	
 	// get all customer
-	public List<Seller> get() throws SQLException{
+	public List<Seller> get() {
 		List<Seller> sellers = new ArrayList<Seller>();
-		String query = "SELECT * FROM sellers";
-		statement = con.createStatement();
-		ResultSet resultSet = statement.executeQuery(query);
-		while(resultSet.next()) {
-			Seller seller = new Seller();
-			seller.setId(resultSet.getInt("id"));
-			seller.setName(resultSet.getString("name"));
-			seller.setEmail(resultSet.getString("email"));
-			seller.setPhone(resultSet.getString("phone"));
-			seller.setImage(resultSet.getString("image"));
-			seller.setAddress(resultSet.getString("address"));
-			seller.setCompany(resultSet.getString("company"));
-			seller.setBusiness_id(resultSet.getInt("business_id"));
-			sellers.add(seller);
+		String query = "SELECT sellers.*, businesses.name as bname FROM sellers LEFT JOIN businesses ON sellers.business_id = businesses.id";
+		try {
+			statement = con.createStatement();
+			ResultSet resultSet = statement.executeQuery(query);
+			while(resultSet.next()) {
+				Seller seller = new Seller();
+				seller.setId(resultSet.getInt("id"));
+				seller.setName(resultSet.getString("name"));
+				seller.setEmail(resultSet.getString("email"));
+				seller.setPhone(resultSet.getString("phone"));
+				seller.setImage(resultSet.getString("image"));
+				seller.setAddress(resultSet.getString("address"));
+				seller.setCompany(resultSet.getString("company"));
+				seller.setBusiness_id(resultSet.getInt("business_id"));
+				seller.setBname(resultSet.getString("bname"));
+				sellers.add(seller);
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 		return sellers;
 	}

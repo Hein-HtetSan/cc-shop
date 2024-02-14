@@ -17,21 +17,26 @@ public class CustomerDAO {
 	}
 	
 	// get all customer
-	public List<Customer> get() throws SQLException{
+	public List<Customer> get() {
 		List<Customer> customers = new ArrayList<Customer>();
 		String query = "SELECT * FROM customers";
-		statement = con.createStatement();
-		ResultSet resultSet = statement.executeQuery(query);
-		while(resultSet.next()) {
-			Customer customer = new Customer();
-			customer.setId(resultSet.getInt("id"));
-			customer.setName(resultSet.getString("name"));
-			customer.setEmail(resultSet.getString("email"));
-			customer.setPhone(resultSet.getString("phone"));
-			customer.setImage(resultSet.getString("image"));
-			customer.setAddress(resultSet.getString("address"));
-			customers.add(customer);
-		}
+		try {
+			statement = con.createStatement();
+			ResultSet resultSet = statement.executeQuery(query);
+			while(resultSet.next()) {
+				Customer customer = new Customer();
+				customer.setId(resultSet.getInt("id"));
+				customer.setName(resultSet.getString("name"));
+				customer.setEmail(resultSet.getString("email"));
+				customer.setPhone(resultSet.getString("phone"));
+				customer.setImage(resultSet.getString("image"));
+				customer.setAddress(resultSet.getString("address"));
+				customers.add(customer);
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}	
 		return customers;
 	}
 	

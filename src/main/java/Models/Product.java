@@ -11,6 +11,21 @@ public class Product {
 	private String description;
 	private int category_id;
 	private int seller_id;
+	private String category_name;
+	private String seller_name;
+	
+	public String getCategory_name() {
+		return category_name;
+	}
+	public void setCategory_name(String category_name) {
+		this.category_name = category_name;
+	}
+	public String getSeller_name() {
+		return seller_name;
+	}
+	public void setSeller_name(String seller_name) {
+		this.seller_name = seller_name;
+	}
 	
 	// and then generated getter and setter 
 		// methods in order to manipulate with database

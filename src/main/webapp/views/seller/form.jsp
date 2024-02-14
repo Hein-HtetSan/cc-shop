@@ -50,7 +50,7 @@
     <div class="box">
  
        <div class="title">LOGIN as Seller</div>
- 		<form action="${pageContext.request.contextPath}/loginSeller" method="post">
+ 		<form action="${pageContext.request.contextPath}/AdminController" method="post">
  			<input type="hidden" name="action" value="login">
 	       <div class="input">
 	        <label for="email">Email</label>
