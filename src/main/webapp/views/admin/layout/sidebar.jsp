@@ -66,7 +66,7 @@
 							<a href="${pageContext.request.contextPath}/AdminController?page=business">
 								<i class="las la-building"></i>
 								<p>Business</p>
-								<span class="badge badge-count">${counts.category_count}</span>
+								<span class="badge badge-count">${counts.business_count}</span>
 							</a>
 						</li>
 						<li class="nva-item d-flex align-items-center justify-content-center">

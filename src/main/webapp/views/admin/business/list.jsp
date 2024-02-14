@@ -22,17 +22,34 @@
 			<div class="main-panel">
 				<div class="content">
 					<div class="container-fluid">
-						<h4 class="page-title"> Users</h4>
+						<h4 class="page-title">   Businesses</h4>
 
                         <!-- Content goes here  -->
                         <div class="row">
-                            <div class="col-12">
+	                        <div class="col-12 col-md-5">
+	                            	<div class="card shadow">
+	                            		<div class="card-header">
+	                            			<h6 class="text-center fw-semibold"> <i class="las la-list"></i> Add Business</h6>
+	                            		</div>
+	                            		<div class="card-body">
+	                            			<form method="post" action="${pageContext.request.contextPath}/BusinessController?action=addBusiness">
+	                            				<div class="form-group">
+	                            				<input type="hidden" name="action" value="saveCategory">
+                            					<label class="form-label" for="name">Name</label>
+                            					<input type="text" placeholder="Enter business name" name="name" class="form-control mb-4" required>
+                            					<button class="btn btn-primary"> <i class="las la-save"></i> Add Business</button>
+                            				</div>
+                            			</form>
+                            		</div>
+                            	</div>
+                            </div>
+                            <div class="col-12 col-md-7">
                                 <div class="card card-tasks">
 									<div class="card-header ">
-										<h4 class="card-title"> <i class="las la-user"></i> List</h4>
-										<p class="card-category">  You can see who are using your platform.</p>
+										<h4 class="card-title"> <i class="las la-building"></i> List</h4>
+										<p class="card-category">  You can see who  using your platform.</p>
 									</div>
-									<div class="card-body userTable">
+									<div class="card-body sellerTable">
 										<div class="table-full-width">
 											<table class="table ">
                                                 <!-- ### Table head ####  -->
@@ -46,18 +63,16 @@
 																</label>
 															</div>
 														</th>
+														<th>ID</th>
 														<th>Name</th>
-														<th>Email</th>
-														<th>Phone</th>
-														<th>Address</th>
 														<th>Action</th>
 													</tr>
 												</thead>
                                                 <!-- #### end of table head ###  -->
 												<tbody>
                                                     <!-- #### Table Body Start #####  -->
-                                                    <c:if test="${userList != null}">
-	                                                    <c:forEach items="${userList}" var="user">
+                                                    <c:if test="${businessList != null}">
+	                                                    <c:forEach items="${businessList}" var="business">
 														<tr>
 															<td>
 																<div class="form-check">
@@ -67,14 +82,12 @@
 																	</label>
 																</div>
 															</td>
-															<td>${user.name}</td>
-															<td>${user.email}</td>
-															<td>${user.phone}</td>
-															<td>${user.address}</td>
+															<td>${business.id}#</td>
+															<td>${business.name}</td>
 															<td class="td-actions">
 																<div class="form-button-action">
-																	<button type="button" data-toggle="tooltip" title="See Detail" class="btn btn-link btn-simple-primary">
-																		<i class="las la-eye"></i>
+																	<button type="button" data-toggle="tooltip" title="Edit" class="btn btn-link btn-simple-primary">
+																		<i class="las la-pen"></i>
 																	</button>
 																	<button type="button" data-toggle="tooltip" title="Remove" class="btn btn-link btn-simple-danger">
 																		<i class="las la-times"></i>
@@ -84,33 +97,33 @@
 														</tr>
 														</c:forEach>
 													</c:if>
-													<c:if test="${userList == null}">
-												        <p class="text-danger fw-semibold fs-5 text-center">No user here.</p>
+													<c:if test="${businessList == null}">
+												        <p class="text-danger fw-semibold fs-5 text-center">No Business here.</p>
 												    </c:if>
 													<!-- #### Table body ####  -->
 												</tbody>
 											</table>
 										</div>
 										<nav aria-label="Page navigation example">
-											  <ul class="pagination">
-											    <c:if test="${currentPage != 1}">
-											        <li class="page-item"><a href="${pageContext.request.contextPath}/AdminController?page=user&page_number=${currentPage - 1}" class="page-link">Previous</a></li>
-												</c:if> 
-											    <c:forEach begin="1" end="${noOfPages}" var="i"> 
-									              <c:choose> 
-									                  <c:when test="${currentPage eq i}"> 
-									                      <li class="page-item"><a class="page-link bg-primary text-light" href="${pageContext.request.contextPath}/AdminController?page=user&page_number=${i}">${i}</a></td> 
-									                  </c:when> 
-									                  <c:otherwise> 
-									                      <li class="page-item"><a class="page-link" href="${pageContext.request.contextPath}/AdminController?page=user&page_number=${i}">${i}</a></td> 
-									                  </c:otherwise> 
-									              </c:choose> 
-									          </c:forEach> 
-											    <c:if test="${currentPage lt noOfPages}">
-											        <li class="page-item"><a href="${pageContext.request.contextPath}/AdminController?page=user&page_number=${currentPage + 1}" class="page-link">Next</a></td>
-											    </c:if>
-											  </ul>
-											</nav>
+										  <ul class="pagination">
+										    <c:if test="${currentPage != 1}">
+										        <li class="page-item"><a href="${pageContext.request.contextPath}/AdminController?page=business&page_number=${currentPage - 1}" class="page-link">Previous</a></li>
+											</c:if> 
+										    <c:forEach begin="1" end="${noOfPages}" var="i"> 
+								              <c:choose> 
+								                  <c:when test="${currentPage eq i}"> 
+								                      <li class="page-item"><a class="page-link bg-primary text-light" href="${pageContext.request.contextPath}/AdminController?page=category?page=business&page_number=${i}">${i}</a></td> 
+								                  </c:when> 
+								                  <c:otherwise> 
+								                      <li class="page-item"><a class="page-link" href="${pageContext.request.contextPath}/AdminController?page=business&page_number=${i}">${i}</a></td> 
+								                  </c:otherwise> 
+								              </c:choose> 
+								          </c:forEach> 
+										    <c:if test="${currentPage lt noOfPages}">
+										        <li class="page-item"><a href="${pageContext.request.contextPath}/AdminController?page=business&page_number=${currentPage + 1}" class="page-link">Next</a></td>
+										    </c:if>
+										  </ul>
+										</nav>
 									</div>
 									
 								</div>

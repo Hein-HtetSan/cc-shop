@@ -29,7 +29,7 @@
     <div class="box">
  
        <div class="title">LOGIN as Admin</div>
- 		<form action="${pageContext.request.contextPath}/loginAdmin" method="post">
+ 		<form action="${pageContext.request.contextPath}/LoginController?page=adminLogin" method="post">
  			<input type="hidden" name="action" value="login">
 	       <div class="input">
 	        <label for="email">Email</label>
@@ -52,7 +52,7 @@
     <div class="overbox">
        <div class="material-button alt-2"><span class="shape"></span></div>
        <div class="title">REGISTER as Admin</div>
- 		<form action="${pageContext.request.contextPath}/AdminController" method="post">
+ 		<form action="${pageContext.request.contextPath}/RegisterController?page=adminRegister" method="post">
  			<input type="hidden" name="action" value="register">
 	       <div class="input">
 	          <label for="name">Username</label>

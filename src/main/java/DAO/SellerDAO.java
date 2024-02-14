@@ -10,6 +10,7 @@ public class SellerDAO {
 	Statement statement = null;
 	PreparedStatement stmt = null;
 	ResultSet resultset = null;
+	private int noOfRecords;
 	
 	// default constructor
 	public SellerDAO() throws ClassNotFoundException, SQLException {
@@ -42,6 +43,39 @@ public class SellerDAO {
 		}
 		return sellers;
 	}
+	
+	// get all seller
+	public List<Seller> getAll(int offset, int noOfRecords) throws SQLException{
+		List<Seller> sellers = new ArrayList<Seller>();  // create empty admin list to store admins
+		Seller seller = null; // create admin object which is from model
+		String query = "select SQL_CALC_FOUND_ROWS sellers.*, businesses.name as bname FROM sellers LEFT JOIN businesses ON sellers.business_id = businesses.id limit " + offset + ", " + noOfRecords;
+		statement = con.createStatement();
+		ResultSet resultSet = statement.executeQuery(query);
+		while(resultSet.next()) {
+			seller = new Seller();
+			seller.setId(resultSet.getInt("id"));
+			seller.setName(resultSet.getString("name"));
+			seller.setEmail(resultSet.getString("email"));
+			seller.setPhone(resultSet.getString("phone"));
+			seller.setImage(resultSet.getString("image"));
+			seller.setAddress(resultSet.getString("address"));
+			seller.setCompany(resultSet.getString("company"));
+			seller.setBusiness_id(resultSet.getInt("business_id"));
+			seller.setBname(resultSet.getString("bname"));
+			sellers.add(seller);
+		}
+		resultset.close();
+		resultset = statement.executeQuery("SELECT FOUND_ROWS()");
+        if(resultset.next()) {
+        	 this.noOfRecords = resultset.getInt(1);
+        }
+		return sellers; // return that list
+	}
+	
+	// get number of records
+		public int getNoOfRecords() {
+	        return noOfRecords;
+	    }
 	
 	// get by customer id
 	public Seller getById(int id) throws SQLException {
