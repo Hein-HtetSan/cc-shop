@@ -25,6 +25,7 @@ public class AdminController extends HttpServlet {
     SellerDAO sellerDAO = null;
     ProductDAO productDAO = null;
     CategoryDAO categoryDAO = null;
+  
     RequestDispatcher dispatcher = null;
 	
     public AdminController() throws ClassNotFoundException, SQLException {
@@ -66,12 +67,19 @@ public class AdminController extends HttpServlet {
 				} 
     		case "product":
     			try {
-					getAllProduct(request, response); // get all category
+					getAllProduct(request, response); // get all product
 				} catch (ServletException | IOException | SQLException e) {
 					e.printStackTrace();
 				}
     			break;
+    		case "business":
+    			break;
     		case "category":
+    			try {
+					getAllCategory(request, response); // get all category
+				} catch (ServletException | IOException | SQLException e) {
+					e.printStackTrace();
+				}
     			break;
     		case "dashboard":
     			break;
@@ -126,6 +134,18 @@ public class AdminController extends HttpServlet {
 		request.setAttribute("sellerList", sellerList);
 		dispatcher = request.getRequestDispatcher("views/admin/store/list.jsp");
 		System.out.println(sellerList);
+		dispatcher.forward(request, response);
+	}
+	
+	// get all category
+	private void getAllCategory(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, SQLException {
+		List<Category> categoryList = categoryDAO.get();
+		// Get counts from utility method
+        Map<String, Integer> counts = getAllCount();
+        request.setAttribute("counts", counts);
+		request.setAttribute("categoryList", categoryList);
+		dispatcher = request.getRequestDispatcher("views/admin/category/list.jsp");
+		System.out.println(categoryList);
 		dispatcher.forward(request, response);
 	}
 	
