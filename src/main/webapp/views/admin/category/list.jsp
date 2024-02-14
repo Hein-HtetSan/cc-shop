@@ -32,8 +32,9 @@
 	                            			<h6 class="text-center fw-semibold"> <i class="las la-list"></i> Add Category</h6>
 	                            		</div>
 	                            		<div class="card-body">
-	                            			<form method="post" action="${pageContext.request.contextPath}/AdminController?action=addCategory">
+	                            			<form method="post" action="${pageContext.request.contextPath}/CategoryController?action=addCategory">
 	                            				<div class="form-group">
+	                            				<input type="hidden" name="action" value="saveCategory">
                             					<label class="form-label" for="name">Name</label>
                             					<input type="text" placeholder="Enter category name" name="name" class="form-control mb-4" required>
                             					<button class="btn btn-primary"> <i class="las la-save"></i> Add Category</button>
@@ -103,6 +104,26 @@
 												</tbody>
 											</table>
 										</div>
+										<nav aria-label="Page navigation example">
+										  <ul class="pagination">
+										    <c:if test="${currentPage != 1}">
+										        <li class="page-item"><a href="${pageContext.request.contextPath}/AdminController?page=category&page_number=${currentPage - 1}" class="page-link">Previous</a></li>
+											</c:if> 
+										    <c:forEach begin="1" end="${noOfPages}" var="i"> 
+								              <c:choose> 
+								                  <c:when test="${currentPage eq i}"> 
+								                      <li class="page-item"><a class="page-link bg-primary text-light" href="${pageContext.request.contextPath}/AdminController?page=category?page=category&page_number=${i}">${i}</a></td> 
+								                  </c:when> 
+								                  <c:otherwise> 
+								                      <li class="page-item"><a class="page-link" href="${pageContext.request.contextPath}/AdminController?page=category&page_number=${i}">${i}</a></td> 
+								                  </c:otherwise> 
+								              </c:choose> 
+								          </c:forEach> 
+										    <c:if test="${currentPage lt noOfPages}">
+										        <li class="page-item"><a href="${pageContext.request.contextPath}/AdminController?page=category&page_number=${currentPage + 1}" class="page-link">Next</a></td>
+										    </c:if>
+										  </ul>
+										</nav>
 									</div>
 									
 								</div>

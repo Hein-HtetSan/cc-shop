@@ -25,6 +25,7 @@ public class AdminController extends HttpServlet {
     SellerDAO sellerDAO = null;
     ProductDAO productDAO = null;
     CategoryDAO categoryDAO = null;
+    BusinessDAO businessDAO = null;
   
     RequestDispatcher dispatcher = null;
 	
@@ -35,6 +36,7 @@ public class AdminController extends HttpServlet {
         sellerDAO = new SellerDAO();
         productDAO = new ProductDAO();
         categoryDAO = new CategoryDAO();
+        businessDAO = new BusinessDAO();
     }
     
     // do get
@@ -73,6 +75,11 @@ public class AdminController extends HttpServlet {
 				}
     			break;
     		case "business":
+    			try {
+					getAllBusiness(request, response); // get all business
+				} catch (ServletException | IOException | SQLException e) {
+					e.printStackTrace();
+				} 
     			break;
     		case "category":
     			try {
@@ -91,14 +98,28 @@ public class AdminController extends HttpServlet {
     
     // get all user
     private void getAllUser(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, SQLException {
-    	List<Customer> userList = customerDAO.get();
-    	// Get counts from utility method
+    	int page_number = 1;
+        int recordsPerPage = 5;
+        try {
+			customerDAO = new CustomerDAO();
+		} catch (ClassNotFoundException | SQLException e) {
+			e.printStackTrace();
+		}
+        // Get counts from utility method
         Map<String, Integer> counts = getAllCount();
         request.setAttribute("counts", counts);
-    	request.setAttribute("userList", userList);
-    	dispatcher = request.getRequestDispatcher("views/admin/user/list.jsp");
-    	System.out.println(userList);
-    	dispatcher.forward(request, response);
+        if (request.getParameter("page_number") != null) {
+        	page_number = Integer.parseInt(request.getParameter("page_number")); 
+        }
+        List<Customer> list = customerDAO.getAll((page_number-1)*recordsPerPage,
+                                 recordsPerPage);
+        int noOfRecords = customerDAO.getNoOfRecords();
+        int noOfPages = (int) Math.ceil(noOfRecords * 1.0 / recordsPerPage);
+        request.setAttribute("userList", list);
+        request.setAttribute("noOfPages", noOfPages);
+        request.setAttribute("currentPage", page_number);
+        dispatcher = request.getRequestDispatcher("views/admin/user/list.jsp"); 
+        dispatcher.forward(request, response);
     }
     
     // get all seller
@@ -139,14 +160,54 @@ public class AdminController extends HttpServlet {
 	
 	// get all category
 	private void getAllCategory(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, SQLException {
-		List<Category> categoryList = categoryDAO.get();
-		// Get counts from utility method
+		int page_number = 1;
+        int recordsPerPage = 4;
+        try {
+			categoryDAO = new CategoryDAO();
+		} catch (ClassNotFoundException | SQLException e) {
+			e.printStackTrace();
+		}
+        // Get counts from utility method
         Map<String, Integer> counts = getAllCount();
         request.setAttribute("counts", counts);
-		request.setAttribute("categoryList", categoryList);
-		dispatcher = request.getRequestDispatcher("views/admin/category/list.jsp");
-		System.out.println(categoryList);
-		dispatcher.forward(request, response);
+        if (request.getParameter("page_number") != null) {
+        	page_number = Integer.parseInt(request.getParameter("page_number")); 
+        }
+        List<Category> list = categoryDAO.getAll((page_number-1)*recordsPerPage,
+                                 recordsPerPage);
+        int noOfRecords = categoryDAO.getNoOfRecords();
+        int noOfPages = (int) Math.ceil(noOfRecords * 1.0 / recordsPerPage);
+        request.setAttribute("categoryList", list);
+        request.setAttribute("noOfPages", noOfPages);
+        request.setAttribute("currentPage", page_number);
+        dispatcher = request.getRequestDispatcher("views/admin/category/list.jsp"); 
+        dispatcher.forward(request, response);
+	}
+	
+	// get all business
+	private void getAllBusiness(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, SQLException {
+		int page_number = 1;
+        int recordsPerPage = 4;
+        try {
+			businessDAO = new BusinessDAO();
+		} catch (ClassNotFoundException | SQLException e) {
+			e.printStackTrace();
+		}
+        // Get counts from utility method
+        Map<String, Integer> counts = getAllCount();
+        request.setAttribute("counts", counts);
+        if (request.getParameter("page_number") != null) {
+        	page_number = Integer.parseInt(request.getParameter("page_number")); 
+        }
+        List<Business> list = businessDAO.getAll((page_number-1)*recordsPerPage,
+                                 recordsPerPage);
+        int noOfRecords = businessDAO.getNoOfRecords();
+        int noOfPages = (int) Math.ceil(noOfRecords * 1.0 / recordsPerPage);
+        request.setAttribute("businessList", list);
+        request.setAttribute("noOfPages", noOfPages);
+        request.setAttribute("currentPage", page_number);
+        dispatcher = request.getRequestDispatcher("views/admin/business/list.jsp"); 
+        dispatcher.forward(request, response);
 	}
 	
 	// get all data count
@@ -156,12 +217,14 @@ public class AdminController extends HttpServlet {
         List<Product> productList = productDAO.get();
         List<Category> categoryList = categoryDAO.get();
         List<Seller> sellerList = sellerDAO.get();
+        List<Business> businessList = businessDAO.get();
         
         counts.put("user_count", userList.size());
         counts.put("product_count", productList.size());
         counts.put("seller_count", sellerList.size());
         counts.put("category_count", categoryList.size());
         counts.put("store_count", sellerList.size());
+        counts.put("business_count", businessList.size());
 
         return counts;
     }
@@ -169,98 +232,10 @@ public class AdminController extends HttpServlet {
 	// do post method
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
-		// get the action type
-		String action = request.getParameter("action");
-		
-		// doPost handle many action like register and login and so on.
-		if(action != null) {
-			switch(action) {
-			
-				case "login": // do the login process
-					try {
-						login(request, response);
-					} catch (ServletException | IOException | SQLException e) {
-						e.printStackTrace();
-					}
-					break;
-					
-				case "register": // do the register process
-					try { // check unexpected error with try and catch block
-						register(request, response);
-					} catch (ServletException | IOException | SQLException e) {
-						e.printStackTrace();
-					}
-					break;
-					
-				default:
-					break;
-					
-			}
-		}
-		
 	}
 
-	// register servlet
-	private void register(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, SQLException{
-		// flag 
-		boolean flag = false;
-		// create new object
-		Admin newAdmin = new Admin();
-		
-		String name = request.getParameter("name"); // get name value
-		String email = request.getParameter("email"); // get email value
-		String password = request.getParameter("password"); // get password value
-		String cpassword = request.getParameter("cpassword"); // get confirm password value
-		String phone = request.getParameter("phone"); // get phone number 
-		String image = "assets/images/troll.jpg"; // default image
-		
-		
-		// Perform server-side validation
-        if (isValid(name, email, password, cpassword)) {
-        	newAdmin.setName(name);
-			newAdmin.setEmail(email);
-			newAdmin.setPhone(phone);
-			newAdmin.setPassword(cpassword);
-			newAdmin.setImage(image);
-			
-			// get return 
-			flag = adminDAO.create(newAdmin);
-			
-			if(flag) {  // if flag true, then go dashboard.
-				dispatcher = request.getRequestDispatcher("/views/admin/dashboard.jsp");
-			    dispatcher.forward(request, response);
-			}
-        } else {
-            // Set error message and forward back to registration form
-            request.setAttribute("error", "Passwords do not match");
-            RequestDispatcher dispatcher = request.getRequestDispatcher("views/admin/form.jsp");
-            dispatcher.forward(request, response);
-        }
+	
+	
 
-	}
-	
-	// login servlet
-	private void login(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, SQLException{
-		Admin admin = new Admin();
-		String email = request.getParameter("email");
-		String password = request.getParameter("password");
-		admin = adminDAO.getAdminByEmail(email);
-		
-		if(admin.getPassword().equals(password)) {
-			dispatcher = request.getRequestDispatcher("/views/admin/dashboard.jsp");
-		    dispatcher.forward(request, response);
-		}else {
-			request.setAttribute("error", "Passwords do not match");
-            RequestDispatcher dispatcher = request.getRequestDispatcher("/views/admin/form.jsp");
-            dispatcher.forward(request, response);
-		}
-	}
-	
-	
-	// register validation
-	private boolean isValid(String username, String email, String password, String confirmPassword) {
-        // Perform validation logic here
-        return !username.equals("") && !email.equals("") && !password.equals("") && password.equals(confirmPassword);
-    }
 
 }

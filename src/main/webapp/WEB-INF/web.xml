@@ -26,13 +26,9 @@
 	
 	<servlet-mapping>
 	    <servlet-name>SellerController</servlet-name>
-	    <url-pattern>/loginSeller</url-pattern>
+	    <url-pattern>/SellerController</url-pattern>
 	</servlet-mapping>
 	
-	<servlet-mapping> 
-		<servlet-name>SellerController</servlet-name>
-		<url-pattern>/registerSeller</url-pattern>
-	</servlet-mapping>
 	<!-- End of seller controller -->
 	
 	<!-- User Controller -->
@@ -43,14 +39,57 @@
 	
 	<servlet-mapping>
 	    <servlet-name>UserController</servlet-name>
-	    <url-pattern>/loginUser</url-pattern>
-	</servlet-mapping>
-	
-	<servlet-mapping> 
-		<servlet-name>UserController</servlet-name>
-		<url-pattern>/registerUser</url-pattern>
+	    <url-pattern>/UserController</url-pattern>
 	</servlet-mapping>
 	<!-- End of user controller -->
+	
+	<!-- User Controller -->
+	<servlet>
+	    <servlet-name>LoginController</servlet-name>
+	    <servlet-class>Controllers.LoginController</servlet-class>
+	</servlet>
+	
+	<servlet-mapping>
+	    <servlet-name>LoginController</servlet-name>
+	    <url-pattern>/LoginController</url-pattern>
+	</servlet-mapping>
+	<!-- End of user controller -->
+	
+	<!-- User Controller -->
+	<servlet>
+	    <servlet-name>RegisterController</servlet-name>
+	    <servlet-class>Controllers.RegisterController</servlet-class>
+	</servlet>
+	
+	<servlet-mapping>
+	    <servlet-name>RegisterController</servlet-name>
+	    <url-pattern>/RegisterController</url-pattern>
+	</servlet-mapping>
+	<!-- End of user controller -->
+	
+	<!-- Category Controller -->
+	<servlet>
+	    <servlet-name>CategoryController</servlet-name>
+	    <servlet-class>Controllers.CategoryController</servlet-class>
+	</servlet>
+	
+	<servlet-mapping>
+	    <servlet-name>CategoryController</servlet-name>
+	    <url-pattern>/CategoryController</url-pattern>
+	</servlet-mapping>
+	<!-- End of user controller -->
+	
+	<!-- Business Controller -->
+	<servlet>
+	    <servlet-name>BusinessController</servlet-name>
+	    <servlet-class>Controllers.BusinessController</servlet-class>
+	</servlet>
+	
+	<servlet-mapping>
+	    <servlet-name>BusinessController</servlet-name>
+	    <url-pattern>/BusinessController</url-pattern>
+	</servlet-mapping>
+	<!-- End of business controller -->
 	
   
 </web-app>
