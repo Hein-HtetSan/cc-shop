@@ -78,19 +78,24 @@
 					<div class="card-body">
 						<div class="row">
                             <div class="col-12 d-flex align-items-center justify-content-center">
+                                <form method="post" action="${pageContext.request.contextPath}/AdminController" enctype="multipart/form-data">
                                 <div class="form-group">
                                     <div class="image-box">
-                                        <img src="./listing.jpg" alt="" class="image">
+                                    	<input type="hidden" name="action" value="updateImage">
+                                    	<input type="hidden" name="admin_id" value="${admin.id}">
+                                        <img src="${admin.image}" alt="" class="image">
                                         <label for="image" class="plus-icon text-muted"> <i class="las la-pen pen-2"></i> </label>
                                         <input type="file" class="image-file" id="image">
+                                        <button type="submit">Save</button>
                                     </div>
                                 </div>
+                                </form>
                             </div>
                             <div class="col-12">
                                 <div class="form-group text-center">
-                                    Name<h6 class="fw-semibold mb-3"> Lucas Henry</h6>
-                                    Email<h6 class="fw-semibold mb-3"> lucasHenry@gmail.com</h6>
-                                    Phone<h6 class="fw-semibold">+959 124 551 1555</h6>
+                                    Name<h6 class="fw-semibold mb-3">${admin.name}</h6>
+                                    Email<h6 class="fw-semibold mb-3">${admin.email}</h6>
+                                    Phone<h6 class="fw-semibold">${admin.phone}</h6>
                                 </div>
 
                                 <!-- #### Button group ####  -->
@@ -98,7 +103,7 @@
                                     <div class="d-flex">
                                         <button class="btn btn-primary w-100"> <i class="las la-pen"></i> Edit </button>
                                         <div class="mx-1"></div>
-                                        <button class="btn btn-danger w-100"> <i class="las la-trash"></i> Delete Account </button>
+                                        <a href="${pageContext.request.contextPath}/LoginController?page=adminLogout" class="btn btn-danger w-100"> <i class="las la-power-off"></i> Logout </a>
                                     </div>
                                     <hr>
                                     <a href="password.html" class="btn btn-link">Change Password?</a> | <a href="" class="btn btn-link btn-danger">Forget Password?</a> 

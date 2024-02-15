@@ -23,7 +23,7 @@ public class BusinessDAO {
 			List<Business> businesses = null;  // create empty admin list to store admins
 			Business business = null; // create admin object which is from model
 			businesses = new ArrayList<Business>(); // create ArrayList admin object
-			String query = "select SQL_CALC_FOUND_ROWS * from businesses limit " + offset + ", " + noOfRecords;
+			String query = "select SQL_CALC_FOUND_ROWS * from businesses ORDER BY updated_at DESC limit " + offset + ", " + noOfRecords;
 			statement = con.createStatement(); // create statement
 			resultset = statement.executeQuery(query); // execute that query and store that into resultset variable
 			while(resultset.next()) {  // until end
@@ -78,13 +78,39 @@ public class BusinessDAO {
 			return flag;
 		}
 		
-		// delete category
+		// delete business
 		public boolean delete(int id) throws SQLException {
 			boolean flag = false;
 			String query = "DELETE FROM businesses WHERE id = " + id;
 			statement = con.createStatement();
 			int deletedRow = statement.executeUpdate(query);
 			if(deletedRow > 0) flag = true;
+			return flag;
+		}
+		
+		// get by id
+		public Business getById(int id) throws SQLException {
+			Business business = new Business();
+			String query = "SELECT * FROM businesses WHERE id = " + id;
+			statement = con.createStatement();
+			resultset = statement.executeQuery(query);
+			// resultset to category object
+			if(resultset.next()) {
+				business.setId(resultset.getInt("id"));
+				business.setName(resultset.getString("name"));
+			}
+			return business; // return object admin
+		}
+		
+		// update business
+		public boolean update(Business business, int id) throws SQLException {
+			boolean flag = false;
+			String query = "UPDATE businesses SET name=? WHERE id=?";
+			stmt = con.prepareStatement(query);
+			stmt.setString(1, business.getName());
+			stmt.setInt(2, id);
+			int updatedRow = stmt.executeUpdate();
+			if(updatedRow > 0) flag = true;
 			return flag;
 		}
 	
@@ -99,4 +125,6 @@ public class BusinessDAO {
 		}
 		
 	}
+	
+	
 }

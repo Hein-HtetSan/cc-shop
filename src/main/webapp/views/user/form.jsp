@@ -112,6 +112,12 @@
  
  </div>
 
+	<c:if test="${!empty error}">
+    <div class="alert alert-warning d-flex justify-content-between"  role="alert">
+  		${error}
+  		<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+	</div>
+	</c:if>
 
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 	<script src="${pageContext.request.contextPath}/assets/js/admin/login.js"></script>

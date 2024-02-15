@@ -86,9 +86,11 @@
 															<td>${business.name}</td>
 															<td class="td-actions">
 																<div class="form-button-action">
+																	<a  href="${pageContext.request.contextPath}/AdminController?action=editBusiness&business_id=${business.id}">
 																	<button type="button" data-toggle="tooltip" title="Edit" class="btn btn-link btn-simple-primary">
 																		<i class="las la-pen"></i>
 																	</button>
+																	</a>
 																	<a href="${pageContext.request.contextPath}/AdminController?action=deleteBusiness&business_id=${business.id}">
 																	<button type="button" data-toggle="tooltip" title="Remove" class="btn btn-link btn-simple-danger">
 																		<i class="las la-times"></i>

@@ -48,7 +48,7 @@ public class SellerDAO {
 	public List<Seller> getAll(int offset, int noOfRecords) throws SQLException{
 		List<Seller> sellers = new ArrayList<Seller>();  // create empty admin list to store admins
 		Seller seller = null; // create admin object which is from model
-		String query = "select SQL_CALC_FOUND_ROWS sellers.*, businesses.name as bname FROM sellers LEFT JOIN businesses ON sellers.business_id = businesses.id limit " + offset + ", " + noOfRecords;
+		String query = "select SQL_CALC_FOUND_ROWS sellers.*, businesses.name as bname FROM sellers LEFT JOIN businesses ON sellers.business_id = businesses.id ORDER BY updated_at DESC limit " + offset + ", " + noOfRecords;
 		statement = con.createStatement();
 		resultset = statement.executeQuery(query);
 		while(resultset.next()) {
@@ -97,12 +97,13 @@ public class SellerDAO {
 	
 	// get by email
 		public Seller getSellerByEmail(String email) throws SQLException {
-			Seller seller = new Seller();
+			Seller seller = null;
 			String query = "SELECT * FROM sellers WHERE email=?";
 			stmt = con.prepareStatement(query);
 			stmt.setString(1, email);
 			resultset = stmt.executeQuery();
 			while(resultset.next()) {
+				seller = new Seller();
 				seller.setId(resultset.getInt("id"));
 				seller.setName(resultset.getString("name"));
 				seller.setEmail(resultset.getString("email"));

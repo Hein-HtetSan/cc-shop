@@ -7,12 +7,12 @@
 				<div class="scrollbar-inner sidebar-wrapper">
 					<div class="user">
 						<div class="photo">
-							<img src="listing.jpg">
+							<img src="${admin.image}">
 						</div>
 						<div class="info">
 							<a class="" data-toggle="collapse" href="#collapseExample" aria-expanded="true">
 								<span>
-									Hizrian
+									${admin.name}
 									<span class="user-level ">Administrator</span>
 								</span>
 							</a>
@@ -27,7 +27,7 @@
 								<p>Dashboard</p>
 							</a>
 						</li>
-						<li class="nav-item <c:if test="${request.getRequestURI() eq '/shop-dot-com/views/admin/user/list.jsp'}">active</c:if>">
+						<li class="nav-item <c:if test="${request.getRequestURI() eq '/AdminController?page=user'}">active</c:if>">
 							<a href="${pageContext.request.contextPath}/AdminController?page=user">
 								<i class="la la-user"></i>
 								<p>Users</p>

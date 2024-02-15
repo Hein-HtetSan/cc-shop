@@ -32,11 +32,26 @@ public class CategoryController extends HttpServlet {
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String action = request.getParameter("action");
+		// add category
 		if(action != null) {
-			try {
-				saveCategory(request, response);  // save new category
-			} catch (ServletException | IOException | SQLException e) {
-				e.printStackTrace();
+			switch(action) {
+			case "addCategory":
+				try {
+					saveCategory(request, response);  // save new category
+				
+				} catch (ServletException | IOException | SQLException e) {
+					e.printStackTrace();
+				}
+				break;
+				
+			case "updateCategory":
+				try {
+					updateCategory(request, response);
+				
+				} catch (ServletException | IOException | SQLException e) {
+					e.printStackTrace();
+				}
+				break;
 			}
 		}
 	}
@@ -49,6 +64,17 @@ public class CategoryController extends HttpServlet {
 		newCategory.setName(name);
 		
 		if(categoryDAO.create(newCategory)) {
+			response.sendRedirect(request.getContextPath() + "/AdminController?page=category");
+		}
+	}
+	
+	// update category
+	private void updateCategory(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, SQLException {
+		String name = request.getParameter("name");
+		String category_id = request.getParameter("category_id");
+		Category updatedCategory = new Category();
+		updatedCategory.setName(name);
+		if(categoryDAO.update(updatedCategory, Integer.parseInt(category_id))) {
 			response.sendRedirect(request.getContextPath() + "/AdminController?page=category");
 		}
 	}

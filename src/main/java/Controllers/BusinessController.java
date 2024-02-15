@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import Models.Business;
+import Models.Category;
 import DAO.BusinessDAO;
 
 public class BusinessController extends HttpServlet {
@@ -33,10 +34,24 @@ public class BusinessController extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String action = request.getParameter("action");
 		if(action != null) {
-			try {
-				saveBusiness(request, response);  // save new category
-			} catch (ServletException | IOException | SQLException e) {
-				e.printStackTrace();
+			switch(action) {
+			// add business
+			case "addBusiness":
+				try {
+					saveBusiness(request, response);  // save new category
+				} catch (ServletException | IOException | SQLException e) {
+					e.printStackTrace();
+				}
+				break;
+				
+			// update business
+			case "updateBusiness":
+				try {
+					updateBusiness(request, response);  // save new category
+				} catch (ServletException | IOException | SQLException e) {
+					e.printStackTrace();
+				}
+				break;
 			}
 		}
 	}
@@ -52,5 +67,16 @@ public class BusinessController extends HttpServlet {
 			response.sendRedirect(request.getContextPath() + "/AdminController?page=business");
 		}
 	}
+	
+	// update category
+		private void updateBusiness(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, SQLException {
+			String name = request.getParameter("name");
+			String business_id = request.getParameter("business_id");
+			Business updatedBusiness = new Business();
+			updatedBusiness.setName(name);
+			if(businessDAO.update(updatedBusiness, Integer.parseInt(business_id))) {
+				response.sendRedirect(request.getContextPath() + "/AdminController?page=business");
+			}
+		}
 
 }

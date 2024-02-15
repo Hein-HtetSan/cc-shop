@@ -58,7 +58,7 @@ public class ProductDAO {
 		public List<Product> getAll(int offset, int noOfRecords) throws SQLException{
 			List<Product> products = new ArrayList<Product>();  // create empty admin list to store admins
 			Product product = null; // create admin object which is from model
-			String query = "select SQL_CALC_FOUND_ROWS products.*, categories.name as category_name, sellers.name as seller_name FROM products LEFT JOIN categories ON products.category_id = categories.id LEFT JOIN sellers ON products.seller_id = sellers.id limit " + offset + ", " + noOfRecords;
+			String query = "select SQL_CALC_FOUND_ROWS products.*, categories.name as category_name, sellers.name as seller_name FROM products LEFT JOIN categories ON products.category_id = categories.id LEFT JOIN sellers ON products.seller_id = sellers.id ORDER BY updated_at DESC limit " + offset + ", " + noOfRecords;
 			statement = con.createStatement();
 	        resultSet = statement.executeQuery(query);
 	        while(resultSet.next()) {

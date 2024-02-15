@@ -47,7 +47,7 @@ public class AdminDAO {
 			public List<Admin> getAll(int offset, int noOfRecords) throws SQLException{
 				List<Admin> admins = new ArrayList<Admin>();  // create empty admin list to store admins
 				Admin admin = null; // create admin object which is from model
-				String query = "select SQL_CALC_FOUND_ROWS * from admin limit " + offset + ", " + noOfRecords;
+				String query = "select SQL_CALC_FOUND_ROWS * from admin ORDER BY updated_at DESC limit " + offset + ", " + noOfRecords;
 				statement = con.createStatement(); // create statement
 				resultset = statement.executeQuery(query); // execute that query and store that into resultset variable
 				while(resultset.next()) {  // until end
@@ -128,12 +128,13 @@ public class AdminDAO {
 	
 	// get by email
 	public Admin getAdminByEmail(String email) throws SQLException {
-		Admin admin = new Admin();
+		Admin admin = null;
 		String query = "SELECT * FROM admin WHERE email=?";
 		stmt = con.prepareStatement(query);
 		stmt.setString(1, email);
 		resultset = stmt.executeQuery();
 		while(resultset.next()) {
+			admin = new Admin();
 			admin.setEmail(resultset.getString("email"));
 			admin.setId(resultset.getInt("id"));
 			admin.setName(resultset.getString("name"));
