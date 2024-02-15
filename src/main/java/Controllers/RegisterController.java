@@ -9,9 +9,11 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import Models.*;
 import DAO.*;
+import Config.Hash;
 
 public class RegisterController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
@@ -19,6 +21,7 @@ public class RegisterController extends HttpServlet {
 	SellerDAO sellerDAO = null;
 	AdminDAO adminDAO = null;
 	RequestDispatcher dispatcher = null;
+	
 
     public RegisterController() throws ClassNotFoundException, SQLException {
         super();
@@ -78,16 +81,21 @@ public class RegisterController extends HttpServlet {
 			
 			// Perform server-side validation
 	        if (isValid(name, email, password, cpassword)) {
+	        	
+	        	String hashed_password = Hash.hashPassword(password);
+	        	
 	        	newAdmin.setName(name);
 				newAdmin.setEmail(email);
 				newAdmin.setPhone(phone);
-				newAdmin.setPassword(cpassword);
+				newAdmin.setPassword(hashed_password);
 				newAdmin.setImage(image);
 				
 				// get return 
 				flag = adminDAO.create(newAdmin);
 				
 				if(flag) {  // if flag true, then go dashboard.
+					
+					
 					dispatcher = request.getRequestDispatcher("/views/admin/dashboard.jsp");
 				    dispatcher.forward(request, response);
 				}
@@ -121,10 +129,13 @@ public class RegisterController extends HttpServlet {
 				
 				// Perform server-side validation
 		        if (isValid(name, email, password, cpassword)) {
+		        	
+		        	String hashed_password = Hash.hashPassword(password);
+		        	
 		        	newSeller.setName(name);
 		        	newSeller.setEmail(email);
 		        	newSeller.setPhone(phone);
-		        	newSeller.setPassword(cpassword);
+		        	newSeller.setPassword(hashed_password);
 		        	newSeller.setImage(image);
 		        	newSeller.setCompany(company);
 		        	newSeller.setBusiness_id(business_id);
@@ -148,6 +159,8 @@ public class RegisterController extends HttpServlet {
 	// register user
 	private void userRegister(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, SQLException {
 			boolean flag = false;
+			HttpSession session = request.getSession();
+			Customer customer = new Customer();
 			
 			String name = request.getParameter("name");
 			String email = request.getParameter("email");
@@ -160,9 +173,11 @@ public class RegisterController extends HttpServlet {
 			if(isValid(name, email, password, cpassword)) {
 				Customer newCustomer = new Customer();
 				
+				String hashed_password = Hash.hashPassword(password);
+				
 				newCustomer.setName(name);
 				newCustomer.setEmail(email);
-				newCustomer.setPassword(cpassword);
+				newCustomer.setPassword(hashed_password);
 				newCustomer.setPhone(phone);
 				newCustomer.setAddress(address);
 				newCustomer.setImage(image);
@@ -170,6 +185,8 @@ public class RegisterController extends HttpServlet {
 				flag = customerDAO.create(newCustomer);
 				
 				if(flag) {
+					customer = customerDAO.getUserByEmail(email);
+					session.setAttribute("customer", customer);
 					dispatcher = request.getRequestDispatcher("/views/user/dashboard.jsp");
 					dispatcher.forward(request, response);
 				}

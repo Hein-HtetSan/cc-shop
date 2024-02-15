@@ -88,6 +88,16 @@ public class ProductDAO {
 		public int getNoOfRecords() {
 	        return noOfRecords;
 	    }
+		
+		// delete product
+				public boolean delete(int id) throws SQLException {
+					boolean flag = false;
+					String query = "DELETE FROM products WHERE id = " + id;
+					statement = con.createStatement();
+					int deletedRow = statement.executeUpdate(query);
+					if(deletedRow > 0) flag = true;
+					return flag;
+				}
 	
 	
 	// testing method

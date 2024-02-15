@@ -42,6 +42,107 @@ public class AdminController extends HttpServlet {
     // do get
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
     	String page = request.getParameter("page");
+    	String action = request.getParameter("action");
+    	
+    	
+    	
+    	if(action != null) {
+    		switch(action) {
+    		// delete user
+    		case "deleteUser":
+    			String user_id = request.getParameter("user_id");
+    			boolean deleteFlag;
+				try {
+					deleteFlag = customerDAO.delete(Integer.parseInt(user_id));
+					if(deleteFlag) {
+						System.out.println("delete success");
+	    				dispatcher = request.getRequestDispatcher("AdminController?page=user");
+	    				dispatcher.forward(request, response);
+	    			}
+				} catch (NumberFormatException | SQLException e) {
+					e.printStackTrace();
+				}
+    			break;
+    			
+    		// delete seller
+    		case "deleteSeller":
+    			String seller_id = request.getParameter("seller_id");
+    			boolean delete_seller;
+    			try {
+					delete_seller = sellerDAO.delete(Integer.parseInt(seller_id));
+					if(delete_seller) {
+						System.out.println("delete success");
+						dispatcher = request.getRequestDispatcher("AdminController?page=seller");
+						dispatcher.forward(request, response);
+					}
+				} catch (NumberFormatException | SQLException e) {
+					e.printStackTrace();
+				}
+    			break;
+
+    		// delete store
+    		case "deleteStore":
+    			String store_id = request.getParameter("store_id");
+    			boolean delete_store;
+    			try {
+					delete_store = sellerDAO.delete(Integer.parseInt(store_id));
+					if(delete_store) {
+						dispatcher = request.getRequestDispatcher("AdminController?page=store");
+						dispatcher.forward(request, response);
+					}
+				} catch (NumberFormatException | SQLException e) {
+					e.printStackTrace();
+				}
+    			break;
+    			
+    		// delete category
+    		case "deleteCategory":
+    			String category_id = request.getParameter("category_id");
+    			boolean delete_category;
+    			try {
+					delete_category = categoryDAO.delete(Integer.parseInt(category_id));
+					if(delete_category) {
+						dispatcher = request.getRequestDispatcher("AdminController?page=category");
+						dispatcher.forward(request, response);
+					}
+				} catch (NumberFormatException | SQLException e) {
+					e.printStackTrace();
+				}
+    			break;
+    			
+    		// delete business
+    		case "deleteBusiness":
+    			String business_id = request.getParameter("business_id");
+    			boolean delete_business;
+    			try {
+					delete_business = businessDAO.delete(Integer.parseInt(business_id));
+					if(delete_business) {
+						dispatcher = request.getRequestDispatcher("AdminController?page=business");
+						dispatcher.forward(request, response);
+					}
+				} catch (NumberFormatException | SQLException e) {
+					e.printStackTrace();
+				}
+    			break;
+    			
+    		// delete product
+    		case "deleteProduct":
+    			String product_id = request.getParameter("product_id");
+    			boolean delete_product;
+    			try {
+					delete_product = productDAO.delete(Integer.parseInt(product_id));
+					if(delete_product) {
+						dispatcher = request.getRequestDispatcher("AdminController?page=product");
+						dispatcher.forward(request, response);
+					}
+				} catch (NumberFormatException | SQLException e) {
+					e.printStackTrace();
+				}
+    			break;
+    		}
+    	}
+    	
+    	
     	if(page == null || page == "") {
     		page = "user";
     	}

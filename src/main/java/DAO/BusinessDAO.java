@@ -77,6 +77,16 @@ public class BusinessDAO {
 			
 			return flag;
 		}
+		
+		// delete category
+		public boolean delete(int id) throws SQLException {
+			boolean flag = false;
+			String query = "DELETE FROM businesses WHERE id = " + id;
+			statement = con.createStatement();
+			int deletedRow = statement.executeUpdate(query);
+			if(deletedRow > 0) flag = true;
+			return flag;
+		}
 	
 	public static void main(String args[]) throws ClassNotFoundException, SQLException {
 		List<Business> bus = new ArrayList<Business>();
