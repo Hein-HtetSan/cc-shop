@@ -76,9 +76,11 @@
 																	<button type="button" data-toggle="tooltip" title="See Detail" class="btn btn-link btn-simple-primary">
 																		<i class="las la-eye"></i>
 																	</button>
+																	<a href="${pageContext.request.contextPath}/AdminController?action=deleteProduct&store_id=${seller.id}">
 																	<button type="button" data-toggle="tooltip" title="Remove" class="btn btn-link btn-simple-danger">
 																		<i class="las la-times"></i>
 																	</button>
+																	</a>
 																</div>
 															</td>
 														</tr>

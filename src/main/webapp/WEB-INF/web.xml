@@ -5,6 +5,12 @@
     <welcome-file>views/index.jsp</welcome-file>
   </welcome-file-list>
   
+  <session-config>
+        <!-- Set session timeout in minutes -->
+        <session-timeout>30</session-timeout>
+    </session-config>
+
+  
   <!-- Start Admin Controller -->
   	<servlet>
 	    <servlet-name>AdminController</servlet-name>
@@ -90,6 +96,10 @@
 	    <url-pattern>/BusinessController</url-pattern>
 	</servlet-mapping>
 	<!-- End of business controller -->
+	
+	
+	
+	
 	
   
 </web-app>

@@ -22,7 +22,7 @@ public class CategoryDAO {
 		List<Category> categories = null;  // create empty admin list to store admins
 		Category category = null; // create admin object which is from model
 		categories = new ArrayList<Category>(); // create ArrayList admin object
-		String query = "select SQL_CALC_FOUND_ROWS * from categories limit " + offset + ", " + noOfRecords;
+		String query = "select SQL_CALC_FOUND_ROWS * from categories ORDER BY updated_at DESC limit " + offset + ", " + noOfRecords;
 		statement = con.createStatement(); // create statement
 		resultset = statement.executeQuery(query); // execute that query and store that into resultset variable
 		while(resultset.next()) {  // until end
@@ -111,12 +111,12 @@ public class CategoryDAO {
 	}
 	
 	// update category
-	public boolean update(Category category) throws SQLException {
+	public boolean update(Category category, int id) throws SQLException {
 		boolean flag = false;
-		String query = "UPDATE admin SET name=? WHERE id=?";
+		String query = "UPDATE categories SET name=? WHERE id=?";
 		stmt = con.prepareStatement(query);
 		stmt.setString(1, category.getName());
-		stmt.setInt(2, category.getId());
+		stmt.setInt(2, id);
 		int updatedRow = stmt.executeUpdate();
 		if(updatedRow > 0) flag = true;
 		return flag;

@@ -45,7 +45,7 @@ public class CustomerDAO {
 				public List<Customer> getAll(int offset, int noOfRecords) throws SQLException{
 					List<Customer> customers = new ArrayList<Customer>();  // create empty admin list to store admins
 					
-					String query = "select SQL_CALC_FOUND_ROWS * from customers limit " + offset + ", " + noOfRecords;
+					String query = "select SQL_CALC_FOUND_ROWS * from customers ORDER BY updated_at DESC limit " + offset + ", " + noOfRecords;
 					statement = con.createStatement();
 					ResultSet resultSet = statement.executeQuery(query);
 					while(resultSet.next()) {
@@ -123,12 +123,13 @@ public class CustomerDAO {
 	
 	// get by email
 			public Customer getUserByEmail(String email) throws SQLException {
-				Customer customer = new Customer();
+				Customer customer = null;
 				String query = "SELECT * FROM customers WHERE email=?";
 				stmt = con.prepareStatement(query);
 				stmt.setString(1, email);
 				resultset = stmt.executeQuery();
 				while(resultset.next()) {
+					customer = new Customer();
 					customer.setId(resultset.getInt("id"));
 					customer.setName(resultset.getString("name"));
 					customer.setEmail(resultset.getString("email"));

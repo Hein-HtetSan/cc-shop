@@ -60,8 +60,8 @@
 	          <span class="spin"></span>
 	       </div>
 	       <div class="input">
-		        <label for="email">Email</label>
-		        <input type="email" name="email" id="email">
+		        <label for="emails">Email</label>
+		        <input type="email" name="email" id="emails">
 		        <span class="spin"></span>
 	     	</div>
 	     	<div class="input">
@@ -70,8 +70,8 @@
 		        <span class="spin"></span>
 		     </div>
 	       <div class="input">
-	          <label for="password">Password</label>
-	          <input type="password" name="password" id="password">
+	          <label for="passwords">Password</label>
+	          <input type="password" name="password" id="passwords">
 	          <span class="spin"></span>
 	       </div>
 	       <div class="input">
@@ -84,8 +84,17 @@
 	       </div>
        </form>
     </div>
+    
+    
  
  </div>
+ 
+ 	<c:if test="${!empty error}">
+    <div class="alert alert-warning d-flex justify-content-between"  role="alert">
+  		${error}
+  		<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+	</div>
+	</c:if>
 
 
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>

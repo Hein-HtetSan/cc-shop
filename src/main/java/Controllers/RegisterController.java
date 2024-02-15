@@ -2,6 +2,7 @@ package Controllers;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.List;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -9,26 +10,43 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import Models.*;
 import DAO.*;
+import Config.Hash;
 
 public class RegisterController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	CustomerDAO customerDAO = null;
 	SellerDAO sellerDAO = null;
 	AdminDAO adminDAO = null;
+	BusinessDAO businessDAO = null;
 	RequestDispatcher dispatcher = null;
+	
 
     public RegisterController() throws ClassNotFoundException, SQLException {
         super();
         customerDAO = new CustomerDAO();
         sellerDAO = new SellerDAO();
         adminDAO = new AdminDAO();
+        businessDAO = new BusinessDAO();
     }
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
+		String page = request.getParameter("page");
+		if(page != null) {
+			if(page.equals("sellerForm")) {
+				try {
+					List<Business> businessList = businessDAO.get();
+					request.setAttribute("businesses", businessList);
+					dispatcher = request.getRequestDispatcher("views/seller/form.jsp");
+					dispatcher.forward(request, response);
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+		}
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -62,7 +80,7 @@ public class RegisterController extends HttpServlet {
 	
 	// register admin
 	private void adminRegister(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, SQLException {
-		
+			HttpSession session = request.getSession();
 			// flag 
 			boolean flag = false;
 			// create new object
@@ -78,19 +96,31 @@ public class RegisterController extends HttpServlet {
 			
 			// Perform server-side validation
 	        if (isValid(name, email, password, cpassword)) {
-	        	newAdmin.setName(name);
-				newAdmin.setEmail(email);
-				newAdmin.setPhone(phone);
-				newAdmin.setPassword(cpassword);
-				newAdmin.setImage(image);
-				
-				// get return 
-				flag = adminDAO.create(newAdmin);
-				
-				if(flag) {  // if flag true, then go dashboard.
-					dispatcher = request.getRequestDispatcher("/views/admin/dashboard.jsp");
-				    dispatcher.forward(request, response);
-				}
+	        	
+	        	Admin is_still_exist_email = adminDAO.getAdminByEmail(email);
+	        	if(is_still_exist_email == null) {
+	        		String hashed_password = Hash.hashPassword(password);
+		        	
+		        	newAdmin.setName(name);
+					newAdmin.setEmail(email);
+					newAdmin.setPhone(phone);
+					newAdmin.setPassword(hashed_password);
+					newAdmin.setImage(image);
+					
+					// get return 
+					flag = adminDAO.create(newAdmin);
+					
+					if(flag) {  // if flag true, then go dashboard.
+						
+						session.setAttribute("admin", newAdmin);
+						dispatcher = request.getRequestDispatcher("/views/admin/dashboard.jsp");
+					    dispatcher.forward(request, response);
+					}
+	        	}else {
+	        		request.setAttribute("error", "Email has already taken");
+	        		dispatcher = request.getRequestDispatcher("/views/admin/form.jsp");
+	        		dispatcher.forward(request, response);
+	        	}
 	        } else {
 	            // Set error message and forward back to registration form
 	            request.setAttribute("error", "Passwords do not match");
@@ -105,6 +135,7 @@ public class RegisterController extends HttpServlet {
 	private void sellerReigster(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, SQLException {
 		// flag 
 				boolean flag = false;
+				HttpSession session = request.getSession();
 				// create new object
 				Seller newSeller = new Seller();
 				
@@ -121,22 +152,35 @@ public class RegisterController extends HttpServlet {
 				
 				// Perform server-side validation
 		        if (isValid(name, email, password, cpassword)) {
-		        	newSeller.setName(name);
-		        	newSeller.setEmail(email);
-		        	newSeller.setPhone(phone);
-		        	newSeller.setPassword(cpassword);
-		        	newSeller.setImage(image);
-		        	newSeller.setCompany(company);
-		        	newSeller.setBusiness_id(business_id);
-		        	newSeller.setAddress(address);
 		        	
-					// get return 
-					flag = sellerDAO.create(newSeller);
-					
-					if(flag) {  // if flag true, then go dashboard.
-						dispatcher = request.getRequestDispatcher("views/seller/dashboard.jsp");
-					    dispatcher.forward(request, response);
-					}
+		        	Seller is_still_exist_email = sellerDAO.getSellerByEmail(email);
+		        	
+		        	if(is_still_exist_email == null) {
+		        		String hashed_password = Hash.hashPassword(password);
+			        	
+			        	newSeller.setName(name);
+			        	newSeller.setEmail(email);
+			        	newSeller.setPhone(phone);
+			        	newSeller.setPassword(hashed_password);
+			        	newSeller.setImage(image);
+			        	newSeller.setCompany(company);
+			        	newSeller.setBusiness_id(business_id);
+			        	newSeller.setAddress(address);
+			        	
+						// get return 
+						flag = sellerDAO.create(newSeller);
+						
+						if(flag) {  // if flag true, then go dashboard
+							session.setAttribute("seller", newSeller);
+							dispatcher = request.getRequestDispatcher("views/seller/dashboard.jsp");
+						    dispatcher.forward(request, response);
+						}
+		        	}else {
+		        		request.setAttribute("error", "Email has already taken");
+		        		dispatcher = request.getRequestDispatcher("/views/seller/form.jsp");
+		        		dispatcher.forward(request, response);
+		        	}
+		        	
 		        } else {
 		            // Set error message and forward back to registration form
 		            request.setAttribute("error", "Passwords do not match");
@@ -148,6 +192,8 @@ public class RegisterController extends HttpServlet {
 	// register user
 	private void userRegister(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, SQLException {
 			boolean flag = false;
+			HttpSession session = request.getSession();
+			Customer newCustomer = new Customer();
 			
 			String name = request.getParameter("name");
 			String email = request.getParameter("email");
@@ -158,23 +204,33 @@ public class RegisterController extends HttpServlet {
 			String address = request.getParameter("address");
 			
 			if(isValid(name, email, password, cpassword)) {
-				Customer newCustomer = new Customer();
 				
-				newCustomer.setName(name);
-				newCustomer.setEmail(email);
-				newCustomer.setPassword(cpassword);
-				newCustomer.setPhone(phone);
-				newCustomer.setAddress(address);
-				newCustomer.setImage(image);
+				Customer is_still_exist_email = customerDAO.getUserByEmail(email);
 				
-				flag = customerDAO.create(newCustomer);
-				
-				if(flag) {
-					dispatcher = request.getRequestDispatcher("/views/user/dashboard.jsp");
-					dispatcher.forward(request, response);
+				if(is_still_exist_email == null) {
+					String hashed_password = Hash.hashPassword(password);
+					
+					newCustomer.setName(name);
+					newCustomer.setEmail(email);
+					newCustomer.setPassword(hashed_password);
+					newCustomer.setPhone(phone);
+					newCustomer.setAddress(address);
+					newCustomer.setImage(image);
+					
+					flag = customerDAO.create(newCustomer);
+					
+					if(flag) {
+						session.setAttribute("customer", newCustomer);
+						dispatcher = request.getRequestDispatcher("/views/user/dashboard.jsp");
+						dispatcher.forward(request, response);
+					}
+				}else {
+					request.setAttribute("error", "Email has already taken");
+	        		dispatcher = request.getRequestDispatcher("/views/user/form.jsp");
+	        		dispatcher.forward(request, response);
 				}
-				
 			}else {
+				request.setAttribute("error", "Passwords do not match");
 				dispatcher = request.getRequestDispatcher("/views/user/form.jsp");
 				dispatcher.forward(request, response);
 			}
