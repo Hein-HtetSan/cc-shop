@@ -101,7 +101,7 @@
 										<div class="u-img"><img src="listing.jpg" alt="user"></div>
 										<div class="u-text">
 											<h4 class="">Hizrian</h4>
-											<p class="text-muted">hello@themekita.com</p><a href="profile.html" class="btn btn-rounded btn-danger btn-sm">View Profile</a></div>
+											<p class="text-muted">hello@themekita.com</p><a href="${pageContext.request.contextPath}/views/admin/profile/index.jsp" class="btn btn-rounded btn-danger btn-sm">View Profile</a></div>
 										</div>
 									</li>
 									<div class="dropdown-divider"></div>
