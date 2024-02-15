@@ -124,38 +124,80 @@ public class AdminController extends HttpServlet {
     
     // get all seller
 	private void getAllSeller(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, SQLException{
-		List<Seller> sellerList = sellerDAO.get();
-		// Get counts from utility method
+		int page_number = 1;
+        int recordsPerPage = 5;
+        try {
+			sellerDAO = new SellerDAO();
+		} catch (ClassNotFoundException | SQLException e) {
+			e.printStackTrace();
+		}
+        // Get counts from utility method
         Map<String, Integer> counts = getAllCount();
         request.setAttribute("counts", counts);
-		request.setAttribute("sellerList", sellerList);
-		dispatcher = request.getRequestDispatcher("views/admin/seller/list.jsp");
-		System.out.println(sellerList);
-		dispatcher.forward(request, response);
+        if (request.getParameter("page_number") != null) {
+        	page_number = Integer.parseInt(request.getParameter("page_number")); 
+        }
+        List<Seller> list = sellerDAO.getAll((page_number-1)*recordsPerPage,
+                                 recordsPerPage);
+        int noOfRecords = sellerDAO.getNoOfRecords();
+        int noOfPages = (int) Math.ceil(noOfRecords * 1.0 / recordsPerPage);
+        request.setAttribute("sellerList", list);
+        request.setAttribute("noOfPages", noOfPages);
+        request.setAttribute("currentPage", page_number);
+        dispatcher = request.getRequestDispatcher("views/admin/seller/list.jsp"); 
+        dispatcher.forward(request, response);
 	}
 	
 	// get all product
 	private void getAllProduct(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, SQLException {
-		List<Product> productList = productDAO.get();
-		// Get counts from utility method
+		int page_number = 1;
+        int recordsPerPage = 5;
+        try {
+			productDAO = new ProductDAO();
+		} catch (ClassNotFoundException | SQLException e) {
+			e.printStackTrace();
+		}
+        // Get counts from utility method
         Map<String, Integer> counts = getAllCount();
         request.setAttribute("counts", counts);
-		request.setAttribute("productList", productList);
-		dispatcher = request.getRequestDispatcher("views/admin/product/list.jsp");
-		System.out.println(productList);
-		dispatcher.forward(request, response);
+        if (request.getParameter("page_number") != null) {
+        	page_number = Integer.parseInt(request.getParameter("page_number")); 
+        }
+        List<Product> list = productDAO.getAll((page_number-1)*recordsPerPage,
+                                 recordsPerPage);
+        int noOfRecords = productDAO.getNoOfRecords();
+        int noOfPages = (int) Math.ceil(noOfRecords * 1.0 / recordsPerPage);
+        request.setAttribute("productList", list);
+        request.setAttribute("noOfPages", noOfPages);
+        request.setAttribute("currentPage", page_number);
+        dispatcher = request.getRequestDispatcher("views/admin/product/list.jsp"); 
+        dispatcher.forward(request, response);
 	}
 	
 	// get all store
 	private void getAllStore(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, SQLException {
-		List<Seller> sellerList = sellerDAO.get();
-		// Get counts from utility method
+		int page_number = 1;
+        int recordsPerPage = 5;
+        try {
+			sellerDAO = new SellerDAO();
+		} catch (ClassNotFoundException | SQLException e) {
+			e.printStackTrace();
+		}
+        // Get counts from utility method
         Map<String, Integer> counts = getAllCount();
         request.setAttribute("counts", counts);
-		request.setAttribute("sellerList", sellerList);
-		dispatcher = request.getRequestDispatcher("views/admin/store/list.jsp");
-		System.out.println(sellerList);
-		dispatcher.forward(request, response);
+        if (request.getParameter("page_number") != null) {
+        	page_number = Integer.parseInt(request.getParameter("page_number")); 
+        }
+        List<Seller> list = sellerDAO.getAll((page_number-1)*recordsPerPage,
+                                 recordsPerPage);
+        int noOfRecords = sellerDAO.getNoOfRecords();
+        int noOfPages = (int) Math.ceil(noOfRecords * 1.0 / recordsPerPage);
+        request.setAttribute("sellerList", list);
+        request.setAttribute("noOfPages", noOfPages);
+        request.setAttribute("currentPage", page_number);
+        dispatcher = request.getRequestDispatcher("views/admin/store/list.jsp"); 
+        dispatcher.forward(request, response);
 	}
 	
 	// get all category

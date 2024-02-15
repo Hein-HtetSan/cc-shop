@@ -35,7 +35,7 @@
 							</a>
 						</li>
                         <li class="nav-item <c:if test="${request.getRequestURI() eq '/shop-dot-com/views/admin/seller/list.jsp'}">active</c:if>">
-							<a href="${pageContext.request.contextPath}/AdminController?page=seller">
+							<a href="${pageContext.request.contextPath}/AdminController?page=seller&page_number=1">
 								<i class="las la-user-tie"></i>
 								<p>Sellers</p>
 								<span class="badge badge-count">${counts.seller_count}</span>
