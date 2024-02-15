@@ -50,18 +50,18 @@ public class SellerDAO {
 		Seller seller = null; // create admin object which is from model
 		String query = "select SQL_CALC_FOUND_ROWS sellers.*, businesses.name as bname FROM sellers LEFT JOIN businesses ON sellers.business_id = businesses.id limit " + offset + ", " + noOfRecords;
 		statement = con.createStatement();
-		ResultSet resultSet = statement.executeQuery(query);
-		while(resultSet.next()) {
+		resultset = statement.executeQuery(query);
+		while(resultset.next()) {
 			seller = new Seller();
-			seller.setId(resultSet.getInt("id"));
-			seller.setName(resultSet.getString("name"));
-			seller.setEmail(resultSet.getString("email"));
-			seller.setPhone(resultSet.getString("phone"));
-			seller.setImage(resultSet.getString("image"));
-			seller.setAddress(resultSet.getString("address"));
-			seller.setCompany(resultSet.getString("company"));
-			seller.setBusiness_id(resultSet.getInt("business_id"));
-			seller.setBname(resultSet.getString("bname"));
+			seller.setId(resultset.getInt("id"));
+			seller.setName(resultset.getString("name"));
+			seller.setEmail(resultset.getString("email"));
+			seller.setPhone(resultset.getString("phone"));
+			seller.setImage(resultset.getString("image"));
+			seller.setAddress(resultset.getString("address"));
+			seller.setCompany(resultset.getString("company"));
+			seller.setBusiness_id(resultset.getInt("business_id"));
+			seller.setBname(resultset.getString("bname"));
 			sellers.add(seller);
 		}
 		resultset.close();
