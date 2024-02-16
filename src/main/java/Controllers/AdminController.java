@@ -181,7 +181,17 @@ public class AdminController extends HttpServlet {
         			break;
         			
         		// edit profile
-        		case "editProfile": // action edit profile in admin profile
+        		case "editAdmin": // action edit profile in admin profile
+        			String admin_id = request.getParameter("admin_id");
+        			try {
+        				Admin admin1 = adminDAO.getById(Integer.parseInt(admin_id));
+        				request.setAttribute("admin", admin1);
+        				System.out.println(admin1);
+        				dispatcher = request.getRequestDispatcher("views/admin/profile/edit.jsp");
+        				dispatcher.forward(request, response);
+        			} catch (NumberFormatException e) {
+        				e.printStackTrace();
+        			}
         			break;
         			
         		// user detail page in admin panel
@@ -235,9 +245,11 @@ public class AdminController extends HttpServlet {
 						e.printStackTrace();
 					}
         			break;
+        		
         		}
         	}
         	
+        	// for page section
         	if(page != null) {
         		switch(page) {
         		case "user":  // user page in admin panel
@@ -288,7 +300,7 @@ public class AdminController extends HttpServlet {
         			dispatcher = request.getRequestDispatcher("views/admin/profile/index.jsp");
         			dispatcher.forward(request, response);
         		case "dashboard": // dashboard page in admin panel
-        			Map<String, Integer> counts;
+        			Map<String, Integer> counts = null;
 					try {
 						counts = getAllCount();
 						request.setAttribute("counts", counts);
@@ -298,6 +310,9 @@ public class AdminController extends HttpServlet {
 						e.printStackTrace();
 					}
         			break;
+        			
+            	
+            			
         		case "form": // form page for admin panel
         			dispatcher = request.getRequestDispatcher("views/admin/form.jsp");
         			dispatcher.forward(request, response);
@@ -498,6 +513,7 @@ public class AdminController extends HttpServlet {
 
 	// do post method
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		HttpSession session = request.getSession();
 		String action = request.getParameter("action");
 		if(action != null) {
 			switch(action) {
@@ -528,6 +544,27 @@ public class AdminController extends HttpServlet {
 				}
     	        
     			break;
+    			
+    		// update profile
+        	case "updateProfile":
+        			String admin_Id = request.getParameter("admin_id");
+        			System.out.println(admin_Id);
+        		try {
+        			Admin updatedAdmin = new Admin();
+        			updatedAdmin.setId(Integer.parseInt(admin_Id));
+        			updatedAdmin.setName(request.getParameter("name"));
+        			updatedAdmin.setEmail(request.getParameter("email"));
+        			updatedAdmin.setPhone(request.getParameter("phone"));
+					if(adminDAO.update(updatedAdmin)) {
+						Admin re_get_admin = adminDAO.getById(Integer.parseInt(admin_Id));
+						session.setAttribute("admin", re_get_admin);
+						response.sendRedirect(request.getContextPath()+"/AdminController?page=user");
+				}
+						
+				} catch (NumberFormatException | SQLException e) {
+					e.printStackTrace();
+				}
+        	break;
     			
     			
 			}

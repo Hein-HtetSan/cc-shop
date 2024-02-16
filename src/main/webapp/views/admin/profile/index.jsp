@@ -86,7 +86,6 @@
                                         <img src="${admin.image}" alt="" class="image">
                                         <label for="image" class="plus-icon text-muted"> <i class="las la-pen pen-2"></i> </label>
                                         <input type="file" class="image-file" id="image">
-                                        <button type="submit">Save</button>
                                     </div>
                                 </div>
                                 </form>
@@ -101,7 +100,7 @@
                                 <!-- #### Button group ####  -->
                                 <div class="form-group text-center">
                                     <div class="d-flex">
-                                        <button class="btn btn-primary w-100"> <i class="las la-pen"></i> Edit </button>
+                                        <a class="btn btn-primary w-100" href="${pageContext.request.contextPath}/AdminController?action=editAdmin&admin_id=${admin.id}"> <i class="las la-pen"></i> Edit </a>
                                         <div class="mx-1"></div>
                                         <a href="${pageContext.request.contextPath}/LoginController?page=adminLogout" class="btn btn-danger w-100"> <i class="las la-power-off"></i> Logout </a>
                                     </div>
