@@ -184,6 +184,20 @@ public class AdminController extends HttpServlet {
         		case "editProfile": // action edit profile in admin profile
         			break;
         			
+        		// user detail page in admin panel
+        		case "userDetail":
+        			String user_id1 = request.getParameter("user_id");
+        			try {
+        				Map<String, Integer> counts = getAllCount();
+        		        request.setAttribute("counts", counts);
+						Customer getCustomer = customerDAO.getById(Integer.parseInt(user_id1));
+						request.setAttribute("user", getCustomer);
+						dispatcher  = request.getRequestDispatcher("/views/admin/user/detail.jsp");
+						dispatcher.forward(request, response);
+					} catch (NumberFormatException | SQLException e) {
+						e.printStackTrace();
+					}
+        			break;
         		}
         	}
         	
