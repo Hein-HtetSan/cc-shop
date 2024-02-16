@@ -184,14 +184,60 @@ public class AdminController extends HttpServlet {
         		case "editProfile": // action edit profile in admin profile
         			break;
         			
+        		// user detail page in admin panel
+        		case "userDetail":
+        			String user_id1 = request.getParameter("user_id");
+        			try {
+        				Map<String, Integer> counts = getAllCount();
+        		        request.setAttribute("counts", counts);
+						Customer getCustomer = customerDAO.getById(Integer.parseInt(user_id1));
+						request.setAttribute("user", getCustomer);
+						dispatcher  = request.getRequestDispatcher("/views/admin/user/detail.jsp");
+						dispatcher.forward(request, response);
+					} catch (NumberFormatException | SQLException e) {
+						e.printStackTrace();
+					}
+        			break;
+        			
+        		// seller detail page in admin panel
+        		case "sellerDetail":
+        			String seller_id1 = request.getParameter("seller_id");
+        			try {
+        				Map<String, Integer> counts = getAllCount();
+						Seller getSeller = sellerDAO.getById(Integer.parseInt(seller_id1));
+						System.out.println(getSeller);
+						List<Product> getProduct_by_seller = productDAO.getProductBySellerId(Integer.parseInt(seller_id1));
+						request.setAttribute("seller", getSeller);
+						request.setAttribute("product", getProduct_by_seller);
+						request.setAttribute("counts", counts);
+						dispatcher  = request.getRequestDispatcher("/views/admin/seller/detail.jsp");
+						System.out.println(counts);
+						dispatcher.forward(request, response);
+					} catch (NumberFormatException | SQLException e) {
+						e.printStackTrace();
+					}
+        			break;
+        			
+        		// store detail page in admin panel
+        		case "storeDetail":
+        			String seller_id2 = request.getParameter("seller_id");
+        			try {
+        				Map<String, Integer> counts = getAllCount();
+						Seller getSeller = sellerDAO.getById(Integer.parseInt(seller_id2));
+						List<Product> getProduct_by_seller = productDAO.getProductBySellerId(Integer.parseInt(seller_id2));
+						request.setAttribute("seller", getSeller);
+						request.setAttribute("product", getProduct_by_seller);
+						request.setAttribute("counts", counts);
+						dispatcher  = request.getRequestDispatcher("/views/admin/store/detail.jsp");
+						System.out.println(counts);
+						dispatcher.forward(request, response);
+					} catch (NumberFormatException | SQLException e) {
+						e.printStackTrace();
+					}
+        			break;
         		}
         	}
         	
-        	
-        	// get page by actions
-        	if(page == null || page == "") {
-        		page = "user";
-        	}
         	if(page != null) {
         		switch(page) {
         		case "user":  // user page in admin panel

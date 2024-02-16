@@ -73,9 +73,11 @@
 															<td>${seller.address}</td>
 															<td class="td-actions">
 																<div class="form-button-action">
+																	<a href="${pageContext.request.contextPath}/AdminController?action=sellerDetail&seller_id=${seller.id}">
 																	<button type="button" data-toggle="tooltip" title="See Detail" class="btn btn-link btn-simple-primary">
 																		<i class="las la-eye"></i>
 																	</button>
+																	</a>
 																	<a href="${pageContext.request.contextPath}/AdminController?action=deleteSeller&seller_id=${seller.id}">
 																	<button type="button" data-toggle="tooltip" title="Remove" class="btn btn-link btn-simple-danger">
 																		<i class="las la-times"></i>
