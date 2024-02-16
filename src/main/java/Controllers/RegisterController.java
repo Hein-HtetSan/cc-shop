@@ -109,12 +109,9 @@ public class RegisterController extends HttpServlet {
 					
 					// get return 
 					flag = adminDAO.create(newAdmin);
-					
 					if(flag) {  // if flag true, then go dashboard.
-						
 						session.setAttribute("admin", newAdmin);
-						dispatcher = request.getRequestDispatcher("/views/admin/dashboard.jsp");
-					    dispatcher.forward(request, response);
+						response.sendRedirect(request.getContextPath() + "/AdminController?page=dashboard");
 					}
 	        	}else {
 	        		request.setAttribute("error", "Email has already taken");
@@ -124,7 +121,7 @@ public class RegisterController extends HttpServlet {
 	        } else {
 	            // Set error message and forward back to registration form
 	            request.setAttribute("error", "Passwords do not match");
-	            RequestDispatcher dispatcher = request.getRequestDispatcher("views/admin/form.jsp");
+	            RequestDispatcher dispatcher = request.getRequestDispatcher("/RegisterController?page=sellerForm");
 	            dispatcher.forward(request, response);
 	        }
 
@@ -172,9 +169,7 @@ public class RegisterController extends HttpServlet {
 						
 						if(flag) {  // if flag true, then go dashboard
 							session.setAttribute("seller", newSeller);
-							dispatcher = request.getRequestDispatcher("views/seller/dashboard.jsp");
-						    dispatcher.forward(request, response);
-						}
+							response.sendRedirect(request.getContextPath() + "/SellerController?page=main");					}
 		        	}else {
 		        		request.setAttribute("error", "Email has already taken");
 		        		dispatcher = request.getRequestDispatcher("/views/seller/form.jsp");
@@ -184,7 +179,7 @@ public class RegisterController extends HttpServlet {
 		        } else {
 		            // Set error message and forward back to registration form
 		            request.setAttribute("error", "Passwords do not match");
-		            RequestDispatcher dispatcher = request.getRequestDispatcher("views/seller/form.jsp");
+		            RequestDispatcher dispatcher = request.getRequestDispatcher("/views/seller/form.jsp");
 		            dispatcher.forward(request, response);
 		        }
 	}
@@ -221,8 +216,7 @@ public class RegisterController extends HttpServlet {
 					
 					if(flag) {
 						session.setAttribute("customer", newCustomer);
-						dispatcher = request.getRequestDispatcher("/views/user/dashboard.jsp");
-						dispatcher.forward(request, response);
+						response.sendRedirect(request.getContextPath() + "/UserController?page=main");
 					}
 				}else {
 					request.setAttribute("error", "Email has already taken");

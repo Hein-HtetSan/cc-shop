@@ -55,10 +55,11 @@ public class AdminController extends HttpServlet {
         	
         	request.setAttribute("admin", admin);
         	
+        	// action section
         	if(action != null) {
         		switch(action) {
         		// delete user
-        		case "deleteUser":
+        		case "deleteUser":  // action delete user in admin panel
         			String user_id = request.getParameter("user_id");
         			boolean deleteFlag;
     				try {
@@ -74,7 +75,7 @@ public class AdminController extends HttpServlet {
         			break;
         			
         		// delete seller
-        		case "deleteSeller":
+        		case "deleteSeller": // action delete seller in admin panel
         			String seller_id = request.getParameter("seller_id");
         			boolean delete_seller;
         			try {
@@ -90,7 +91,7 @@ public class AdminController extends HttpServlet {
         			break;
 
         		// delete store
-        		case "deleteStore":
+        		case "deleteStore": // action delete store in admin panel
         			String store_id = request.getParameter("store_id");
         			boolean delete_store;
         			try {
@@ -105,7 +106,7 @@ public class AdminController extends HttpServlet {
         			break;
         			
         		// delete category
-        		case "deleteCategory":
+        		case "deleteCategory": // action delete category in admin panel
         			String category_id = request.getParameter("category_id");
         			boolean delete_category;
         			try {
@@ -120,7 +121,7 @@ public class AdminController extends HttpServlet {
         			break;
         			
         		// delete business
-        		case "deleteBusiness":
+        		case "deleteBusiness": // action delete business in admin panel
         			String business_id = request.getParameter("business_id");
         			boolean delete_business;
         			try {
@@ -135,7 +136,7 @@ public class AdminController extends HttpServlet {
         			break;
         			
         		// delete product
-        		case "deleteProduct":
+        		case "deleteProduct":  // action delete product in admin panel
         			String product_id = request.getParameter("product_id");
         			boolean delete_product;
         			try {
@@ -150,7 +151,7 @@ public class AdminController extends HttpServlet {
         			break;
         			
         		// edit category
-        		case "editCategory":
+        		case "editCategory": // action edit category in admin panel
         			String category_Id = request.getParameter("category_id");
         			try {
     					Category category = categoryDAO.getById(Integer.parseInt(category_Id));
@@ -165,7 +166,7 @@ public class AdminController extends HttpServlet {
         			break;
         			
         		// edit business
-        		case "editBusiness":
+        		case "editBusiness": // action edit business in admin panel
         			String business_Id = request.getParameter("business_id");
         			try {
         				Business business = businessDAO.getById(Integer.parseInt(business_Id));
@@ -180,7 +181,7 @@ public class AdminController extends HttpServlet {
         			break;
         			
         		// edit profile
-        		case "editProfile":
+        		case "editProfile": // action edit profile in admin profile
         			break;
         			
         		}
@@ -193,56 +194,65 @@ public class AdminController extends HttpServlet {
         	}
         	if(page != null) {
         		switch(page) {
-        		case "user":
+        		case "user":  // user page in admin panel
         			try {
     					getAllUser(request, response); // user list
     				} catch (ServletException | IOException | SQLException e) {
     					e.printStackTrace();
     				}
         			break;
-        		case "seller":
+        		case "seller": // seller page in admin panel
         			try {
     					getAllSeller(request, response); // get all seller
     				} catch (ServletException | IOException | SQLException e) {
     					e.printStackTrace();
     				}
         			break;
-        		case "store":
+        		case "store": // store page in admin panel
         			try {
     					getAllStore(request, response);// get all store
     				} catch (ServletException | IOException | SQLException e) {
     					e.printStackTrace();
     				} 
-        		case "product":
+        		case "product": // product page in admin panel
         			try {
     					getAllProduct(request, response); // get all product
     				} catch (ServletException | IOException | SQLException e) {
     					e.printStackTrace();
     				}
         			break;
-        		case "business":
+        		case "business": // business page in admin panel
         			try {
     					getAllBusiness(request, response); // get all business
     				} catch (ServletException | IOException | SQLException e) {
     					e.printStackTrace();
     				} 
         			break;
-        		case "category":
+        		case "category": // category page in admin panel
         			try {
     					getAllCategory(request, response); // get all category
     				} catch (ServletException | IOException | SQLException e) {
     					e.printStackTrace();
     				}
         			break;
-        		case "profile":
+        		case "profile": // profile page in admin panel
         			String admin_id = request.getParameter("admin_id");
         			Admin getAdmin = adminDAO.getById(Integer.parseInt(admin_id));
         			request.setAttribute("admin", getAdmin);
         			dispatcher = request.getRequestDispatcher("views/admin/profile/index.jsp");
         			dispatcher.forward(request, response);
-        		case "dashboard":
+        		case "dashboard": // dashboard page in admin panel
+        			Map<String, Integer> counts;
+					try {
+						counts = getAllCount();
+						request.setAttribute("counts", counts);
+	        			dispatcher = request.getRequestDispatcher("views/admin/dashboard.jsp");
+	        			dispatcher.forward(request, response);
+					} catch (SQLException e) {
+						e.printStackTrace();
+					}
         			break;
-        		case "form":
+        		case "form": // form page for admin panel
         			dispatcher = request.getRequestDispatcher("views/admin/form.jsp");
         			dispatcher.forward(request, response);
         		default:

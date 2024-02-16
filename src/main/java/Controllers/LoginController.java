@@ -93,13 +93,17 @@ public class LoginController extends HttpServlet {
 		String email = request.getParameter("email");
 		String password = request.getParameter("password");
 		customer = customerDAO.getUserByEmail(email);
-		
-		if(Hash.verifyPassword(password, customer.getPassword())) {
-			session.setAttribute("admin", customer);
-			dispatcher = request.getRequestDispatcher("/views/user/dashboard.jsp");
-		    dispatcher.forward(request, response);
+		if(customer != null) {
+			if(Hash.verifyPassword(password, customer.getPassword())) {
+				session.setAttribute("customer", customer);
+				response.sendRedirect(request.getContextPath()+"/UserController?page=main");
+			}else {
+				request.setAttribute("error", "Passwords do not match");
+	            RequestDispatcher dispatcher = request.getRequestDispatcher("/views/user/form.jsp");
+	            dispatcher.forward(request, response);
+			}
 		}else {
-			request.setAttribute("error", "Passwords do not match");
+			request.setAttribute("error", "Email was wrong!");
             RequestDispatcher dispatcher = request.getRequestDispatcher("/views/user/form.jsp");
             dispatcher.forward(request, response);
 		}
@@ -112,13 +116,17 @@ public class LoginController extends HttpServlet {
 		String email = request.getParameter("email");
 		String password = request.getParameter("password");
 		seller = sellerDAO.getSellerByEmail(email);
-		
-		if(Hash.verifyPassword(password, seller.getPassword())) {
-			session.setAttribute("admin", seller);
-			dispatcher = request.getRequestDispatcher("/views/seller/dashboard.jsp");
-		    dispatcher.forward(request, response);
+		if(seller != null) {
+			if(Hash.verifyPassword(password, seller.getPassword())) {
+				session.setAttribute("seller", seller);
+				response.sendRedirect(request.getContextPath()+"/SellerController?page=main");
+			}else {
+				request.setAttribute("error", "Email or Password was wrong!");
+	            RequestDispatcher dispatcher = request.getRequestDispatcher("/views/seller/form.jsp");
+	            dispatcher.forward(request, response);
+			}
 		}else {
-			request.setAttribute("error", "Email or Password was wrong!");
+			request.setAttribute("error", "Email was wrong!");
             RequestDispatcher dispatcher = request.getRequestDispatcher("/views/seller/form.jsp");
             dispatcher.forward(request, response);
 		}
@@ -134,7 +142,7 @@ public class LoginController extends HttpServlet {
 		if(admin != null) {
 			if(Hash.verifyPassword(password, admin.getPassword())) {
 				session.setAttribute("admin", admin);
-				response.sendRedirect(request.getContextPath() + "/AdminController");
+				response.sendRedirect(request.getContextPath() + "/AdminController?page=dashboard");
 			}else {
 				request.setAttribute("error", "Password was wrong!");
 	            RequestDispatcher dispatcher = request.getRequestDispatcher("/views/admin/form.jsp");
