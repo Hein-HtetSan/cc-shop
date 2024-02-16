@@ -54,6 +54,22 @@ public class ProductDAO {
 	    return products;
 	}
 	
+	// get product count by seller id
+	public List<Product> getProductBySellerId(int id) throws SQLException {
+		List<Product> products = new ArrayList<Product>();
+		String query = "SELECT products.name, MAX(products.rating) FROM products LEFT JOIN sellers ON sellers.id = products.seller_id WHERE sellers.id=" + id + " GROUP BY products.name";
+		statement = con.createStatement();
+		resultSet = statement.executeQuery(query);
+		Product product = null;
+		while(resultSet.next()) {
+			product = new Product();
+			product.setName(resultSet.getString("name"));
+			product.setRating(resultSet.getInt("rating"));
+			products.add(product);
+		}
+		return products;
+	}
+	
 	// get all product
 		public List<Product> getAll(int offset, int noOfRecords) throws SQLException{
 			List<Product> products = new ArrayList<Product>();  // create empty admin list to store admins

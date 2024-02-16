@@ -90,7 +90,7 @@
  </div>
  
  	<c:if test="${not empty error}">
-    <div class="alert alert-warning d-flex justify-content-between"  role="alert">
+    <div class="alert alert-warning d-flex justify-content-between offset-9 w-25"  role="alert">
   		${error}
   		<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
 	</div>
