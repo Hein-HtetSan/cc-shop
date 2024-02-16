@@ -89,7 +89,7 @@
  
  </div>
  
- 	<c:if test="${!empty error}">
+ 	<c:if test="${not empty error}">
     <div class="alert alert-warning d-flex justify-content-between"  role="alert">
   		${error}
   		<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>

@@ -11,6 +11,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import DAO.SellerDAO;
 import DAO.BusinessDAO;
@@ -34,16 +35,25 @@ public class SellerController extends HttpServlet {
 
     // Get Method
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-    	    		List<Business> businesses;
-					try {
-						businesses = businessDAO.get();
-						request.setAttribute("businesses",businesses);
-						dispatcher = request.getRequestDispatcher("views/seller/form.jsp");
-			            dispatcher.forward(request, response);
-					} catch (SQLException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
+    	String page = request.getParameter("page");
+    	HttpSession session = request.getSession();
+    	
+    	Seller seller = (Seller) session.getAttribute("seller");
+    	if(seller != null) {
+    		if(page != null) {
+    			switch(page) {
+    			
+    			// seller main page --> redirect
+    			case "main":
+    				dispatcher = request.getRequestDispatcher("/views/seller/dashboard.jsp");
+    				dispatcher.forward(request, response);
+    				break;
+    				
+    			}
+    		}
+    	}else {
+    		response.sendRedirect("views/seller/form.jsp");
+    	}
     }
     
     
