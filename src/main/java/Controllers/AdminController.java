@@ -66,6 +66,7 @@ public class AdminController extends HttpServlet {
     					deleteFlag = customerDAO.delete(Integer.parseInt(user_id));
     					if(deleteFlag) {
     						System.out.println("delete success");
+    						request.setAttribute("success", "Deleted User Successfully");
     	    				dispatcher = request.getRequestDispatcher("AdminController?page=user");
     	    				dispatcher.forward(request, response);
     	    			}
@@ -82,6 +83,7 @@ public class AdminController extends HttpServlet {
     					delete_seller = sellerDAO.delete(Integer.parseInt(seller_id));
     					if(delete_seller) {
     						System.out.println("delete success");
+    						request.setAttribute("success", "Deleted Seller Successfully");
     						dispatcher = request.getRequestDispatcher("AdminController?page=seller");
     						dispatcher.forward(request, response);
     					}
@@ -97,6 +99,7 @@ public class AdminController extends HttpServlet {
         			try {
     					delete_store = sellerDAO.delete(Integer.parseInt(store_id));
     					if(delete_store) {
+    						request.setAttribute("success", "Deleted Store Successfully");
     						dispatcher = request.getRequestDispatcher("AdminController?page=store");
     						dispatcher.forward(request, response);
     					}
@@ -112,6 +115,7 @@ public class AdminController extends HttpServlet {
         			try {
     					delete_category = categoryDAO.delete(Integer.parseInt(category_id));
     					if(delete_category) {
+    						request.setAttribute("success", "Deleted Category Successfully");
     						dispatcher = request.getRequestDispatcher("AdminController?page=category");
     						dispatcher.forward(request, response);
     					}
@@ -181,7 +185,17 @@ public class AdminController extends HttpServlet {
         			break;
         			
         		// edit profile
-        		case "editProfile": // action edit profile in admin profile
+        		case "editAdmin": // action edit profile in admin profile
+        			String admin_id = request.getParameter("admin_id");
+        			try {
+        				Admin admin1 = adminDAO.getById(Integer.parseInt(admin_id));
+        				request.setAttribute("admin", admin1);
+        				System.out.println(admin1);
+        				dispatcher = request.getRequestDispatcher("views/admin/profile/edit.jsp");
+        				dispatcher.forward(request, response);
+        			} catch (NumberFormatException e) {
+        				e.printStackTrace();
+        			}
         			break;
         			
         		// user detail page in admin panel
@@ -235,9 +249,11 @@ public class AdminController extends HttpServlet {
 						e.printStackTrace();
 					}
         			break;
+        		
         		}
         	}
         	
+        	// for page section
         	if(page != null) {
         		switch(page) {
         		case "user":  // user page in admin panel
@@ -282,13 +298,18 @@ public class AdminController extends HttpServlet {
     				}
         			break;
         		case "profile": // profile page in admin panel
+        			String success = request.getParameter("success");
         			String admin_id = request.getParameter("admin_id");
         			Admin getAdmin = adminDAO.getById(Integer.parseInt(admin_id));
+        			
+        			
         			request.setAttribute("admin", getAdmin);
+        			if(success != null) request.setAttribute("success", success);
+        			
         			dispatcher = request.getRequestDispatcher("views/admin/profile/index.jsp");
         			dispatcher.forward(request, response);
         		case "dashboard": // dashboard page in admin panel
-        			Map<String, Integer> counts;
+        			Map<String, Integer> counts = null;
 					try {
 						counts = getAllCount();
 						request.setAttribute("counts", counts);
@@ -298,6 +319,9 @@ public class AdminController extends HttpServlet {
 						e.printStackTrace();
 					}
         			break;
+        			
+            	
+            			
         		case "form": // form page for admin panel
         			dispatcher = request.getRequestDispatcher("views/admin/form.jsp");
         			dispatcher.forward(request, response);
@@ -332,6 +356,10 @@ public class AdminController extends HttpServlet {
                                  recordsPerPage);
         int noOfRecords = customerDAO.getNoOfRecords();
         int noOfPages = (int) Math.ceil(noOfRecords * 1.0 / recordsPerPage);
+        
+        String success = request.getParameter("success");
+        if(success != null) request.setAttribute("success", success);
+        
         request.setAttribute("userList", list);
         request.setAttribute("noOfPages", noOfPages);
         request.setAttribute("currentPage", page_number);
@@ -358,6 +386,10 @@ public class AdminController extends HttpServlet {
                                  recordsPerPage);
         int noOfRecords = sellerDAO.getNoOfRecords();
         int noOfPages = (int) Math.ceil(noOfRecords * 1.0 / recordsPerPage);
+        
+        String success = request.getParameter("success");
+        if(success != null) request.setAttribute("success", success);
+        
         request.setAttribute("sellerList", list);
         request.setAttribute("noOfPages", noOfPages);
         request.setAttribute("currentPage", page_number);
@@ -384,6 +416,10 @@ public class AdminController extends HttpServlet {
                                  recordsPerPage);
         int noOfRecords = productDAO.getNoOfRecords();
         int noOfPages = (int) Math.ceil(noOfRecords * 1.0 / recordsPerPage);
+        
+        String success = request.getParameter("success");
+        if(success != null) request.setAttribute("success", success);
+        
         request.setAttribute("productList", list);
         request.setAttribute("noOfPages", noOfPages);
         request.setAttribute("currentPage", page_number);
@@ -410,6 +446,10 @@ public class AdminController extends HttpServlet {
                                  recordsPerPage);
         int noOfRecords = sellerDAO.getNoOfRecords();
         int noOfPages = (int) Math.ceil(noOfRecords * 1.0 / recordsPerPage);
+        
+        String success = request.getParameter("success");
+        if(success != null) request.setAttribute("success", success);
+        
         request.setAttribute("sellerList", list);
         request.setAttribute("noOfPages", noOfPages);
         request.setAttribute("currentPage", page_number);
@@ -421,6 +461,7 @@ public class AdminController extends HttpServlet {
 	private void getAllCategory(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, SQLException {
 		int page_number = 1;
         int recordsPerPage = 4;
+        
         try {
 			categoryDAO = new CategoryDAO();
 		} catch (ClassNotFoundException | SQLException e) {
@@ -436,6 +477,10 @@ public class AdminController extends HttpServlet {
                                  recordsPerPage);
         int noOfRecords = categoryDAO.getNoOfRecords();
         int noOfPages = (int) Math.ceil(noOfRecords * 1.0 / recordsPerPage);
+        
+        String success = request.getParameter("success");
+        if(success != null) request.setAttribute("success", success);
+        
         request.setAttribute("categoryList", list);
         request.setAttribute("noOfPages", noOfPages);
         request.setAttribute("currentPage", page_number);
@@ -462,6 +507,10 @@ public class AdminController extends HttpServlet {
                                  recordsPerPage);
         int noOfRecords = businessDAO.getNoOfRecords();
         int noOfPages = (int) Math.ceil(noOfRecords * 1.0 / recordsPerPage);
+        
+        String success = request.getParameter("success");
+        if(success != null) request.setAttribute("success", success);
+        
         request.setAttribute("businessList", list);
         request.setAttribute("noOfPages", noOfPages);
         request.setAttribute("currentPage", page_number);
@@ -498,6 +547,7 @@ public class AdminController extends HttpServlet {
 
 	// do post method
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		HttpSession session = request.getSession();
 		String action = request.getParameter("action");
 		if(action != null) {
 			switch(action) {
@@ -528,6 +578,27 @@ public class AdminController extends HttpServlet {
 				}
     	        
     			break;
+    			
+    		// update profile
+        	case "updateProfile":
+        			String admin_Id = request.getParameter("admin_id");
+        			System.out.println(admin_Id);
+        		try {
+        			Admin updatedAdmin = new Admin();
+        			updatedAdmin.setId(Integer.parseInt(admin_Id));
+        			updatedAdmin.setName(request.getParameter("name"));
+        			updatedAdmin.setEmail(request.getParameter("email"));
+        			updatedAdmin.setPhone(request.getParameter("phone"));
+					if(adminDAO.update(updatedAdmin)) {
+						Admin re_get_admin = adminDAO.getById(Integer.parseInt(admin_Id));
+						session.setAttribute("admin", re_get_admin);
+						response.sendRedirect(request.getContextPath()+"/AdminController?page=user");
+				}
+						
+				} catch (NumberFormatException | SQLException e) {
+					e.printStackTrace();
+				}
+        	break;
     			
     			
 			}

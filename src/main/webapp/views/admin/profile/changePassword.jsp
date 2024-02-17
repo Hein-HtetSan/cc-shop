@@ -2,12 +2,11 @@
     pageEncoding="ISO-8859-1"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
     
-    
 <!DOCTYPE html>
 <html>
 <head>
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-	<title>CC Shop | Profile</title>
+	<title>Change Password</title>
 	<meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no' name='viewport' />
 	<link rel="stylesheet" href="${pageContext.request.contextPath}/assets/admin/assets/css/bootstrap.min.css">
 	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i">
@@ -24,90 +23,67 @@
 	.card{
 		width: 500px !important;
 	}
-    .image-box{
-        width: 90px;
-        height: 100px;
-        border: 1px solid #b4b4b4;
-        border-radius: 10px;
-        position: relative;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-    .plus-icon{
-        width: 35px;
-        height: 35px;
-        border-radius: 50%;
-        background-color: rgb(226, 94, 94);
-        z-index: 5;
-        cursor: pointer;
-        position: absolute;
-        top: 70px;
-        left: 60px;
-        text-align: center;
-        transition: all .1s ease;
-    }
-    .pen-2{
-        font-size: 18px;
-        margin-top: 10px;
-        color: rgb(249, 249, 249);
-    }
-    .plus-icon:hover{
-        transform: scale(1.05);
-        background: #361cdc;
-    }
-    img{
-        width: 100%;
-        height: 100%;
-        border-radius: 10px;
-    }
-    .image-file{
-        display: none;
-    }
 </style>
 
 <body>
-	<div class="wrapper  bg-light ">
+	<div class="wrapper bg-light">
+	
+							<c:if test="${not empty error}">
+								<div class="alert alert-danger text-center" role="alert" id="errorAlert">
+								${error}
+								</div>
+							</c:if>
 
         <div class="row ">
 			<div class="col-12 d-flex align-items-center justify-content-center form-wrapper">
 				<div class="card shadow rounded">
 					<div class="card-header">
-						<h5 class="text-muted fw-bold text-center">  <i class="las la-edit"></i> Edit Profile</h5>
+						<h5 class="text-muted fw-bold"> <i class="las la-key"></i> Change Password</h5>
 					</div>
 					<div class="card-body">
-						<div class="row">
-                            <div class="col-12">
-                                <form method="post" action="${pageContext.request.contextPath}/AdminController">
-                                	<input type="hidden" name="action" value="updateProfile" >
-                                	<input type="hidden" name="admin_id" value="${admin.id}" >
-                                	<div class="form-group">
-                                		<lable class="form-label" for="name">Name</lable>
-                                		<input type="text" name="name" value="${admin.name }" class="form-control">
-                                	</div>	
-                                	<div class="form-group">
-                                		<lable class="form-label" for="email">Email</lable>
-                                		<input type="email" name="email" value="${admin.email }" class="form-control">
-                                	</div>
-                                	<div class="form-group">
-                                		<lable class="form-label" for="phone">Phone</lable>
-                                		<input type="text" name="phone" value="${admin.phone }" class="form-control">
-                                	</div>		
-                                	<div class="form-group">
-                                		<button class="btn btn-primary"> <i class="las la-save"></i> Update </button>
-                                	</div>	
-                                </form>
-                                <!-- #### Button group ####  -->
-                                <div class="form-group text-center">
-                                    <a class="btn btn-link  d-block " href="${pageContext.request.contextPath}/AdminController?page=user" >  Back to Dashboard </a> 
-                                </div>
-                            </div>
-                        </div>
+						<form action="${pageContext.request.contextPath}/PasswordController" method="post" class="">
+							<input type="hidden" name="action" value="updateAdminPassword">
+							<input type="hidden" name="admin_id" value="${admin.id}">
+							<div class="form-group">
+								<label for="cpassword" class="fw-semibold text-muted">Current Password</label>
+								<input type="password" class="form-control" name="current_password" placeholder="*******" >
+							</div>
+							<div class="form-group">
+								<label for="cpassword" class="fw-semibold text-muted">New Password</label>
+								<input type="password" class="form-control" name="new_password" placeholder="*******" >
+							</div>
+							<div class="form-group">
+								<label for="cpassword" class="fw-semibold text-muted">Confirm New Password</label>
+								<input type="password" class="form-control" name="confirm_new_password" placeholder="*******" >
+							</div>
+							<div class="form-group">
+								<a href="${pageContext.request.contextPath}/AdminController?page=profile&admin_id=${admin.id}" class="btn btn-secondary"><i class="las la-arrow-left"></i> Back</a>
+								<button type="submit" class="btn btn-primary"><i class="las la-key"></i> Save	</button>
+							</div>
+						</form>
 					</div>
 				</div>
 			</div>
 		</div>
+        
+
 	</div>
+	
+	<script>
+    // Wait for the document to be ready
+    document.addEventListener('DOMContentLoaded', function() {
+        // Find the success alert element
+        var successAlert = document.getElementById('errorAlert');
+        
+        // If the alert element exists
+        if (successAlert) {
+            // Set a timeout to hide the alert after 3 seconds
+            setTimeout(function() {
+                successAlert.style.display = 'none'; // Hide the alert
+            }, 3000); // 3000 milliseconds = 3 seconds
+        }
+	    });
+	</script>
 
 </body>
 <script src="${pageContext.request.contextPath}/assets/admin/assets/js/core/jquery.3.2.1.min.js"></script>

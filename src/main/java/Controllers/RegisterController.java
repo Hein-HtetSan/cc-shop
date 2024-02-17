@@ -110,7 +110,8 @@ public class RegisterController extends HttpServlet {
 					// get return 
 					flag = adminDAO.create(newAdmin);
 					if(flag) {  // if flag true, then go dashboard.
-						session.setAttribute("admin", newAdmin);
+						Admin retrieveAdmin = adminDAO.getAdminByEmail(email);
+						session.setAttribute("admin", retrieveAdmin);
 						response.sendRedirect(request.getContextPath() + "/AdminController?page=dashboard");
 					}
 	        	}else {
@@ -168,7 +169,8 @@ public class RegisterController extends HttpServlet {
 						flag = sellerDAO.create(newSeller);
 						
 						if(flag) {  // if flag true, then go dashboard
-							session.setAttribute("seller", newSeller);
+							Seller retrieveSeller = sellerDAO.getSellerByEmail(email);
+							session.setAttribute("seller", retrieveSeller);
 							response.sendRedirect(request.getContextPath() + "/SellerController?page=main");					}
 		        	}else {
 		        		request.setAttribute("error", "Email has already taken");
@@ -215,7 +217,8 @@ public class RegisterController extends HttpServlet {
 					flag = customerDAO.create(newCustomer);
 					
 					if(flag) {
-						session.setAttribute("customer", newCustomer);
+						Customer retrieveCustomer = customerDAO.getUserByEmail(email);
+						session.setAttribute("customer", retrieveCustomer);
 						response.sendRedirect(request.getContextPath() + "/UserController?page=main");
 					}
 				}else {
