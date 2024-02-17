@@ -28,13 +28,16 @@ public class PasswordController extends HttpServlet {
     }
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		HttpSession session = request.getSession();
 		String page = request.getParameter("page");
 		if(page != null) {
 			switch(page) {
 			case "adminPasswordChange": // admin password change
 				String admin_id = request.getParameter("admin_id");
+				String errors = request.getParameter("error");
 				Admin get_admin = adminDAO.getById(Integer.parseInt(admin_id));
+				if(errors != null) {
+					request.setAttribute("error", errors);
+				}
 				request.setAttribute("admin", get_admin);
 				request.getRequestDispatcher("/views/admin/profile/changePassword.jsp").forward(request, response);
 				break;
@@ -71,7 +74,7 @@ public class PasswordController extends HttpServlet {
 									System.out.println("got updated");
 									String success = "Updated Password successfully";
 									String encodedSuccess = URLEncoder.encode(success, "UTF-8");
-									response.sendRedirect(request.getContextPath() +"/AdminController?page=dashboard&success="+encodedSuccess);
+									response.sendRedirect(request.getContextPath() +"/AdminController?page=profile&admin_id="+admin_id+"&success="+encodedSuccess);
 								}
 							} catch (NumberFormatException | SQLException e) {
 								e.printStackTrace();

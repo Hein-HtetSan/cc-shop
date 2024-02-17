@@ -24,10 +24,34 @@
 			<div class="main-panel">
 				<div class="content">
 					<div class="container-fluid">
+
 						<h4 class="page-title">Dashboard</h4>
+						
+						<c:if test="${not empty success }">
+						<div class="alert alert-success text-center " role="alert" id="errorAlert">
+							${success}
+						</div>
+						</c:if>
+						<c:if test="${not empty error }">
+						<div class="alert alert-error text-center " role="alert" id="errorAlert">
+							${error}
+						</div>
+						</c:if>
+						
+						<c:if test="${not empty success }">
+						<div class="alert alert-success text-center " role="alert" id="errorAlert">
+							${success}
+						</div>
+						</c:if>
+						<c:if test="${not empty error }">
+						<div class="alert alert-error text-center " role="alert" id="errorAlert">
+							${error}
+						</div>
+						</c:if>
 
                         <!-- Content goes here  -->
                         <div class="row">
+                        
 							<div class="col-md-3">
 								<div class="card card-stats card-warning">
 									<div class="card-body ">
@@ -105,6 +129,7 @@
 								</div>
 							</div>
 						</div>
+						
 
 					</div>
 				</div>
@@ -117,7 +142,21 @@
 
 
     <!-- Bootstrap JS (optional, for some features) -->
-   
+   <script>
+    // Wait for the document to be ready
+    document.addEventListener('DOMContentLoaded', function() {
+        // Find the success alert element
+        var successAlert = document.getElementById('errorAlert');
+        
+        // If the alert element exists
+        if (successAlert) {
+            // Set a timeout to hide the alert after 3 seconds
+            setTimeout(function() {
+                successAlert.style.display = 'none'; // Hide the alert
+            }, 3000); // 3000 milliseconds = 3 seconds
+        }
+	    });
+	</script>
 
 </body>
 

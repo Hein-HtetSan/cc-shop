@@ -23,6 +23,17 @@
 				<div class="content">
 					<div class="container-fluid">
 						<h4 class="page-title">   Businesses</h4>
+						
+						<c:if test="${not empty success }">
+						<div class="alert alert-success text-center " role="alert" id="errorAlert">
+							${success}
+						</div>
+						</c:if>
+						<c:if test="${not empty error }">
+						<div class="alert alert-error text-center " role="alert" id="errorAlert">
+							${error}
+						</div>
+						</c:if>
 
                         <!-- Content goes here  -->
                         <div class="row">
@@ -142,27 +153,21 @@
 		</div>
 	</div>
 
-	<!-- Modal -->
-	<div class="modal fade" id="modalUpdate" tabindex="-1" role="dialog" aria-labelledby="modalUpdatePro" aria-hidden="true">
-		<div class="modal-dialog modal-dialog-centered" role="document">
-			<div class="modal-content">
-				<div class="modal-header bg-primary">
-					<h6 class="modal-title"><i class="la la-frown-o"></i> Under Development</h6>
-					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-						<span aria-hidden="true">&times;</span>
-					</button>
-				</div>
-				<div class="modal-body text-center">									
-					<p>Currently the pro version of the <b>Ready Dashboard</b> Bootstrap is in progress development</p>
-					<p>
-						<b>We'll let you know when it's done</b></p>
-				</div>
-				<div class="modal-footer">
-					<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-				</div>
-			</div>
-		</div>
-	</div>
+	<script>
+    // Wait for the document to be ready
+    document.addEventListener('DOMContentLoaded', function() {
+        // Find the success alert element
+        var successAlert = document.getElementById('errorAlert');
+        
+        // If the alert element exists
+        if (successAlert) {
+            // Set a timeout to hide the alert after 3 seconds
+            setTimeout(function() {
+                successAlert.style.display = 'none'; // Hide the alert
+            }, 3000); // 3000 milliseconds = 3 seconds
+        }
+	    });
+	</script>
 
 </body>
 

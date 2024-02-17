@@ -1,6 +1,7 @@
 package Controllers;
 
 import java.io.IOException;
+import java.net.URLEncoder;
 import java.sql.SQLException;
 
 import javax.servlet.RequestDispatcher;
@@ -64,7 +65,9 @@ public class BusinessController extends HttpServlet {
 		newBusiness.setName(name);
 		
 		if(businessDAO.create(newBusiness)) {
-			response.sendRedirect(request.getContextPath() + "/AdminController?page=business");
+			String success = "Added Business Successfully";
+			String encoded = URLEncoder.encode(success, "UTF-8");
+			response.sendRedirect(request.getContextPath() + "/AdminController?page=business&success="+encoded);
 		}
 	}
 	
@@ -75,7 +78,9 @@ public class BusinessController extends HttpServlet {
 			Business updatedBusiness = new Business();
 			updatedBusiness.setName(name);
 			if(businessDAO.update(updatedBusiness, Integer.parseInt(business_id))) {
-				response.sendRedirect(request.getContextPath() + "/AdminController?page=business");
+				String success = "Updated Business Successfully";
+				String encoded = URLEncoder.encode(success, "UTF-8");
+				response.sendRedirect(request.getContextPath() + "/AdminController?page=business&success="+encoded);
 			}
 		}
 
