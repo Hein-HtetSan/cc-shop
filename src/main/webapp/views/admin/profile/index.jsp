@@ -105,9 +105,10 @@
                                         <a href="${pageContext.request.contextPath}/LoginController?page=adminLogout" class="btn btn-danger w-100"> <i class="las la-power-off"></i> Logout </a>
                                     </div>
                                     <hr>
-                                    <a href="password.html" class="btn btn-link">Change Password?</a> | <a href="" class="btn btn-link btn-danger">Forget Password?</a> 
+                                    <a href="${pageContext.request.contextPath}/PasswordController?page=adminPasswordChange&admin_id=${admin.id}" class="btn btn-link">Change Password?</a> | <a href="" class="btn btn-link btn-danger">Forget Password?</a> 
                                     <a class="btn btn-link  d-block " href="${pageContext.request.contextPath}/AdminController?page=user" >  Back to Dashboard </a> 
                                 </div>
+                                
                             </div>
                         </div>
 					</div>
@@ -123,7 +124,6 @@
 <script src="${pageContext.request.contextPath}/assets/admin/assets/js/core/bootstrap.min.js"></script>
 <script src="${pageContext.request.contextPath}/assets/admin/assets/js/plugin/chartist/chartist.min.js"></script>
 <script src="${pageContext.request.contextPath}/assets/admin/assets/js/plugin/chartist/plugin/chartist-plugin-tooltip.min.js"></script>
-<script src="${pageContext.request.contextPath}/assets/admin/assets/js/plugin/bootstrap-notify/bootstrap-notify.min.js"></script>
 <script src="${pageContext.request.contextPath}/assets/admin/assets/js/plugin/bootstrap-toggle/bootstrap-toggle.min.js"></script>
 <script src="${pageContext.request.contextPath}/assets/admin/assets/js/plugin/jquery-mapael/jquery.mapael.min.js"></script>
 <script src="${pageContext.request.contextPath}/assets/admin/assets/js/plugin/jquery-mapael/maps/world_countries.min.js"></script>

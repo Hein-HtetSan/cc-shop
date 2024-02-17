@@ -97,6 +97,18 @@
 	</servlet-mapping>
 	<!-- End of business controller -->
 	
+	<!-- Business Controller -->
+	<servlet>
+	    <servlet-name>PasswordController</servlet-name>
+	    <servlet-class>Controllers.PasswordController</servlet-class>
+	</servlet>
+	
+	<servlet-mapping>
+	    <servlet-name>PasswordController</servlet-name>
+	    <url-pattern>/PasswordController</url-pattern>
+	</servlet-mapping>
+	<!-- End of business controller -->
+	
 	
 	
 	

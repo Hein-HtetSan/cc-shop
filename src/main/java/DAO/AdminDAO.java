@@ -86,6 +86,7 @@ public class AdminDAO {
 				admin.setEmail(resultset.getString("email"));
 				admin.setPhone(resultset.getString("phone"));
 				admin.setImage(resultset.getString("image"));
+				admin.setPassword(resultset.getString("password"));
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -165,6 +166,18 @@ public class AdminDAO {
 		stmt.setString(2, admin.getEmail());
 		stmt.setString(3, admin.getPhone());
 		stmt.setInt(4, admin.getId());
+		int updatedRow = stmt.executeUpdate();
+		if(updatedRow > 0) flag = true;
+		return flag;
+	}
+	
+	// update password
+	public boolean updatePassword(String password, int id) throws SQLException {
+		boolean flag = false;
+		String query = "UPDATE admin SET password=? WHERE id=?";
+		stmt = con.prepareStatement(query);
+		stmt.setString(1, password);
+		stmt.setInt(2, id);
 		int updatedRow = stmt.executeUpdate();
 		if(updatedRow > 0) flag = true;
 		return flag;
