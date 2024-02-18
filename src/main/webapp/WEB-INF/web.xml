@@ -7,7 +7,7 @@
   
   <session-config>
         <!-- Set session timeout in minutes -->
-        <session-timeout>45</session-timeout>
+        <session-timeout>1600</session-timeout>
     </session-config>
 
   
@@ -86,6 +86,18 @@
 	<servlet-mapping>
 	    <servlet-name>BusinessController</servlet-name>
 	    <url-pattern>/BusinessController</url-pattern>
+	</servlet-mapping>
+	<!-- End of business controller -->
+	
+	<!-- Business Controller -->
+	<servlet>
+	    <servlet-name>PasswordController</servlet-name>
+	    <servlet-class>Controllers.PasswordController</servlet-class>
+	</servlet>
+	
+	<servlet-mapping>
+	    <servlet-name>PasswordController</servlet-name>
+	    <url-pattern>/PasswordController</url-pattern>
 	</servlet-mapping>
 	<!-- End of business controller -->
 	

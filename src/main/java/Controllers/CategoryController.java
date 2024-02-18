@@ -1,6 +1,7 @@
 package Controllers;
 
 import java.io.IOException;
+import java.net.URLEncoder;
 import java.sql.SQLException;
 
 import javax.servlet.RequestDispatcher;
@@ -64,7 +65,9 @@ public class CategoryController extends HttpServlet {
 		newCategory.setName(name);
 		
 		if(categoryDAO.create(newCategory)) {
-			response.sendRedirect(request.getContextPath() + "/AdminController?page=category");
+			String success = "Added Category Successfully";
+			String encoded = URLEncoder.encode(success, "UTF-8");
+			response.sendRedirect(request.getContextPath() + "/AdminController?page=category&success="+encoded);
 		}
 	}
 	
@@ -75,7 +78,9 @@ public class CategoryController extends HttpServlet {
 		Category updatedCategory = new Category();
 		updatedCategory.setName(name);
 		if(categoryDAO.update(updatedCategory, Integer.parseInt(category_id))) {
-			response.sendRedirect(request.getContextPath() + "/AdminController?page=category");
+			String success = "Updated Category Successfully";
+			String encoded = URLEncoder.encode(success, "UTF-8");
+			response.sendRedirect(request.getContextPath() + "/AdminController?page=category&success="+encoded);
 		}
 	}
 

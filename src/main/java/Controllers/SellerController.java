@@ -1,6 +1,8 @@
 package Controllers;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.PrintWriter;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
@@ -8,10 +10,18 @@ import java.util.Map;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.PrintWriter;
+import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.servlet.http.Part;
 
 import DAO.SellerDAO;
 import DAO.BusinessDAO;
@@ -43,9 +53,10 @@ public class SellerController extends HttpServlet {
     			
     			// seller main page --> redirect
     			case "dashboard":
-    				dispatcher = request.getRequestDispatcher("/SellerController?page=dashboard");
+    				dispatcher = request.getRequestDispatcher("/views/seller/dashboard.jsp");
     				dispatcher.forward(request, response);
     				break;
+
     			case "product":
     				dispatcher = request.getRequestDispatcher("/views/seller/product/product.jsp");
     				dispatcher.forward(request, response);
@@ -60,9 +71,9 @@ public class SellerController extends HttpServlet {
 		    		dispatcher = request.getRequestDispatcher("/views/seller/history/history.jsp");
 					dispatcher.forward(request, response);
 					break;
-		}
 		
-    			
+		
+    			}
     		}
     	}else {
     		response.sendRedirect("views/seller/form.jsp");
@@ -74,6 +85,8 @@ public class SellerController extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
 	}
+	
+	
 	
 	
 	
