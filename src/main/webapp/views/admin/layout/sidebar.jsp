@@ -21,7 +21,7 @@
 						</div>
 					</div>
 					<ul class="nav">
-						<li class="nav-item <c:if test="${request.getRequestURI() eq 'http://localhost:9095/shop-dot-com/views/admin/dashboard.jsp'}">active</c:if>">
+						<li class="nav-item <c:if test="${request.getRequestURI() eq 'http://localhost:8080/shop-dot-com/views/admin/dashboard.jsp'}">active</c:if>">
 							<a href="${pageContext.request.contextPath}/AdminController?page=dashboard">
 								<i class="la la-dashboard"></i>
 								<p>Dashboard</p>

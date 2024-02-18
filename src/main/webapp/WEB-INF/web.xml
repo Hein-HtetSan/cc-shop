@@ -25,15 +25,7 @@
 	<!-- End of Admin Section -->
 	
 	<!-- Seller Controller -->
-	<servlet>
-	    <servlet-name>SellerController</servlet-name>
-	    <servlet-class>Controllers.SellerController</servlet-class>
-	</servlet>
 	
-	<servlet-mapping>
-	    <servlet-name>SellerController</servlet-name>
-	    <url-pattern>/SellerController</url-pattern>
-	</servlet-mapping>
 	
 	<!-- End of seller controller -->
 	
