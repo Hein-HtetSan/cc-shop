@@ -171,7 +171,7 @@ public class RegisterController extends HttpServlet {
 						if(flag) {  // if flag true, then go dashboard
 							Seller retrieveSeller = sellerDAO.getSellerByEmail(email);
 							session.setAttribute("seller", retrieveSeller);
-							response.sendRedirect(request.getContextPath() + "/SellerController?page=main");					}
+							response.sendRedirect(request.getContextPath() + "/SellerController?page=dashboard");					}
 		        	}else {
 		        		request.setAttribute("error", "Email has already taken");
 		        		dispatcher = request.getRequestDispatcher("/views/seller/form.jsp");

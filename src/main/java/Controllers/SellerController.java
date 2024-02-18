@@ -29,7 +29,7 @@ import Models.Seller;
 import Models.Business;
 import java.util.*;
 
-
+@WebServlet("/SellerController")
 public class SellerController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
     SellerDAO sellerDAO = null;
@@ -41,8 +41,6 @@ public class SellerController extends HttpServlet {
         sellerDAO = new SellerDAO();
         businessDAO = new BusinessDAO();
     }
-
-
     // Get Method
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
     	String page = request.getParameter("page");
@@ -54,10 +52,27 @@ public class SellerController extends HttpServlet {
     			switch(page) {
     			
     			// seller main page --> redirect
-    			case "main":
+    			case "dashboard":
     				dispatcher = request.getRequestDispatcher("/views/seller/dashboard.jsp");
     				dispatcher.forward(request, response);
     				break;
+
+    			case "product":
+    				dispatcher = request.getRequestDispatcher("/views/seller/product/product.jsp");
+    				dispatcher.forward(request, response);
+    				break;
+    			
+    			case "order":
+					dispatcher = request.getRequestDispatcher("/views/seller/order/order.jsp");
+					dispatcher.forward(request, response);
+					break;
+			
+    			case "history":
+		    		dispatcher = request.getRequestDispatcher("/views/seller/history/history.jsp");
+					dispatcher.forward(request, response);
+					break;
+		
+		
     			}
     		}
     	}else {

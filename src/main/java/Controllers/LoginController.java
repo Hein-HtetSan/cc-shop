@@ -119,7 +119,7 @@ public class LoginController extends HttpServlet {
 		if(seller != null) {
 			if(Hash.verifyPassword(password, seller.getPassword())) {
 				session.setAttribute("seller", seller);
-				response.sendRedirect(request.getContextPath()+"/SellerController?page=main");
+				response.sendRedirect(request.getContextPath()+"/SellerController?page=dashboard");
 			}else {
 				request.setAttribute("error", "Email or Password was wrong!");
 	            RequestDispatcher dispatcher = request.getRequestDispatcher("/views/seller/form.jsp");
