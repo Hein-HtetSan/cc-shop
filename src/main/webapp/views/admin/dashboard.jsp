@@ -38,16 +38,6 @@
 						</div>
 						</c:if>
 						
-						<c:if test="${not empty success }">
-						<div class="alert alert-success text-center " role="alert" id="errorAlert">
-							${success}
-						</div>
-						</c:if>
-						<c:if test="${not empty error }">
-						<div class="alert alert-error text-center " role="alert" id="errorAlert">
-							${error}
-						</div>
-						</c:if>
 
                         <!-- Content goes here  -->
                         <div class="row">
@@ -128,6 +118,9 @@
 									</div>
 								</div>
 							</div>
+							
+							
+							
 						</div>
 						
 
