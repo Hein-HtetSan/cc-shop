@@ -19,15 +19,15 @@
 					<ul class="navbar-nav topbar-nav ml-md-auto align-items-center">
 						<li class="nav-item dropdown">
 							<a class="dropdown-toggle profile-pic" data-toggle="dropdown" href="#" aria-expanded="false">
-							 <img src="${admin.image}" alt="user-img" width="39" class="img"><span class="text-light" >${admin.name}</span></span> 
+							 <img src="${seller.image}" alt="user-img" width="39" class="img"><span class="text-light" >${seller.name}</span></span> 
 							 </a>
 							<ul class="dropdown-menu dropdown-user">
 								<li>
 									<div class="user-box">
-										<div class="u-img"><img src="${admin.image}" alt="user"></div>
+										<div class="u-img"><img src="${seller.image}" alt="user"></div>
 										<div class="u-text">
-											<h4 class="">${admin.name}</h4>
-											<p class="text-muted">${admin.email}</p><a href="${pageContext.request.contextPath}/AdminController?page=profile&admin_id=${admin.id}" class="btn btn-rounded btn-danger btn-sm">View Profile</a></div>
+											<h4 class="">${seller.name}</h4>
+											<p class="text-muted">${seller.email}</p><a href="${pageContext.request.contextPath}/AdminController?page=profile&admin_id=${admin.id}" class="btn btn-rounded btn-danger btn-sm">View Profile</a></div>
 										</div>
 									</li>
 									<div class="dropdown-divider"></div>
