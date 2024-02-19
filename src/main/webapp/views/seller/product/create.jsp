@@ -36,7 +36,7 @@
 				</div>
 		        <div class="row d-flex align-items-center justify-content-center">
 		           <div class="col-12 col-md-5">
-		           	<form action="${pageContext.request.contextPath}/SellerController" method="post" enctype="multipart/form-data">
+		           	<form action="${pageContext.request.contextPath}/ProductController" method="post" enctype="multipart/form-data">
 		                <div class="card">
 		                   <div class="card-body">
 		                   		<input type="hidden" name="action" value="store">
@@ -79,7 +79,7 @@
 		                   		</div>
 		                   		<div class="d-flex align-items-center justify-content-between">
 		                   			<div class="form-group">
-		                   				<a class="btn btn-secondary text-light" href="">Back</a>
+		                   				<a class="btn btn-secondary text-light" href="${pageContext.request.contextPath}/SellerController?page=product">Back</a>
 		                   			</div>
 		                   			<div class="form-group">
 		                   				<button class="btn btn-primary">Save</button>
