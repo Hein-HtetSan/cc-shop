@@ -25,8 +25,11 @@ import javax.servlet.http.Part;
 
 import DAO.SellerDAO;
 import DAO.BusinessDAO;
+import DAO.CategoryDAO;
 import Models.Seller;
 import Models.Business;
+import Models.Category;
+
 import java.util.*;
 
 @WebServlet("/SellerController")
@@ -34,12 +37,14 @@ public class SellerController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
     SellerDAO sellerDAO = null;
     BusinessDAO businessDAO = null;
+    CategoryDAO categoryDAO = null;
     RequestDispatcher dispatcher = null;
 	
     public SellerController() throws ClassNotFoundException, SQLException {
         super();
         sellerDAO = new SellerDAO();
         businessDAO = new BusinessDAO();
+        categoryDAO = new CategoryDAO();
     }
     // Get Method
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -48,12 +53,14 @@ public class SellerController extends HttpServlet {
     	
     	Seller seller = (Seller) session.getAttribute("seller");
     	if(seller != null) {
+    		
+    		request.setAttribute("seller", seller);
+    		
     		if(page != null) {
     			switch(page) {
     			
     			// seller main page --> redirect
     			case "dashboard":
-    				request.setAttribute("seller", seller);
     				dispatcher = request.getRequestDispatcher("/views/seller/dashboard.jsp");
     				dispatcher.forward(request, response);
     				break;
@@ -72,8 +79,22 @@ public class SellerController extends HttpServlet {
 		    		dispatcher = request.getRequestDispatcher("/views/seller/history/history.jsp");
 					dispatcher.forward(request, response);
 					break;
-		
-		
+					
+    			case "createProductPage":
+    				try {
+						List<Category> categories = categoryDAO.get();
+						request.setAttribute("categories", categories);
+						dispatcher = request.getRequestDispatcher("/views/seller/product/create.jsp");
+	    				dispatcher.forward(request, response);
+					} catch (SQLException e) {
+						e.printStackTrace();
+					}
+    				break;
+    				
+    			case "addProductImage":
+    				dispatcher = request.getRequestDispatcher("/views/seller/product/insert_image.jsp");
+    				dispatcher.forward(request, response);
+    				break;
     			}
     		}
     	}else {

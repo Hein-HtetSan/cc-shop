@@ -7,10 +7,12 @@
 				<div class="scrollbar-inner sidebar-wrapper">
 					<div class="user">
 						<div class="photo">
+							<img src="${seller.image}">
 						</div>
 						<div class="info">
 							<a class="" data-toggle="collapse" href="#collapseExample" aria-expanded="true">
 								<span>
+									${seller.name}
 									<span class="user-level ">Seller</span>
 								</span>
 							</a>
@@ -20,25 +22,25 @@
 					</div>
 					<ul class="nav">
 						<li class="nav-item <c:if test="${request.getRequestURI() eq 'http://localhost:8080/shop-dot-com/views/seller/dashboard.jsp'}">active</c:if>">
-							<a href="${pageContext.request.contextPath}/views/seller/dashboard.jsp">
+							<a href="${pageContext.request.contextPath}/SellerController?page=dashboard">
 								<i class="la la-dashboard"></i>
 								<p>Dashboard</p>
 							</a>
 						</li>
 						<li class="nav-item <c:if test="${request.getRequestURI() eq '/SellerController?page=product'}">active</c:if>">
-							<a href="${pageContext.request.contextPath}/views/seller/product/product.jsp">
+							<a href="${pageContext.request.contextPath}/SellerController?page=product">
 								<i class="la la-user"></i>
 								<p>Products</p>
 							</a>
 						</li>
                         <li class="nav-item <c:if test = "${request.getRequestURL() eq '/SellerController?page=order' }">active</c:if>">
-							<a href="${pageContext.request.contextPath}/views/seller/order/order.jsp">
+							<a href="${pageContext.request.contextPath}/SellerController?page=order">
 								<i class="las la-user-tie"></i>
 								<p>Order</p>
 							</a>
 						</li>
                         <li class="nav-item <c:if test = "${request.getRequestURL() eq '/SellerController?page=history' }">active</c:if>">
-							<a href="${pageContext.request.contextPath}/views/seller/history/history.jsp">
+							<a href="${pageContext.request.contextPath}/SellerController?page=history">
 								<i class="las la-store"></i>
 								<p>History</p>
 							</a>
