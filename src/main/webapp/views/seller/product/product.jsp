@@ -118,4 +118,5 @@
 		</div>
 				
 	</div>
+
 <%@ include file="/views/seller/layout/footer.jsp"%>
