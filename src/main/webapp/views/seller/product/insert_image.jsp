@@ -63,39 +63,7 @@
 		</div>		
 	</div>
 	
-	<script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
-
-	<script type="text/javascript">
-	$(document).ready(function(){
-	    $(".add-image").click(function(){
-	        var imageBox = '<div class="image-box d-flex align-items-center justify-content-between my-2">' +
-	                            '<div class="form-group flex-grow-1 mr-2">' +
-	                                '<label class="form-label image-label text-muted p-2 bg-light mt-2" for="image">Select Image</label>' +
-	                                '<input type="file" class="form-control image-input" name="image" id="image">' +
-	                            '</div>'+
-	                            '<button class="remove-image btn btn-danger">Remove</button>' +
-	                        '</div>';
-	        $(".image-container").append(imageBox);
-	    });
-
-	    // Event listener for dynamically added remove-image buttons
-	    $(".image-container").on("click", ".remove-image", function(){
-	        $(this).closest(".image-box").remove(); // Remove the closest .image-box
-	    });
-
-	 // Event listener for dynamically added image inputs
-	    $(".image-container").on("change", ".image-input", function(){
-	        var label = $(this).siblings("label.image-label");
-	        label.text("Imported").removeClass("text-muted").addClass("text-success");
-	        label.removeClass("bg-light").addClass("bg-success");
-
-	        // Find the closest image-box relative to the input that triggered the change event
-	        var imageBox = $(this).closest(".image-box");
-	        imageBox.addClass("bg-success"); // Change background color of the closest .image-box
-	    });
-	});
-
-    </script>
+	
 
 	
 <%@ include file="/views/seller/layout/footer.jsp"%>

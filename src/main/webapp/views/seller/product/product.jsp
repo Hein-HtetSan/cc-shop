@@ -20,7 +20,7 @@
 				<div class="row">
 					<h4 class="page-title col-md-6 col-6">Product</h4>
                 	<div class="col-md-6 col-6">
-                		<a href="${pageContext.request.contextPath}/SellerController?page=createProductPage" type="button" class="btn btn-primary text-white pull-right"> Add New Product</a>
+                		<a href="${pageContext.request.contextPath}/SellerController?page=createProductPage&seller_id=${seller.id}" type="button" class="btn btn-primary text-white pull-right"> Add New Product</a>
                 	</div>
 				</div>
 		        <div class="row">
