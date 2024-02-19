@@ -53,6 +53,7 @@ public class SellerController extends HttpServlet {
     			
     			// seller main page --> redirect
     			case "dashboard":
+    				request.setAttribute("seller", seller);
     				dispatcher = request.getRequestDispatcher("/views/seller/dashboard.jsp");
     				dispatcher.forward(request, response);
     				break;
