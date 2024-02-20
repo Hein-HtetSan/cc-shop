@@ -91,7 +91,7 @@
 		                                <div class="mt-3 mt-lg-0 ml-lg-3 text-center">
 		                                	<span class="mt-2">Number of Product: ${product.count}</span>
 		                                    <h4 class="mb-0 font-weight-semibold mt-2">${product.price} MMK</h4>	
-		                                    <a href="${pageContext.request.contextPath}/ProductController?page=detail&product_id=${product.id}" type="button" class="btn btn-info mt-4 text-white"> <i class="las la-exclamation-circle"></i></a>
+		                                    <a href="${pageContext.request.contextPath}/ProductController?page=detail&product_id=${product.id}&seller_id=${seller.id}" type="button" class="btn btn-info mt-4 text-white"> <i class="las la-exclamation-circle"></i></a>
 		                                    <a href="${pageContext.request.contextPath}/ProductController?page=edit&product_id=${product.id}" class="btn btn-primary mt-4 text-white "> <i class="las la-edit"></i>  </a>
 		                                    <a href="${pageContext.request.contextPath}/ProductController?page=destory&product_id=${product.id}" type="button" class="btn btn-danger mt-4 text-white"> <i class="las la-trash"></i> </a>
 		                                </div>

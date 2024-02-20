@@ -82,7 +82,7 @@
 														<td>${product.name}</td>
 														<td>${product.seller_name}</td>
 														<td>${product.rating}</td>
-														<td>1${product.price}$</td>
+														<td>1${product.price} MMKs</td>
 														<td>
 															<c:choose>
 															    <c:when test="${product.count > 0}">
@@ -96,12 +96,9 @@
 														</td>
 														<td class="td-actions">
 															<div class="form-button-action">
-																<button type="button" data-toggle="tooltip" title="See Detail" class="btn btn-link btn-simple-primary">
-																	<i class="las la-eye"></i>
-																</button>
-																<a href="${pageContext.request.contextPath}/AdminController?action=deleteProduct&product_id=${product.id}">
-																	<button type="button" data-toggle="tooltip" title="Remove" class="btn btn-link btn-simple-danger">
-																		<i class="las la-times"></i>
+																<a href="${pageContext.request.contextPath}/AdminController?action=productDetail&product_id=${product.id}">
+																	<button type="button" data-toggle="tooltip" title="See Detail" class="btn btn-link btn-simple-primary">
+																		<i class="las la-eye"></i>
 																	</button>
 																</a>
 															</div>
