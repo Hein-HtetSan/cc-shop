@@ -53,6 +53,11 @@ public class LoginController extends HttpServlet {
 				session.removeAttribute("admin");
 				response.sendRedirect(request.getContextPath()  + "/views/admin/form.jsp");
 			}
+			
+			if(page.equals("sellerLogout")) {
+				session.removeAttribute("seller");
+				response.sendRedirect(request.getContextPath() + "/RegisterController?page=sellerForm");
+			}
 		}
 	}
 

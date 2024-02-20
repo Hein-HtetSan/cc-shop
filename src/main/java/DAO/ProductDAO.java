@@ -1,5 +1,6 @@
 package DAO;
 
+import java.io.File;
 import java.sql.*;
 import java.util.*;
 
@@ -152,6 +153,41 @@ public class ProductDAO {
 			public List<Product> getAll(int offset, int noOfRecords) throws SQLException{
 				List<Product> products = new ArrayList<Product>();  // create empty admin list to store admins
 				Product product = null; // create admin object which is from model
+				String query = "select SQL_CALC_FOUND_ROWS products.*, categories.name as category_name, MIN(images.name) AS image_name, sellers.name as seller_name FROM products "
+						+ "LEFT JOIN categories ON products.category_id = categories.id "
+						+ "LEFT JOIN sellers ON products.seller_id = sellers.id "
+						+ "LEFT JOIN images ON images.product_id = products.id GROUP BY "
+						+ "products.id "
+						+ "ORDER BY updated_at DESC limit " + offset + ", " + noOfRecords;
+				statement = con.createStatement();
+		        resultSet = statement.executeQuery(query);
+		        while(resultSet.next()) {
+		             product = new Product();
+		            product.setId(resultSet.getInt("id"));
+		            product.setName(resultSet.getString("name"));
+		            product.setPrice(resultSet.getInt("price"));
+		            product.setDescription(resultSet.getString("description"));
+		            product.setCount(resultSet.getInt("count"));
+		            product.setRating(resultSet.getInt("rating"));
+		            product.setCategory_id(resultSet.getInt("category_id"));
+		            product.setSeller_id(resultSet.getInt("seller_id"));
+		            product.setSeller_name(resultSet.getString("seller_name"));
+		            product.setCategory_name(resultSet.getString("category_name"));
+		            product.setImage(resultSet.getString("image_name"));
+		            // Add the product to the list
+		            products.add(product);
+		        }
+				resultSet.close();
+				resultSet = statement.executeQuery("SELECT FOUND_ROWS()");
+		        if(resultSet.next()) {
+		        	 this.noOfRecords = resultSet.getInt(1);
+		        }
+				return products; // return that list
+			}
+			
+			public List<Product> getFull(int offset, int noOfRecords) throws SQLException{
+				List<Product> products = new ArrayList<Product>();  // create empty admin list to store admins
+				Product product = null; // create admin object which is from model
 				String query = "select SQL_CALC_FOUND_ROWS products.*, categories.name as category_name, images.name as image_name, sellers.name as seller_name FROM products LEFT JOIN categories ON products.category_id = categories.id LEFT JOIN sellers ON products.seller_id = sellers.id LEFT JOIN images ON images.product_id = products.id ORDER BY updated_at DESC limit " + offset + ", " + noOfRecords;
 				statement = con.createStatement();
 		        resultSet = statement.executeQuery(query);
@@ -178,8 +214,6 @@ public class ProductDAO {
 		        }
 				return products; // return that list
 			}
-	
-	
 
 		// get number of records
 		public int getNoOfRecords() {
@@ -188,12 +222,66 @@ public class ProductDAO {
 		
 		// delete product
 		public boolean delete(int id) throws SQLException {
-				boolean flag = false;
-				String query = "DELETE FROM products WHERE id = " + id;
+				boolean delete_product_flag = false;
+				boolean delete_image_flag = false;
+				boolean is_all_deleted = false;
+				
+				List<String> images = new ArrayList<String>();
+				
+				// frist select the images
+				String select_product = "SELECT * FROM images WHERE product_id = " +id;
 				statement = con.createStatement();
-				int deletedRow = statement.executeUpdate(query);
-				if(deletedRow > 0) flag = true;
-				return flag;
+				resultSet = statement.executeQuery(select_product);
+				while(resultSet.next()) {
+					String image = resultSet.getString("name");
+					images.add(image);
+				}
+				statement.close();
+				
+				
+				// delete from product table
+				String query = "DELETE FROM images WHERE product_id = " + id;
+				statement = con.createStatement();
+				int delete_image = statement.executeUpdate(query);
+				if(delete_image > 0) delete_image_flag = true;
+				statement.close();
+				
+				// delete image from local images
+				for(String i : images) {
+					// Provide the path of the file you want to delete
+					String filePath = "C:\\Users\\acer\\Desktop\\cc-shop\\src\\main\\webapp\\assets\\images\\products\\" + i;
+
+					// Create a File object with the specified file path
+					File fileToDelete = new File(filePath);
+
+					// Check if the file exists before attempting to delete it
+					if (fileToDelete.exists()) {
+					    // Attempt to delete the file
+					    if (fileToDelete.delete()) {
+					        System.out.println("File deleted successfully.");
+					    } else {
+					        System.out.println("Failed to delete the file.");
+					    }
+					} else {
+					    System.out.println("File does not exist.");
+					}
+				}
+				System.out.println("Deleted file successfullt");
+				
+				if(delete_image_flag) {
+					System.out.println("delete from image table");
+					// then delete product image
+					String query2 = "DELETE FROM products WHERE id = " +id;
+					statement = con.createStatement();
+					int deleted_product = statement.executeUpdate(query2);
+					if(deleted_product > 0) {
+						delete_product_flag = true;
+						System.out.println("delete from  product table");
+					}
+				}
+				if(delete_product_flag && delete_image_flag) is_all_deleted = true;
+				
+				return is_all_deleted;
 		}
 		
 		

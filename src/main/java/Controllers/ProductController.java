@@ -23,9 +23,11 @@ import javax.servlet.http.Part;
 
 import java.util.*;
 
+import Models.Category;
 import Models.Image;
 import Models.Product;
 import DAO.ProductDAO;
+import DAO.CategoryDAO;
 
 @MultipartConfig
 
@@ -34,27 +36,46 @@ public class ProductController extends HttpServlet {
 	
 	Connection con=null;
 	ProductDAO productDAO = null;
+	CategoryDAO categoryDAO = null;
 	RequestDispatcher dispatcher = null;
        
     public ProductController() throws ClassNotFoundException, SQLException {
         super();
         con = Config.config.getConnections();
         productDAO = new ProductDAO();
+        categoryDAO = new CategoryDAO();
     }
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String page = request.getParameter("page");
+		String error = request.getParameter("error");
 		
 		if(page != null) {
 			switch(page) {
-			// create page for product
-			case "createPage":
-				
+			case "createProductPage":
+				try {
+					List<Category> categories = categoryDAO.get();
+					request.setAttribute("categories", categories);
+					if(error != null) request.setAttribute("error", error);
+					dispatcher = request.getRequestDispatcher("/views/seller/product/create.jsp");
+    				dispatcher.forward(request, response);
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
 				break;
 				
 			// edit page for product
 			case "editPage":
 				
+				break;
+				
+			// destory the product
+			case "destory":
+				try {
+					destory(request, response);
+				} catch (NumberFormatException | ServletException | IOException | SQLException e) {
+					e.printStackTrace();
+				}
 				break;
 			}
 		}
@@ -72,11 +93,6 @@ public class ProductController extends HttpServlet {
 				} catch (ServletException | IOException | SQLException e) {
 					e.printStackTrace();
 				}
-				break;
-			
-			//destory product
-			case "destory":
-				
 				break;
 				
 			//update product content
@@ -241,5 +257,20 @@ public class ProductController extends HttpServlet {
 	        }
 	        return "";
 	    }
+		
+	// destory the product
+		private void destory(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, NumberFormatException, SQLException {
+			String product_id = request.getParameter("product_id");
+			boolean flag = productDAO.delete(Integer.parseInt(product_id));
+			if(flag) {
+				String success = "Deleted product successfully!";
+				String encoded = URLEncoder.encode(success, "UTF-8");
+				response.sendRedirect(request.getContextPath() +"/SellerController?page=product&success="+encoded);
+			}else {
+				String error = "Can't delete product!";
+				String encodedError = URLEncoder.encode(error, "UTF-8");
+				response.sendRedirect(request.getContextPath() +"/SellerController?page=product&error="+encodedError);
+			}
+		}
 
 }
