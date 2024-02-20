@@ -83,7 +83,7 @@ public class SellerController extends HttpServlet {
 
     			case "product":
     				try {
-						getAllProductWithOneImage(request, response);
+    					getAllProductWithOneImageBySellerID(request, response);
 					} catch (ServletException | IOException | SQLException e) {
 						e.printStackTrace();
 					}
@@ -123,7 +123,43 @@ public class SellerController extends HttpServlet {
 	
 	
 	// get all product with one image
+    private void getAllProductWithOneImageBySellerID(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, SQLException {
+    	// get the product with seller id
+    	String seller_id = request.getParameter("seller_id");
+    	
+    	int page_number = 1;
+        int recordsPerPage = 4;
+        try {
+			productDAO = new ProductDAO();
+		} catch (ClassNotFoundException | SQLException e) {
+			e.printStackTrace();
+		}
+        // Get counts from utility method
+        if (request.getParameter("page_number") != null) {
+        	page_number = Integer.parseInt(request.getParameter("page_number")); 
+        }
+        List<Product> products = productDAO.getAllBySellerID((page_number-1)*recordsPerPage,
+                                 recordsPerPage, Integer.parseInt(seller_id));
+        int noOfRecords = productDAO.getNoOfRecords();
+        System.out.println(noOfRecords);
+        int noOfPages = (int) Math.ceil(noOfRecords * 1.0 / recordsPerPage);
+        
+        String success = request.getParameter("success");
+        if(success != null) request.setAttribute("success", success);
+        
+        request.setAttribute("products", products);
+        request.setAttribute("noOfPages", noOfPages);
+        request.setAttribute("currentPage", page_number);
+        request.setAttribute("seller_id", seller_id);
+        dispatcher = request.getRequestDispatcher("/views/seller/product/product.jsp");
+		dispatcher.forward(request, response);
+    }
+    
+    
+ // get all product with one image by customer
     private void getAllProductWithOneImage(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, SQLException {
+    	// get the product with seller id
+    	
     	int page_number = 1;
         int recordsPerPage = 4;
         try {

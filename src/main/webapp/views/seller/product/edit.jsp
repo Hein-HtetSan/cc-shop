@@ -95,7 +95,7 @@
 		                   		</div>
 		                   		<div class="d-flex align-items-center justify-content-between">
 		                   			<div class="form-group">
-		                   				<a class="btn btn-secondary text-light" href="${pageContext.request.contextPath}/SellerController?page=product">Back</a>
+		                   				<a class="btn btn-secondary text-light" href="${pageContext.request.contextPath}/SellerController?page=product&seller_id=${seller.id}">Back</a>
 		                   			</div>
 		                   			<div class="form-group">
 		                   				<button class="btn btn-primary" type="submit">Update</button>

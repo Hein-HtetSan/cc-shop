@@ -184,6 +184,44 @@ public class ProductDAO {
 				return products; // return that list
 			}
 			
+			
+			// get all product by seller Id
+						public List<Product> getAllBySellerID(int offset, int noOfRecords, int seller_id) throws SQLException{
+							List<Product> products = new ArrayList<Product>();  // create empty admin list to store admins
+							Product product = null; // create admin object which is from model
+							String query = "select SQL_CALC_FOUND_ROWS products.*, categories.name as category_name, MIN(images.name) AS image_name, sellers.name as seller_name FROM products "
+									+ "LEFT JOIN categories ON products.category_id = categories.id "
+									+ "LEFT JOIN sellers ON products.seller_id = sellers.id "
+									+ "LEFT JOIN images ON images.product_id = products.id  WHERE sellers.id="+seller_id+" GROUP BY "
+									+ "products.id "
+									+ "ORDER BY updated_at DESC limit " + offset + ", " + noOfRecords ;
+							statement = con.createStatement();
+					        resultSet = statement.executeQuery(query);
+					        while(resultSet.next()) {
+					             product = new Product();
+					            product.setId(resultSet.getInt("id"));
+					            product.setName(resultSet.getString("name"));
+					            product.setPrice(resultSet.getInt("price"));
+					            product.setDescription(resultSet.getString("description"));
+					            product.setCount(resultSet.getInt("count"));
+					            product.setRating(resultSet.getInt("rating"));
+					            product.setCategory_id(resultSet.getInt("category_id"));
+					            product.setSeller_id(resultSet.getInt("seller_id"));
+					            product.setSeller_name(resultSet.getString("seller_name"));
+					            product.setCategory_name(resultSet.getString("category_name"));
+					            product.setImage(resultSet.getString("image_name"));
+					            // Add the product to the list
+					            products.add(product);
+					        }
+							resultSet.close();
+							resultSet = statement.executeQuery("SELECT FOUND_ROWS()");
+					        if(resultSet.next()) {
+					        	 this.noOfRecords = resultSet.getInt(1);
+					        }
+							return products; // return that list
+						}
+			
+			
 			public Product getFullDataBySellerId(int id) throws SQLException{
 				Product product = new Product(); // create admin object which is from model
 				String query = "select products.*, categories.name as category_name, sellers.name as seller_name FROM products LEFT JOIN categories ON products.category_id = categories.id LEFT JOIN sellers ON products.seller_id = sellers.id WHERE products.id=" + id;

@@ -28,7 +28,7 @@
 							</a>
 						</li>
 						<li class="nav-item <c:if test="${request.getRequestURI() eq '/SellerController?page=product'}">active</c:if>">
-							<a href="${pageContext.request.contextPath}/SellerController?page=product">
+							<a href="${pageContext.request.contextPath}/SellerController?page=product&seller_id=${seller.id}">
 								<i class="la la-user"></i>
 								<p>Products</p>
 							</a>

@@ -69,8 +69,8 @@
 			          </div>
 			
 			          <hr />
-			          	<a href="${pageContext.request.contextPath}/ProductController?page=edit&product_id=${product.id}" class="btn btn-warning border border-secondary py-2 "> Edit </a>
-			          	<a href="${pageContext.request.contextPath}/SellerController?page=product" class="btn btn-primary border border-secondary py-2 "> Ok </a>
+			          	<a href="${pageContext.request.contextPath}/ProductController?page=edit&product_id=${product.id}&seller_id=${seller.id}" class="btn btn-warning border border-secondary py-2 "> Edit </a>
+			          	<a href="${pageContext.request.contextPath}/SellerController?page=product&seller_id=${seller.id}" class="btn btn-primary border border-secondary py-2 "> Ok </a>
 			          </div>
 
 			        </div>

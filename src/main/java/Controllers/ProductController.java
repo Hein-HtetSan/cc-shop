@@ -430,6 +430,7 @@ public class ProductController extends HttpServlet {
 			
 			request.setAttribute("images", images);
 			request.setAttribute("product", product);
+			request.setAttribute("seller_id", seller_id);
 			dispatcher = request.getRequestDispatcher("/views/seller/product/detail.jsp");
 			dispatcher.forward(request, response);
 		}
