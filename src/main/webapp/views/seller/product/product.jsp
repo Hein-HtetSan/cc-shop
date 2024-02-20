@@ -18,7 +18,7 @@
 		<div class="content">
 			<div class="container-fluid">
 				<div class="row">
-					<h4 class="page-title col-md-6 col-6">Product</h4>
+					<h4 class="page-title col-md-6 col-6">Product ( ${products.size()} ) </h4>
                 	<div class="col-md-6 col-6">
                 		<a href="${pageContext.request.contextPath}/ProductController?page=createProductPage&seller_id=${seller.id}" type="button" class="btn btn-primary text-white pull-right"> Add New Product</a>
                 	</div>
@@ -69,22 +69,31 @@
 		
 		                                <div class="media-body p-3">
 		                                    <h6 class="media-title font-weight-semibold">
-		                                        <a href="#" data-abc="true" class="">${product.name }</a>
+		                                        <a href="#" data-abc="true" class="">${product.name}</a>
 		                                    </h6>
 		
 		                                    <ul class="list-inline list-inline-dotted mb-3 mb-lg-2">
 		                                        <li class="list-inline-item"><a href="#" class="text-muted" data-abc="true">${product.category_name}</a></li>
 		                                    </ul>
 		
-		                                    <p class="mb-3">${product.description}</p>
+		                                    <p class="mb-3">
+											    <c:choose>
+											        <c:when test="${product.description.length() > 200}">
+											            ${product.description.substring(0, 200)} ...
+											        </c:when>
+											        <c:otherwise>
+											            ${product.description}
+											        </c:otherwise>
+											    </c:choose>
+											</p>
 		
 		                                </div>
 		                                <div class="mt-3 mt-lg-0 ml-lg-3 text-center">
 		                                	<span class="mt-2">Number of Product: ${product.count}</span>
 		                                    <h4 class="mb-0 font-weight-semibold mt-2">${product.price} MMK</h4>	
-		                                    <button type="button" class="btn btn-info mt-4 text-white"> Detail</button>
-		                                    <button type="button" class="btn btn-primary mt-4 text-white"> Edit</button>
-		                                    <a href="${pageContext.request.contextPath}/ProductController?page=destory&product_id=${product.id}" type="button" class="btn btn-danger mt-4 text-white"> Remove</a>
+		                                    <a href="${pageContext.request.contextPath}/ProductController?page=detail&product_id=${product.id}" type="button" class="btn btn-info mt-4 text-white"> <i class="las la-exclamation-circle"></i></a>
+		                                    <a href="${pageContext.request.contextPath}/ProductController?page=edit&product_id=${product.id}" class="btn btn-primary mt-4 text-white "> <i class="las la-edit"></i>  </a>
+		                                    <a href="${pageContext.request.contextPath}/ProductController?page=destory&product_id=${product.id}" type="button" class="btn btn-danger mt-4 text-white"> <i class="las la-trash"></i> </a>
 		                                </div>
 		                            </div>
 		                        </div>
