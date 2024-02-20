@@ -99,22 +99,8 @@ public class SellerController extends HttpServlet {
 					dispatcher.forward(request, response);
 					break;
 					
-    			case "createProductPage":
-    				try {
-						List<Category> categories = categoryDAO.get();
-						request.setAttribute("categories", categories);
-						if(error != null) request.setAttribute("error", error);
-						dispatcher = request.getRequestDispatcher("/views/seller/product/create.jsp");
-	    				dispatcher.forward(request, response);
-					} catch (SQLException e) {
-						e.printStackTrace();
-					}
-    				break;
-    				
-    			case "addProductImage":
-    				dispatcher = request.getRequestDispatcher("/views/seller/product/insert_image.jsp");
-    				dispatcher.forward(request, response);
-    				break;
+    			
+
     			}
     		}
     	}else {

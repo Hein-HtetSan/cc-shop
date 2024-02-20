@@ -20,7 +20,7 @@
 				<div class="row">
 					<h4 class="page-title col-md-6 col-6">Product</h4>
                 	<div class="col-md-6 col-6">
-                		<a href="${pageContext.request.contextPath}/SellerController?page=createProductPage&seller_id=${seller.id}" type="button" class="btn btn-primary text-white pull-right"> Add New Product</a>
+                		<a href="${pageContext.request.contextPath}/ProductController?page=createProductPage&seller_id=${seller.id}" type="button" class="btn btn-primary text-white pull-right"> Add New Product</a>
                 	</div>
 				</div>
 		        <div class="row">
@@ -82,7 +82,9 @@
 		                                <div class="mt-3 mt-lg-0 ml-lg-3 text-center">
 		                                	<span class="mt-2">Number of Product: ${product.count}</span>
 		                                    <h4 class="mb-0 font-weight-semibold mt-2">${product.price} MMK</h4>	
-		                                    <button type="button" class="btn btn-primary mt-4 text-white"> Detail</button>
+		                                    <button type="button" class="btn btn-info mt-4 text-white"> Detail</button>
+		                                    <button type="button" class="btn btn-primary mt-4 text-white"> Edit</button>
+		                                    <a href="${pageContext.request.contextPath}/ProductController?page=destory&product_id=${product.id}" type="button" class="btn btn-danger mt-4 text-white"> Remove</a>
 		                                </div>
 		                            </div>
 		                        </div>
