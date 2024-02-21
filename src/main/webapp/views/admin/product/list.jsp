@@ -116,20 +116,20 @@
 										<nav aria-label="Page navigation example">
 										  <ul class="pagination">
 										    <c:if test="${currentPage != 1}">
-										        <li class="page-item"><a href="${pageContext.request.contextPath}/AdminController?page=sellerpage_number=${currentPage - 1}" class="page-link">Previous</a></li>
+										        <li class="page-item"><a href="${pageContext.request.contextPath}/AdminController?page=productpage_number=${currentPage - 1}" class="page-link">Previous</a></li>
 											</c:if> 
 										    <c:forEach begin="1" end="${noOfPages}" var="i"> 
 								              <c:choose> 
 								                  <c:when test="${currentPage eq i}"> 
-								                      <li class="page-item"><a class="page-link bg-primary text-light" href="${pageContext.request.contextPath}/AdminController?page=seller?page=business&page_number=${i}">${i}</a></td> 
+								                      <li class="page-item"><a class="page-link bg-primary text-light" href="${pageContext.request.contextPath}/AdminController?page=product?page=business&page_number=${i}">${i}</a></td> 
 								                  </c:when> 
 								                  <c:otherwise> 
-								                      <li class="page-item"><a class="page-link" href="${pageContext.request.contextPath}/AdminController?page=seller&page_number=${i}">${i}</a></td> 
+								                      <li class="page-item"><a class="page-link" href="${pageContext.request.contextPath}/AdminController?page=product&page_number=${i}">${i}</a></td> 
 								                  </c:otherwise> 
 								              </c:choose> 
 								          </c:forEach> 
 										    <c:if test="${currentPage lt noOfPages}">
-										        <li class="page-item"><a href="${pageContext.request.contextPath}/AdminController?page=seller&page_number=${currentPage + 1}" class="page-link">Next</a></td>
+										        <li class="page-item"><a href="${pageContext.request.contextPath}/AdminController?page=product&page_number=${currentPage + 1}" class="page-link">Next</a></td>
 										    </c:if>
 										  </ul>
 										</nav>

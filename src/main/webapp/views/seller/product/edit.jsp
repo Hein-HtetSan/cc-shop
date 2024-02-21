@@ -46,6 +46,7 @@
 		                   <div class="card-body">
 		                   		<input type="hidden" name="action" value="update">
 		                   		<input type="hidden" name="product_id" value="${product.id}">
+		                   		<input type="hidden" name="seller_id" value="${product.seller_id}">
 		                   		<div class="form-group">
 		                   			<label class="form-label" for="name">Product Name</label>
 		                   			<input type="text" class="form-control" name="name" value="${product.name}">

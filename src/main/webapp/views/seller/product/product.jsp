@@ -18,7 +18,7 @@
 		<div class="content">
 			<div class="container-fluid">
 				<div class="row">
-					<h4 class="page-title col-md-6 col-6">Product ( ${products.size()} ) </h4>
+					<h4 class="page-title col-md-6 col-6">Product ( ${product_count} ) </h4>
                 	<div class="col-md-6 col-6">
                 		<a href="${pageContext.request.contextPath}/ProductController?page=createProductPage&seller_id=${seller.id}" type="button" class="btn btn-primary text-white pull-right"> Add New Product</a>
                 	</div>
@@ -40,20 +40,20 @@
 									<nav aria-label="Page navigation example">
 										  <ul class="pagination">
 										    <c:if test="${currentPage != 1}">
-										        <li class="page-item"><a href="${pageContext.request.contextPath}/SellerController?page=product&page_number=${currentPage - 1}" class="page-link">Previous</a></li>
+										        <li class="page-item"><a href="${pageContext.request.contextPath}/SellerController?page=product&page_number=${currentPage - 1}&seller_id=${seller.id}" class="page-link">Previous</a></li>
 											</c:if> 
 										    <c:forEach begin="1" end="${noOfPages}" var="i"> 
 								              <c:choose> 
 								                  <c:when test="${currentPage eq i}"> 
-								                      <li class="page-item"><a class="page-link bg-primary text-light" href="${pageContext.request.contextPath}/SellerController?page=product&page_number=${i}">${i}</a></td> 
+								                      <li class="page-item"><a class="page-link bg-primary text-light" href="${pageContext.request.contextPath}/SellerController?page=product&page_number=${i}&seller_id=${seller.id}">${i}</a></td> 
 								                  </c:when> 
 								                  <c:otherwise> 
-								                      <li class="page-item"><a class="page-link" href="${pageContext.request.contextPath}/SellerController?page=product&page_number=${i}">${i}</a></td> 
+								                      <li class="page-item"><a class="page-link" href="${pageContext.request.contextPath}/SellerController?page=product&page_number=${i}&seller_id=${seller.id}">${i}</a></td> 
 								                  </c:otherwise> 
 								              </c:choose> 
 								          </c:forEach> 
 										    <c:if test="${currentPage lt noOfPages}">
-										        <li class="page-item"><a href="${pageContext.request.contextPath}/SellerController?page=product&page_number=${currentPage + 1}" class="page-link">Next</a></td>
+										        <li class="page-item"><a href="${pageContext.request.contextPath}/SellerController?page=product&page_number=${currentPage + 1}&seller_id=${seller.id}" class="page-link">Next</a></td>
 										    </c:if>
 										  </ul>
 										</nav> 
@@ -93,7 +93,7 @@
 		                                    <h4 class="mb-0 font-weight-semibold mt-2">${product.price} MMK</h4>	
 		                                    <a href="${pageContext.request.contextPath}/ProductController?page=detail&product_id=${product.id}&seller_id=${seller.id}" type="button" class="btn btn-info mt-4 text-white"> <i class="las la-exclamation-circle"></i></a>
 		                                    <a href="${pageContext.request.contextPath}/ProductController?page=edit&product_id=${product.id}" class="btn btn-primary mt-4 text-white "> <i class="las la-edit"></i>  </a>
-		                                    <a href="${pageContext.request.contextPath}/ProductController?page=destory&product_id=${product.id}" type="button" class="btn btn-danger mt-4 text-white"> <i class="las la-trash"></i> </a>
+		                                    <a href="${pageContext.request.contextPath}/ProductController?page=destory&product_id=${product.id}&seller_id=${seller.id}" type="button" class="btn btn-danger mt-4 text-white"> <i class="las la-trash"></i> </a>
 		                                </div>
 		                            </div>
 		                        </div>

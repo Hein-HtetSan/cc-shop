@@ -74,6 +74,11 @@
 								${success}
 								</div>
 							</c:if>
+							<c:if test="${not empty error}">
+								<div class="alert alert-danger text-center" role="alert" id="successAlert">
+								${error}
+								</div>
+							</c:if>
 
         <div class="row ">
         					
@@ -90,7 +95,14 @@
                                     <div class="image-box">
                                     	<input type="hidden" name="action" value="updateImage">
                                     	<input type="hidden" name="admin_id" value="${admin.id}">
-                                        <img src="${admin.image}" alt="" class="image">
+                                        
+                                        <c:if test="${admin.image == 'assets/images/troll.jpg'}">
+	                                		<img class="image <c:if test='${admin.image != "assets/images/troll.jpg"}'> d-none </c:if>" src="${admin.image}">
+	                                	</c:if>
+	                                	<c:if test="${admin.image != null}">
+	                                		<img class=" image <c:if test='${admin.image == "assets/images/troll.jpg"}'> d-none </c:if>" src="${pageContext.request.contextPath}/assets/images/admin/${admin.image}" class="rounded border p-2" style="width: 120px !important; height: 100px !important;">
+	                                	</c:if>
+                                        
                                         <label for="image" class="plus-icon text-muted"> <i class="las la-pen pen-2"></i> </label>
                                         <input type="file" class="image-file" id="image">
                                     </div>

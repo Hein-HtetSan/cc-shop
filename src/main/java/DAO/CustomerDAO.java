@@ -135,6 +135,7 @@ public class CustomerDAO {
 					customer.setEmail(resultset.getString("email"));
 					customer.setPhone(resultset.getString("phone"));
 					customer.setImage(resultset.getString("image"));
+					customer.setAddress(resultset.getString("address"));;
 					customer.setPassword(resultset.getString("password"));
 				}
 				return customer;

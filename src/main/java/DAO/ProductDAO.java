@@ -155,8 +155,7 @@ public class ProductDAO {
 				String query = "select SQL_CALC_FOUND_ROWS products.*, categories.name as category_name, MIN(images.name) AS image_name, sellers.name as seller_name FROM products "
 						+ "LEFT JOIN categories ON products.category_id = categories.id "
 						+ "LEFT JOIN sellers ON products.seller_id = sellers.id "
-						+ "LEFT JOIN images ON images.product_id = products.id GROUP BY "
-						+ "products.id "
+						+ "LEFT JOIN images ON images.product_id = products.id GROUP BY products.id "
 						+ "ORDER BY updated_at DESC limit " + offset + ", " + noOfRecords;
 				statement = con.createStatement();
 		        resultSet = statement.executeQuery(query);
@@ -183,6 +182,81 @@ public class ProductDAO {
 		        }
 				return products; // return that list
 			}
+			
+			
+			// get product by category id
+			public List<Product> getByCategoryID(int offset, int noOfRecords, int category_id) throws SQLException{
+				List<Product> products = new ArrayList<Product>();  // create empty admin list to store admins
+				Product product = null; // create admin object which is from model
+				String query = "select SQL_CALC_FOUND_ROWS products.*, categories.name as category_name, MIN(images.name) AS image_name, sellers.name as seller_name FROM products "
+						+ "LEFT JOIN categories ON products.category_id = categories.id "
+						+ "LEFT JOIN sellers ON products.seller_id = sellers.id "
+						+ "LEFT JOIN images ON images.product_id = products.id WHERE products.category_id="+category_id+" GROUP BY products.id "
+						+ "ORDER BY updated_at DESC limit " + offset + ", " + noOfRecords;
+				statement = con.createStatement();
+		        resultSet = statement.executeQuery(query);
+		        while(resultSet.next()) {
+		             product = new Product();
+		            product.setId(resultSet.getInt("id"));
+		            product.setName(resultSet.getString("name"));
+		            product.setPrice(resultSet.getInt("price"));
+		            product.setDescription(resultSet.getString("description"));
+		            product.setCount(resultSet.getInt("count"));
+		            product.setRating(resultSet.getInt("rating"));
+		            product.setCategory_id(resultSet.getInt("category_id"));
+		            product.setSeller_id(resultSet.getInt("seller_id"));
+		            product.setSeller_name(resultSet.getString("seller_name"));
+		            product.setCategory_name(resultSet.getString("category_name"));
+		            product.setImage(resultSet.getString("image_name"));
+		            // Add the product to the list
+		            products.add(product);
+		        }
+				resultSet.close();
+				resultSet = statement.executeQuery("SELECT FOUND_ROWS()");
+		        if(resultSet.next()) {
+		        	 this.noOfRecords = resultSet.getInt(1);
+		        }
+				return products; // return that list
+			}
+			
+			// get by search term
+			public List<Product> getBySearching(String searchTerm) throws SQLException{
+				List<Product> products = new ArrayList<Product>();  // create empty admin list to store admins
+				Product product = null; // create admin object which is from model
+				String query = "SELECT SQL_CALC_FOUND_ROWS products.*, " + 
+					    "categories.name AS category_name, " + 
+					    "MIN(images.name) AS image_name, " + 
+					    "sellers.name AS seller_name " + 
+					    "FROM products " + 
+					    "LEFT JOIN categories ON products.category_id = categories.id " + 
+					    "LEFT JOIN sellers ON products.seller_id = sellers.id " + 
+					    "LEFT JOIN images ON images.product_id = products.id " + 
+					    "WHERE products.name LIKE '%" + searchTerm + "%' " + 
+					    "OR categories.name LIKE '%" + searchTerm + "%' " + 
+					    "OR sellers.name LIKE '%" + searchTerm + "%' " + 
+					    "GROUP BY products.id";
+
+				statement = con.createStatement();
+		        resultSet = statement.executeQuery(query);
+		        while(resultSet.next()) {
+		             product = new Product();
+		            product.setId(resultSet.getInt("id"));
+		            product.setName(resultSet.getString("name"));
+		            product.setPrice(resultSet.getInt("price"));
+		            product.setDescription(resultSet.getString("description"));
+		            product.setCount(resultSet.getInt("count"));
+		            product.setRating(resultSet.getInt("rating"));
+		            product.setCategory_id(resultSet.getInt("category_id"));
+		            product.setSeller_id(resultSet.getInt("seller_id"));
+		            product.setSeller_name(resultSet.getString("seller_name"));
+		            product.setCategory_name(resultSet.getString("category_name"));
+		            product.setImage(resultSet.getString("image_name"));
+		            // Add the product to the list
+		            products.add(product);
+		        }
+				return products; // return that list
+			}
+			
 			
 			
 			// get all product by seller Id
@@ -242,6 +316,81 @@ public class ProductDAO {
 				return product; // return that list
 			}
 			
+			public int getProductCountBySellerId(int id) {
+				int count = 0;
+				String query = "SELECT count(products.name) as product_count from products WHERE seller_id = " + id;
+				try {
+					statement = con.createStatement();
+					 resultSet = statement.executeQuery(query);
+				     if (resultSet.next()) {
+				        count = resultSet.getInt("product_count");
+				     }
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+				return count;
+			}
+			
+			public Product getFullDataByProductId(int id) throws SQLException{
+				Product product = new Product(); // create admin object which is from model
+				String query = "select products.*, categories.name as category_name, sellers.name as seller_name FROM products LEFT JOIN categories ON products.category_id = categories.id LEFT JOIN sellers ON products.seller_id = sellers.id WHERE products.id=" + id;
+				statement = con.createStatement();
+		        resultSet = statement.executeQuery(query);
+		        while(resultSet.next()) {
+		            product.setId(resultSet.getInt("id"));
+		            product.setName(resultSet.getString("name"));
+		            product.setPrice(resultSet.getInt("price"));
+		            product.setDescription(resultSet.getString("description"));
+		            product.setCount(resultSet.getInt("count"));
+		            product.setRating(resultSet.getInt("rating"));
+		            product.setCategory_id(resultSet.getInt("category_id"));
+		            product.setSeller_id(resultSet.getInt("seller_id"));
+		            product.setSeller_name(resultSet.getString("seller_name"));
+		            product.setCategory_name(resultSet.getString("category_name"));
+		        }
+				return product; // return that list
+			}
+			
+			
+			// get product by category id with limit 5 in product
+			public List<Product> getSomeProductByCategoryId(int id) {
+				List<Product> products = new ArrayList<Product>();
+				String query = "SELECT products.*, categories.name AS category_name, MIN(images.name) AS image_name, sellers.name AS seller_name " +
+			               "FROM products " +
+			               "LEFT JOIN categories ON products.category_id = categories.id " +
+			               "LEFT JOIN sellers ON products.seller_id = sellers.id " +
+			               "LEFT JOIN images ON images.product_id = products.id " +
+			               "WHERE products.category_id = " + id + " " +
+			               "GROUP BY products.id " +
+			               "ORDER BY RAND() " +
+			               "LIMIT 4";
+
+				try {
+					statement = con.createStatement();
+					resultSet = statement.executeQuery(query);
+			        while(resultSet.next()) {
+			        	Product product = new Product();
+			            product.setId(resultSet.getInt("id"));
+			            product.setName(resultSet.getString("name"));
+			            product.setPrice(resultSet.getInt("price"));
+			            product.setDescription(resultSet.getString("description"));
+			            product.setCount(resultSet.getInt("count"));
+			            product.setRating(resultSet.getInt("rating"));
+			            product.setCategory_id(resultSet.getInt("category_id"));
+			            product.setSeller_id(resultSet.getInt("seller_id"));
+			            product.setSeller_name(resultSet.getString("seller_name"));
+			            product.setCategory_name(resultSet.getString("category_name"));
+			            product.setImage(resultSet.getString("image_name"));
+			            products.add(product);
+			        }
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+				return products;
+			}
+			
+			
+			
 			// delete image by id
 			public boolean deleteImageById(int id) {
 				boolean flag = false;
@@ -300,6 +449,22 @@ public class ProductDAO {
 		        }
 				return images; // return that list
 			}
+			
+			// get the full image by seller id
+						public List<Image> getFullImagesByProductId(int id) throws SQLException{
+							List<Image> images = new ArrayList<Image>(); // create admin object which is from model
+							String query = "select * from images WHERE product_id=" + id;
+							statement = con.createStatement();
+					        resultSet = statement.executeQuery(query);
+					        while(resultSet.next()) {
+					        	Image image = new Image();
+					        	image.setId(resultSet.getInt("id"));
+					        	image.setName(resultSet.getString("name"));
+					        	image.setProduct_id(resultSet.getInt("product_id"));
+					        	images.add(image);
+					        }
+							return images; // return that list
+						}
 
 		// get number of records
 		public int getNoOfRecords() {
