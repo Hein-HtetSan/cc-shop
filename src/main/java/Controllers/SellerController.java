@@ -141,7 +141,9 @@ public class SellerController extends HttpServlet {
         List<Product> products = productDAO.getAllBySellerID((page_number-1)*recordsPerPage,
                                  recordsPerPage, Integer.parseInt(seller_id));
         int noOfRecords = productDAO.getNoOfRecords();
-        System.out.println(noOfRecords);
+        // get products count
+        int count = productDAO.getProductCountBySellerId(Integer.parseInt(seller_id));
+        
         int noOfPages = (int) Math.ceil(noOfRecords * 1.0 / recordsPerPage);
         
         String success = request.getParameter("success");
@@ -151,6 +153,7 @@ public class SellerController extends HttpServlet {
         request.setAttribute("noOfPages", noOfPages);
         request.setAttribute("currentPage", page_number);
         request.setAttribute("seller_id", seller_id);
+        request.setAttribute("product_count", count);
         dispatcher = request.getRequestDispatcher("/views/seller/product/product.jsp");
 		dispatcher.forward(request, response);
     }

@@ -9,9 +9,46 @@
 
 <%@ include file="/views/user/layout/navbar.jsp" %>
 
+<style>
+    .grid-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      
+      gap: 20px;
+    }
+    .grid-item {
+      background-color: #f0f0f0;
+      padding: 20px;
+      border: 1px solid #ccc;
+    }
+  </style>
+  
+  
+  
+  <!-- SECTION NEW elect-->
+		<div class="section search-section">
+			<!-- container -->
+			<div class="container">
+				<!-- row -->
+				<div class="row">
+					<!-- Products tab & slick -->
+					<div class="col-md-12">
+						<div class="grid-container" >
+
+							</div>
+						</div>
+					</div>
+					<!-- Products tab & slick -->
+				</div>
+				<!-- /row -->									
+			</div>
+			<!-- /container -->
+		</div>
+		<!-- /SECTION -->
+
 
 <!-- SECTION COLLECTION	-->
-		<div class="section">
+		<div class="section main-section">
 			<!-- container -->
 			<div class="container">
 				<!-- row -->
@@ -23,7 +60,7 @@
 								<img src="${pageContext.request.contextPath}/assets/customer/img/shop01.png" alt="">
 							</div>
 							<div class="shop-body">
-								<h3>Laptop<br>Collection</h3>
+								<h3>Electronic<br>Collection</h3>
 								<a href="#" class="cta-btn">Shop now <i class="fa fa-arrow-circle-right"></i></a>
 							</div>
 						</div>
@@ -37,7 +74,7 @@
 								<img src="${pageContext.request.contextPath}/assets/customer/img/shop03.png" alt="">
 							</div>
 							<div class="shop-body">
-								<h3>Accessories<br>Collection</h3>
+								<h3>Cosmetics<br>Collection</h3>
 								<a href="#" class="cta-btn">Shop now <i class="fa fa-arrow-circle-right"></i></a>
 							</div>
 						</div>
@@ -51,7 +88,7 @@
 								<img src="${pageContext.request.contextPath}/assets/customer/img/shop02.png" alt="">
 							</div>
 							<div class="shop-body">
-								<h3>Cameras<br>Collection</h3>
+								<h3>Fashion<br>Collection</h3>
 								<a href="#" class="cta-btn">Shop now <i class="fa fa-arrow-circle-right"></i></a>
 							</div>
 						</div>
@@ -66,34 +103,54 @@
 		
 		
 		<!-- SECTION NEW elect-->
-		<div class="section">
+		<div class="section main-section">
 			<!-- container -->
 			<div class="container">
 				<!-- row -->
 				<div class="row">
+				
+					<!-- Pagination -->
+					<nav aria-label="Page navigation example">
+						<ul class="pagination">
+							<c:if test="${currentPage != 1}">
+								 <li class="page-item"><a href="${pageContext.request.contextPath}/UserController?page=main&page_number=${currentPage - 1}" class="page-link">Previous</a></li>
+							</c:if> 
+						    <c:forEach begin="1" end="${noOfPages}" var="i"> 
+				             <c:choose> 
+							       <c:when test="${currentPage eq i}"> 
+						        	    <li class="page-item"><a class="page-link bg-primary text-light" href="${pageContext.request.contextPath}/UserController?page=main&page_number=${i}">${i}</a></td> 
+				                  </c:when> 
+				                  <c:otherwise> 
+									    <li class="page-item"><a class="page-link" href="${pageContext.request.contextPath}/UserController?page=main&page_number=${i}">${i}</a></td> 
+				                  </c:otherwise> 
+				              </c:choose> 
+					          </c:forEach> 
+							    <c:if test="${currentPage lt noOfPages}">
+							        <li class="page-item"><a href="${pageContext.request.contextPath}/UserController?page=main&page_number=${currentPage + 1}" class="page-link">Next</a></td>
+							    </c:if>
+							  </ul>
+						</nav>
+					<!-- End of pagination -->
 
 					<!-- Products tab & slick -->
 					<div class="col-md-12">
-						<div class="row">
-							<div class="products-tabs">
-								<!-- tab -->
-								<div id="tab1" class="tab-pane active">
-									<div class="products-slick" data-nav="#slick-nav-1">
-									
-									<c:forEach items="${products}" var="product">
+						<div class="grid-container" >
+						
+							<c:forEach items="${products}" var="product">
+									<div class="grid-item" >
 										<!-- product -->
 										<div class="product">
 											<div class="product-img">
 												<img src="${pageContext.request.contextPath}/assets/images/products/${product.image}" alt="">
 											</div>
 											<div class="product-body">
-												<p class="product-category">Category</p>
+												<p class="product-category">${product.category_name}</p>
+												<p class="product-category" style="font-weight: bold;">Seller: ${product.seller_name}</p>
 												<h3 class="product-name"><a href="#">${product.name}</a></h3>
 												<h4 class="product-price">${product.price}MMKs</h4>
 												<div class="product-btns">
 													<button class="add-to-wishlist"><i class="fa fa-heart-o"></i><span class="tooltipp">add to wishlist</span></button>
-													<button class="add-to-compare"><i class="fa fa-exchange"></i><span class="tooltipp">add to compare</span></button>
-													<button class="quick-view"><i class="fa fa-eye"></i><span class="tooltipp">quick view</span></button>
+													<button class="quick-view"><a class="" href="${pageContext.request.contextPath}/UserController?page=productDetail&product_id=${product.id}"><i class="fa fa-eye"></i><span class="tooltipp">quick view</span></a></button>
 												</div>
 											</div>
 											<div class="add-to-cart">
@@ -101,13 +158,8 @@
 											</div>
 										</div>
 										<!-- /product -->
-									</c:forEach>
-										
-										
 									</div>
-									<div id="slick-nav-1" class="products-slick-nav"></div>
-								</div>
-								<!-- /tab -->
+								</c:forEach>
 							</div>
 						</div>
 					</div>
@@ -118,7 +170,5 @@
 			<!-- /container -->
 		</div>
 		<!-- /SECTION -->
-
-
 
 <%@ include file="/views/user/layout/footer.jsp" %>

@@ -11,9 +11,9 @@
 				<div id="responsive-nav">
 					<!-- NAV -->
 					<ul class="main-nav nav navbar-nav">
-						<li class="active"><a href="#">Home</a></li>
+						<li class="" id="mainLink"><a href="${pageContext.request.contextPath}/UserController?page=fetchByCategory&category_id=all">All</a></li>
 						<c:forEach items="${categories}" var="category">
-							<li class=""><a href="#">${category.name}</a></li>
+							<li class="${param.category_id == category.id ? 'active' : ''}"><a href="${pageContext.request.contextPath}/UserController?page=fetchByCategory&category_id=${category.id}">${category.name}</a></li>
 						</c:forEach>
 					</ul>
 					<!-- /NAV -->
@@ -23,3 +23,6 @@
 			<!-- /container -->
 		</nav>
 		<!-- /NAVIGATION -->
+		
+		
+		

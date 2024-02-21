@@ -323,6 +323,7 @@ public class AdminController extends HttpServlet {
     					e.printStackTrace();
     				}
         			break;
+        			
         		case "profile": // profile page in admin panel
         			String success = request.getParameter("success");
         			String admin_id = request.getParameter("admin_id");
@@ -334,6 +335,7 @@ public class AdminController extends HttpServlet {
         			
         			dispatcher = request.getRequestDispatcher("views/admin/profile/index.jsp");
         			dispatcher.forward(request, response);
+        			
         		case "dashboard": // dashboard page in admin panel
         			Map<String, Integer> counts = null;
 					try {
@@ -607,19 +609,19 @@ public class AdminController extends HttpServlet {
 				    int max = 10000;
 				    int random_number = (int) (Math.random()*(max-min+1)+min);  
 				    // Process the file upload
-				    String fileName = extractFileName(part);
+				    String fileName = extractFileName(image);
 				    String updated_filename = random_number + "_" + fileName;
 				    System.out.println("File Name: " + fileName);
 
 				    //Define destination directory
-			        String uploadDir = "C:\\Users\\acer\\Desktop\\cc-shop\\src\\main\\webapp\\assets\\images\\products"; // Example: "C:/eclipse_workspace/upload"
+			        String uploadDir = "C:\\Users\\acer\\Desktop\\cc-shop\\src\\main\\webapp\\assets\\images\\admin"; // Example: "C:/eclipse_workspace/upload"
 			        
 			        // Write file to the destination directory
 			        OutputStream out = null;
 			        InputStream fileContent = null;
 			        try {
 			            out = new FileOutputStream(new File(uploadDir + File.separator + updated_filename));
-			            fileContent = part.getInputStream();
+			            fileContent = image.getInputStream();
 
 			            int read;
 			            final byte[] bytes = new byte[1024];
@@ -655,7 +657,16 @@ public class AdminController extends HttpServlet {
 	}
 
 	
-	
+	private String extractFileName(Part part) {
+        String contentDisp = part.getHeader("content-disposition");
+        String[] tokens = contentDisp.split(";");
+        for (String token : tokens) {
+            if (token.trim().startsWith("filename")) {
+                return token.substring(token.indexOf('=') + 1).trim().replace("\"", "");
+            }
+        }
+        return "";
+    }
 
 
 }

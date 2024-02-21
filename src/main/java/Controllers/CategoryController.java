@@ -64,20 +64,21 @@ public class CategoryController extends HttpServlet {
 		
 		Category is_duplicated = categoryDAO.getByName(name);
 		
-		if(is_duplicated != null) {
+		if(is_duplicated == null) {
+			Category newCategory = new Category();
+			newCategory.setName(name);
+			
+			if(categoryDAO.create(newCategory)) {
+				String success = "Added Category Successfully";
+				String encoded = URLEncoder.encode(success, "UTF-8");
+				response.sendRedirect(request.getContextPath() + "/AdminController?page=category&success="+encoded);
+			}
+		}else {
+			System.out.println("duplicated");
 			String error = "Name has already taken";
 			String encoded = URLEncoder.encode(error, "UTF-8");
 			response.sendRedirect(request.getContextPath() + "/AdminController?page=category&error="+encoded);
 			return;
-		}
-		
-		Category newCategory = new Category();
-		newCategory.setName(name);
-		
-		if(categoryDAO.create(newCategory)) {
-			String success = "Added Category Successfully";
-			String encoded = URLEncoder.encode(success, "UTF-8");
-			response.sendRedirect(request.getContextPath() + "/AdminController?page=category&success="+encoded);
 		}
 	}
 	

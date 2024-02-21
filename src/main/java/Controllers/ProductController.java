@@ -51,12 +51,16 @@ public class ProductController extends HttpServlet {
 		String error = request.getParameter("error");
 		String success = request.getParameter("success");
 		
+		
 		if(page != null) {
 			switch(page) {
 			case "createProductPage":
 				try {
 					List<Category> categories = categoryDAO.get();
+					String seller_id = request.getParameter("seller_id");
+					System.out.println(seller_id);
 					request.setAttribute("categories", categories);
+					request.setAttribute("seller_id", seller_id);
 					if(error != null) request.setAttribute("error", error);
 					dispatcher = request.getRequestDispatcher("/views/seller/product/create.jsp");
     				dispatcher.forward(request, response);
@@ -142,6 +146,8 @@ public class ProductController extends HttpServlet {
 			String seller_id = request.getParameter("seller_id"); // get seller id
 			Collection<Part> parts = request.getParts(); // get images parts
 			boolean hasFileUpload = false;
+			
+			System.out.println(seller_id);
 			
 			// Iterate through the parts
 			for (Part part : request.getParts()) {
@@ -265,7 +271,7 @@ public class ProductController extends HttpServlet {
 				if(is_image_inserted && is_product_inserted) {
 					String success = "Created product successfully!";
 					String encoded = URLEncoder.encode(success, "UTF-8");
-					response.sendRedirect(request.getContextPath() +"/SellerController?page=product&success="+encoded);
+					response.sendRedirect(request.getContextPath() +"/SellerController?page=product&success="+encoded+"&seller_id="+seller_id);
 				}
 			}
 		}
@@ -277,6 +283,7 @@ public class ProductController extends HttpServlet {
 			String count = request.getParameter("count"); // get product count
 			String price = request.getParameter("price"); // get product price
 			String category_id = request.getParameter("category"); // get product category
+			String seller_id = request.getParameter("seller_id");
 			Collection<Part> parts = request.getParts(); // get images parts
 			boolean hasFileUpload = false;
 			
@@ -388,7 +395,7 @@ public class ProductController extends HttpServlet {
 				if(is_product_updated) {
 					String success = "Updated product successfully!";
 					String encoded = URLEncoder.encode(success, "UTF-8");
-					response.sendRedirect(request.getContextPath() +"/SellerController?page=product&success="+encoded);
+					response.sendRedirect(request.getContextPath() +"/SellerController?page=product&success="+encoded+"&seller_id="+seller_id);
 				}
 			}
 		}
@@ -407,15 +414,16 @@ public class ProductController extends HttpServlet {
 	// destory the product
 		private void destory(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, NumberFormatException, SQLException {
 			String product_id = request.getParameter("product_id");
+			String seller_id = request.getParameter("seller_id");
 			boolean flag = productDAO.delete(Integer.parseInt(product_id));
 			if(flag) {
 				String success = "Deleted product successfully!";
 				String encoded = URLEncoder.encode(success, "UTF-8");
-				response.sendRedirect(request.getContextPath() +"/SellerController?page=product&success="+encoded);
+				response.sendRedirect(request.getContextPath() +"/SellerController?page=product&success="+encoded+"&seller_id="+seller_id);
 			}else {
 				String error = "Can't delete product!";
 				String encodedError = URLEncoder.encode(error, "UTF-8");
-				response.sendRedirect(request.getContextPath() +"/SellerController?page=product&error="+encodedError);
+				response.sendRedirect(request.getContextPath() +"/SellerController?page=product&error="+encodedError+"&seller_id="+seller_id);
 			}
 		}
 		

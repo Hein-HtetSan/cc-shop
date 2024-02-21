@@ -40,6 +40,15 @@
 		<![endif]-->
 
     </head>
+    
+    <style>
+    	.header-search form .input {
+		  width: calc(100% - 160px);
+		  margin-right: -4px;
+		  border-radius: 40px 0px 0px 40px !important;
+		}
+    </style>
+    
 	<body>
 		<!-- HEADER -->
 		<header>
@@ -47,13 +56,14 @@
 			<div id="top-header">
 				<div class="container">
 					<ul class="header-links pull-left">
-						<li><a href="#"><i class="fa fa-phone"></i> +021-95-51-84</a></li>
-						<li><a href="#"><i class="fa fa-envelope-o"></i> email@email.com</a></li>
-						<li><a href="#"><i class="fa fa-map-marker"></i> 1734 Stonecoal Road</a></li>
+						<li> <h5 class=" fw-semibold" style="color: white;">Your Account Info</h5> </li>
+						<li><a href="#"><i class="fa fa-phone"></i>+95-${customer.phone}</a></li>
+						<li><a href="#"><i class="fa fa-envelope-o"></i>${customer.email }</a></li>
+						<li><a href="#"><i class="fa fa-map-marker"></i>${customer.address }</a></li>
 					</ul>
 					<ul class="header-links pull-right">
-						<li><a href="#"><i class="fa fa-dollar"></i> USD</a></li>
-						<li><a href="#"><i class="fa fa-user-o"></i> My Account</a></li>
+						<li><a href="${pageContext.request.contextPath}"><i class="fa fa-user-o"></i> My Account</a></li>
+						<li><a href="${pageContext.request.contextPath}/LoginController?page=userLogout"><i class="fa fa-power-off"></i> Logout</a></li>
 					</ul>
 				</div>
 			</div>
@@ -78,10 +88,10 @@
 						<!-- SEARCH BAR -->
 						<div class="col-md-6">
 							<div class="header-search">
-								<form method="get" action="#">
-									<input class="input" placeholder="Search here">
-									<button class="search-btn">Search</button>
-								</form>
+								<form method="get" action="#" id="productForm">
+									<input id="searchInput" class="input" placeholder="Search here">
+									<button type="submit" class="search-btn">Search</button>
+								</form>					
 							</div>
 						</div>
 						<!-- /SEARCH BAR -->
@@ -161,3 +171,9 @@
 			<!-- /MAIN HEADER -->
 		</header>
 		<!-- /HEADER -->
+		
+		
+
+
+		
+		
