@@ -10,8 +10,15 @@ public class Cart {
 	private int price;
 	private String product_name;
 	private String customer_name;
+	private String image;
 	
 	
+	public String getImage() {
+		return image;
+	}
+	public void setImage(String image) {
+		this.image = image;
+	}
 	public String getProduct_name() {
 		return product_name;
 	}
