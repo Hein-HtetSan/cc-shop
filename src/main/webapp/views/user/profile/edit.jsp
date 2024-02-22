@@ -60,56 +60,42 @@
 						</div>
 						</c:if>
 				<!-- row -->	
-				<a href="${pageContext.request.contextPath}/UserController?page=main" style="">Back</a>
+				<a href="${pageContext.request.contextPath}/UserController?page=profile&user_id=${user.id}" style="">Back</a>
 				<div class="row profile-wrapper">
 				
 					<!-- user profile -->	
-					<div class="col-md-5 order-details" style="margin-top: 2rem !important; margin-right: 5rem !important;">
-						<div class="section-title text-center">
-							<h3 class="title">Profile</h3>
-						</div>
-						<div class="seller-img-wrapper">
-							<c:if test="${user.image == 'assets/images/troll.jpg' }">
-								<img class="seller-image" src="${pageContext.request.contextPath}/${user.image}" >
-							</c:if>
-							<c:if test="${user.image != 'assets/images/troll.jpg' }">
-								<img class="seller-image" src="${pageContext.request.contextPath}/assets/images/user/${user.image}" >
-							</c:if>
-						</div>
-						<div class="order-summary">
-							<div class="order-col">
-								<div><strong>Content</strong></div>
-								<div><strong></strong></div>
+							<div class="col-md-5 " style="margin-bottom: 2rem;">
+					
+								<form action="${pageContext.request.contextPath}/UserController" method="post" class="edit-form" enctype="multipart/form-data">
+									
+									<input type="hidden" name="id" value="${user.id}">
+									<input type="hidden" name="action" value="updateProfile" >
+									
+									<h3 class="title" style="margin-bottom: 2rem;">Edit Profile</h3>
+									<div class="form-group">
+										<label class="form-label">Name</label>
+										<input class="form-control" name="name" type="text" value="${user.name}">
+									</div>
+									<div class="form-group">
+										<label class="form-label">Email</label>
+										<input class="form-control" name="email" type="email" value="${user.email}">
+									</div>
+									<div class="form-group">
+										<label class="form-label">Phone</label>
+										<input class="form-control" name="phone" type="number" value="${user.phone}">
+									</div>
+									<div class="form-group">
+										<label class="form-label">Address</label>
+										<input class="form-control" name="address" type="text"value="${user.address}">
+									</div>
+									<div class="form-group">
+										<label class="form-label">Choose New Image</label>
+										<input class="form-control" name="file" type="file">
+									</div>
+									<button class="btn btn-info" type="submit">Update Profile</button>
+								</form>
+							
 							</div>
-							<div class="order-products">
-								<div class="order-col">
-									<div>Name</div>
-									<div>${user.name}</div>
-								</div>
-								<div class="order-col">
-									<div>Email</div>
-									<div>${user.email}</div>
-								</div>
-								<div class="order-col">
-									<div>Phone</div>
-									<div>${user.phone}</div>
-								</div>
-								<div class="order-col">
-									<div>Address</div>
-									<div>${user.address}</div>
-								</div>
-							</div>
-						</div>
-						<div class="row" style="display: block;">
-							<div class="col" style="display: flex; align-items: center; justify-content: end">
-								<a href="${pageContext.request.contextPath}/UserController?page=edit&user_id=${user.id}" class="btn btn-primary" id="editBtn" style="margin-right: .5rem;">Edit Profile</a>
-								<a href="${pageContext.request.contextPath}/LoginController?page=userLogout" class="btn btn-danger"> Logout</a>
-							</div>
-							<hr>
-							<a href="${pageContext.request.contextPath}/UserController?page=changePassword&user_id=${user.id}" style="display: block; text-align:center; margin-bottom: .9rem;">Change Password</a>
-							<a href="" style="display: block; text-align:center;">Forget Password?</a>
-						</div>
-					</div>
 					<!-- /user profile -->
 					
 					
@@ -120,7 +106,6 @@
 			<!-- /container -->
 		</div>
 		<!-- /SECTION -->
-
 	<script>
     // Wait for the document to be ready
     document.addEventListener('DOMContentLoaded', function() {
@@ -136,5 +121,6 @@
         }
 	    });
 	</script>
+
 
 <%@ include file="/views/user/layout/footer.jsp" %>

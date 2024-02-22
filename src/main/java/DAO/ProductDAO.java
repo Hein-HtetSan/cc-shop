@@ -60,7 +60,7 @@ public class ProductDAO {
 	// get product count by seller id
 	public List<Product> getProductBySellerId(int id) throws SQLException {
 		List<Product> products = new ArrayList<Product>();
-		String query = "SELECT products.name, MAX(products.rating) FROM products LEFT JOIN sellers ON sellers.id = products.seller_id WHERE sellers.id=" + id + " GROUP BY products.name";
+		String query = "SELECT products.name, MAX(products.rating) as rating FROM products LEFT JOIN sellers ON sellers.id = products.seller_id WHERE sellers.id=" + id + " GROUP BY products.name";
 		statement = con.createStatement();
 		resultSet = statement.executeQuery(query);
 		Product product = null;
@@ -258,6 +258,19 @@ public class ProductDAO {
 			}
 			
 			
+			// get product count by Seller id
+			public int getProductCountBySellerID(int seller_id) throws SQLException {
+				int count = 0;
+				String query = "SELECT count(*) as product_count FROM products WHERE products.seller_id= " + seller_id;
+				statement = con.createStatement();
+				resultSet = statement.executeQuery(query);
+				if(resultSet.next()) {
+					count = resultSet.getInt("product_count");
+				}
+				return count;
+			}
+			
+			
 			
 			// get all product by seller Id
 						public List<Product> getAllBySellerID(int offset, int noOfRecords, int seller_id) throws SQLException{
@@ -315,6 +328,8 @@ public class ProductDAO {
 		        }
 				return product; // return that list
 			}
+			
+			
 			
 			public int getProductCountBySellerId(int id) {
 				int count = 0;

@@ -116,7 +116,7 @@
 										<nav aria-label="Page navigation example">
 										  <ul class="pagination">
 										    <c:if test="${currentPage != 1}">
-										        <li class="page-item"><a href="${pageContext.request.contextPath}/AdminController?page=productpage_number=${currentPage - 1}" class="page-link">Previous</a></li>
+										        <li class="page-item"><a href="${pageContext.request.contextPath}/AdminController?page=product&page_number=${currentPage - 1}" class="page-link">Previous</a></li>
 											</c:if> 
 										    <c:forEach begin="1" end="${noOfPages}" var="i"> 
 								              <c:choose> 

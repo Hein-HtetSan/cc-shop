@@ -15,6 +15,7 @@
 
 		<!-- Google font -->
 		<link href="https://fonts.googleapis.com/css?family=Montserrat:400,500,700" rel="stylesheet">
+		
 
 		<!-- Bootstrap -->
 		<link type="text/css" rel="stylesheet" href="${pageContext.request.contextPath}/assets/customer/css/bootstrap.min.css"/>
@@ -53,7 +54,7 @@
 						<li><a href="#"><i class="fa fa-map-marker"></i>${customer.address }</a></li>
 					</ul>
 					<ul class="header-links pull-right">
-						<li><a href="${pageContext.request.contextPath}"><i class="fa fa-user-o"></i> My Account</a></li>
+						<li><a href="${pageContext.request.contextPath}/UserController?page=profile&user_id=${customer.id}"><i class="fa fa-user-o"></i> My Account</a></li>
 						<li><a href="${pageContext.request.contextPath}/LoginController?page=userLogout"><i class="fa fa-power-off"></i> Logout</a></li>
 					</ul>
 				</div>

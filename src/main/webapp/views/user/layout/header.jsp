@@ -62,7 +62,7 @@
 						<li><a href="#"><i class="fa fa-map-marker"></i>${customer.address }</a></li>
 					</ul>
 					<ul class="header-links pull-right">
-						<li><a href="${pageContext.request.contextPath}"><i class="fa fa-user-o"></i> My Account</a></li>
+						<li><a href="${pageContext.request.contextPath}/UserController?page=profile&user_id=${customer.id}"><i class="fa fa-user-o"></i> My Account</a></li>
 						<li><a href="${pageContext.request.contextPath}/LoginController?page=userLogout"><i class="fa fa-power-off"></i> Logout</a></li>
 					</ul>
 				</div>
