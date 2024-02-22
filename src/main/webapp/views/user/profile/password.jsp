@@ -85,7 +85,7 @@
 										<label class="form-label">Confirm new password</label>
 										<input class="form-control" type="password"  name="confirm_new_password">
 									</div>
-									<button class="btn btn-info" type="submit">Update Profile</button>
+									<button class="btn btn-info" type="submit">Update Password</button>
 								</form>
 							
 					</div>

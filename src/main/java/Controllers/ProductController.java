@@ -161,32 +161,38 @@ public class ProductController extends HttpServlet {
 			if(name == null || name.equals("")) {  // check name is empty or not
 				String error = "Name can't be blank!";
 				String encodedError = URLEncoder.encode(error, "UTF-8");
-				response.sendRedirect(request.getContextPath() +"/SellerController?page=createProductPage&seller_id="+seller_id+"&error="+encodedError);
+				response.sendRedirect(request.getContextPath() +"/ProductController?page=createProductPage&seller_id="+seller_id+"&error="+encodedError);
 			}
 			else if(description == null || description.equals("")) { // check description is empty or not
 				String error = "Description can't be blank!";
 				String encodedError = URLEncoder.encode(error, "UTF-8");
-				response.sendRedirect(request.getContextPath() +"/SellerController?page=createProductPage&seller_id="+seller_id+"&error="+encodedError);
+				response.sendRedirect(request.getContextPath() +"/ProductController?page=createProductPage&seller_id="+seller_id+"&error="+encodedError);
 			}
 			else if(count == null || count.equals("")) { // check count is empty or not
 				String error = "Please fill the count";
 				String encodedError = URLEncoder.encode(error, "UTF-8");
-				response.sendRedirect(request.getContextPath() +"/SellerController?page=createProductPage&seller_id="+seller_id+"&error="+encodedError);
+				response.sendRedirect(request.getContextPath() +"/ProductController?page=createProductPage&seller_id="+seller_id+"&error="+encodedError);
 			}
-			else if(price == null || price.equals("")) { // check price is empty or not
+			else if(Integer.parseInt(count) <= 0) { // check count is empty or not
+				String error = "Invalid product count";
+				String encodedError = URLEncoder.encode(error, "UTF-8");
+				response.sendRedirect(request.getContextPath() +"/ProductController?page=createProductPage&seller_id="+seller_id+"&error="+encodedError);
+			}
+			else if(price == null || price.equals("") ) { // check price is empty or not
 				String error = "Please insert the price!";
 				String encodedError = URLEncoder.encode(error, "UTF-8");
-				response.sendRedirect(request.getContextPath() +"/SellerController?page=createProductPage&seller_id="+seller_id+"&error="+encodedError);
+				response.sendRedirect(request.getContextPath() +"/ProductController?page=createProductPage&seller_id="+seller_id+"&error="+encodedError);
 			}
+			
 			else if(category_id == null || category_id.equals("")) { // check category is empty or not
 				String error = "Please choose category!";
 				String encodedError = URLEncoder.encode(error, "UTF-8");
-				response.sendRedirect(request.getContextPath() +"/SellerController?page=createProductPage&seller_id="+seller_id+"&error="+encodedError);
+				response.sendRedirect(request.getContextPath() +"/ProductController?page=createProductPage&seller_id="+seller_id+"&error="+encodedError);
 			}
 			else if(!hasFileUpload) { // check file is empty or not
 				String error = "Please choose at least one image!";
 				String encodedError = URLEncoder.encode(error, "UTF-8");
-				response.sendRedirect(request.getContextPath() +"/SellerController?page=createProductPage&seller_id="+seller_id+"&error="+encodedError);
+				response.sendRedirect(request.getContextPath() +"/ProductController?page=createProductPage&seller_id="+seller_id+"&error="+encodedError);
 			}
 			else { // if all exists;
 				boolean is_image_inserted = false; // to check image is inserted or not

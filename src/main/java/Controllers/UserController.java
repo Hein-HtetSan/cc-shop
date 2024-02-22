@@ -40,6 +40,7 @@ public class UserController extends HttpServlet {
 	CategoryDAO categoryDAO = null;
 	ProductDAO productDAO = null;
 	SellerDAO sellerDAO = null;
+	CartDAO cartDAO = null;
 	
 
     public UserController() throws ClassNotFoundException, SQLException {
@@ -48,6 +49,7 @@ public class UserController extends HttpServlet {
         categoryDAO = new CategoryDAO();
         productDAO = new ProductDAO();
         sellerDAO = new SellerDAO();
+        cartDAO = new CartDAO();
     }
 
     // do get method
@@ -274,6 +276,11 @@ public class UserController extends HttpServlet {
 	
 	// main panel
 	private void mainPanel (HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, SQLException {
+		String error = request.getParameter("error");
+		String success = request.getParameter("success");
+		HttpSession session = request.getSession();
+		Customer user = (Customer) session.getAttribute("customer");
+		int user_id = user.getId();
 		// get all category
 		List<Category> categoires = categoryDAO.get();
 		// get all product
@@ -288,20 +295,24 @@ public class UserController extends HttpServlet {
         if (request.getParameter("page_number") != null) {
         	page_number = Integer.parseInt(request.getParameter("page_number")); 
         }
-        List<Product> products = productDAO.getAll((page_number-1)*recordsPerPage,
+        List<Product> products = productDAO.getAll((page_number-1)*recordsPerPage,  // get product with pagination
                                  recordsPerPage);
-        List<Product> get_all_products = productDAO.get();
-        int product_count = get_all_products.size();
+        List<Product> get_all_products = productDAO.get();   // get all product 
+        int product_count = get_all_products.size(); // get the product count
+        List<Cart> carts = cartDAO.getProductinCartByUserId(user_id);
         
         int noOfRecords = productDAO.getNoOfRecords();
         System.out.println(noOfRecords);
         int noOfPages = (int) Math.ceil(noOfRecords * 1.0 / recordsPerPage);
         
+        if(error != null) request.setAttribute("error", error);
+        if(success != null) request.setAttribute("success", success);
         request.setAttribute("products", products);
         request.setAttribute("noOfPages", noOfPages);
         request.setAttribute("currentPage", page_number);
 		request.setAttribute("categories", categoires);
 		request.setAttribute("total_product", product_count);
+		request.setAttribute("carts", carts);
 		dispatcher = request.getRequestDispatcher("/views/user/dashboard.jsp");
 		dispatcher.forward(request, response);
 	}
