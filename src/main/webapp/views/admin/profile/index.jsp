@@ -64,6 +64,7 @@
     .image-file{
         display: none;
     }
+    
 </style>
 
 <body>
@@ -136,6 +137,7 @@
 		</div>
 							
 	</div>
+	
 	
 	<script>
     // Wait for the document to be ready

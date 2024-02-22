@@ -62,6 +62,7 @@
 					<!-- Product details -->
 					<div class="col-md-5">
 						<div class="product-details">
+							<h4 class="">Seller : <a class="" href="${pageContext.request.contextPath}/UserController?page=seller&seller_id=${product.seller_id}&product_id=${product.id}">${product.seller_name}</a> </h4>
 							<h2 class="product-name">${product.name}</h2>
 							
 							<div>

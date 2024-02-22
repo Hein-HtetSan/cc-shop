@@ -60,28 +60,29 @@
 						<h3>No product avilable!</h3>
 					</c:if>
 				
-					<!-- Pagination -->
-					<nav aria-label="Page navigation example">
-						<ul class="pagination">
-							<c:if test="${currentPage != 1}">
-								 <li class="page-item"><a href="${pageContext.request.contextPath}/UserController?page=main&page_number=${currentPage - 1}" class="page-link">Previous</a></li>
-							</c:if> 
-						    <c:forEach begin="1" end="${noOfPages}" var="i"> 
-				             <c:choose> 
-							       <c:when test="${currentPage eq i}"> 
-						        	    <li class="page-item"><a class="page-link bg-primary text-light" href="${pageContext.request.contextPath}/UserController?page=main&page_number=${i}">${i}</a></td> 
-				                  </c:when> 
-				                  <c:otherwise> 
-									    <li class="page-item"><a class="page-link" href="${pageContext.request.contextPath}/UserController?page=main&page_number=${i}">${i}</a></td> 
-				                  </c:otherwise> 
-				              </c:choose> 
-					          </c:forEach> 
-							    <c:if test="${currentPage lt noOfPages}">
-							        <li class="page-item"><a href="${pageContext.request.contextPath}/UserController?page=main&page_number=${currentPage + 1}" class="page-link">Next</a></td>
-							    </c:if>
-							  </ul>
-						</nav>
-					<!-- End of pagination -->
+					<!-- store bottom filter -->
+						<div class="store-filter clearfix">
+							<span class="store-qty">Showing ${products.size()} Products</span>
+							<ul class="store-pagination">
+								<c:if test="${currentPage != 1}">
+									<li><a href="${pageContext.request.contextPath}/UserController?page=main&page_number=${currentPage - 1}"><i class="fa fa-angle-left"></i></a></li>
+								</c:if>
+								<c:forEach begin="1" end="${noOfPages}" var="i"> 
+									<c:choose> 
+								       <c:when test="${currentPage eq i}"> 
+								       		<li class="active" ><a style="color: white !important;" class="text-light" href="${pageContext.request.contextPath}/UserController?page=main&page_number=${i}">${i}</a></li>
+								       </c:when>
+								       <c:otherwise> 
+								       		<li class=""><a href="${pageContext.request.contextPath}/UserController?page=main&page_number=${i}">${i}</a></li>
+								       </c:otherwise>
+								    </c:choose>
+								</c:forEach>
+								<c:if test="${currentPage lt noOfPages}">
+									<li><a href="${pageContext.request.contextPath}/UserController?page=main&page_number=${currentPage + 1}"><i class="fa fa-angle-right"></i></a></li>
+								</c:if>
+							</ul>
+						</div>
+						<!-- /store bottom filter -->
 
 					<!-- Products tab & slick -->
 					<div class="col-md-12">
