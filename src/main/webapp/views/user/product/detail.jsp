@@ -33,6 +33,27 @@
 		<div class="section">
 			<!-- container -->
 			<div class="container">
+			
+			
+				<!-- alert -->
+					<c:if test="${not empty success }">
+						<div class="alert bg-success text-center " role="alert" id="errorAlert">
+							${success}
+						</div>
+					</c:if>
+					<c:if test="${not empty error }">
+						<div class="alert bg-danger text-center " role="alert" id="errorAlert">
+							${error}
+						</div>
+					</c:if>
+					<div class="alert bg-danger text-center " role="alert" id="alert-error">
+							<!-- error message goes here -->
+					</div>
+					<div class="alert bg-success text-center " role="alert" id="alert-success">
+							<!-- error message goes here -->
+					</div>
+				<!-- alert -->
+			
 				<!-- row -->
 				<div class="row">
 					<!-- Product main img -->
@@ -78,12 +99,20 @@
 								<div class="qty-label">
 									Qty
 									<div class="input-number">
-										<input type="number">
+										<input type="hidden" id="user_id" value="${customer.id}">
+										<input type="hidden" id="product_id" value="${product.id}">
+										<input type="number" id="quantity" value="1">
 										<span class="qty-up">+</span>
 										<span class="qty-down">-</span>
 									</div>
 								</div>
-								<button class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i> add to cart</button>
+								
+								
+									<button class="add-to-cart-btn main-add-to-cart-btn">
+									<i class="fa fa-shopping-cart"></i> add to cart
+									</button>
+								
+								
 							</div>
 
 							<ul class="product-btns">
@@ -175,7 +204,9 @@
 								</div>
 							</div>
 							<div class="add-to-cart">
-								<button class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i> add to cart</button>
+								<a href="${pageContext.request.contextPath}/CartController?action=addToCartFromRelated&user_id=${customer.id}&product_id=${product.id}&previous_product_id=${previous_product_id}">
+									<button class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i> add to cart</button>
+								</a>
 							</div>
 						</div>
 						</div>
@@ -189,6 +220,26 @@
 			<!-- /container -->
 		</div>
 		<!-- /Section -->
+		
+		<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+		<script>
+		    // Wait for the document to be ready
+		    $(document).ready(function() {
+		        // Find the error alert element
+		        var $errorAlert = $('#errorAlert');
+		        
+		        // If the alert element exists
+		        if ($errorAlert.length) {
+		            // Set a timeout to hide the alert after 3 seconds
+		            setTimeout(function() {
+		                // Fade out the alert over 0.5 seconds
+		                $errorAlert.fadeOut(500);
+		            }, 3000); // 3000 milliseconds = 3 seconds
+		        }
+		    });
+		</script>
+		
+		<%@ include file="/views/user/layout/footer.jsp" %>
+		
+		
 
-
-<%@ include file="/views/user/layout/footer.jsp" %>

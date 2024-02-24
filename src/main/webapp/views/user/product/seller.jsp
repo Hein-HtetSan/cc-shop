@@ -44,6 +44,18 @@
 		<div class="section">
 			<!-- container -->
 			<div class="container">
+			
+				<c:if test="${not empty success }">
+						<div class="alert bg-success text-center " role="alert" id="errorAlert">
+							${success}
+						</div>
+					</c:if>
+					<c:if test="${not empty error }">
+						<div class="alert bg-danger text-center " role="alert" id="errorAlert">
+							${error}
+						</div>
+					</c:if>
+			
 				<!-- row -->
 				<div class="row">
 				
@@ -151,7 +163,11 @@
 												</div>
 											</div>
 											<div class="add-to-cart">
-												<button class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i> add to cart</button>
+												<a href="${pageContext.request.contextPath}/CartController?action=addToCartFromSeller&user_id=${customer.id}&seller_id=${seller.id}&product_id=${product.id}&previous_product_id=${product_id}">
+													<button  class="add-to-cart-btn">
+														<i class="fa fa-shopping-cart"></i> add to cart
+													</button>
+												</a>
 											</div>
 										</div>
 										<!-- /product -->
@@ -169,5 +185,22 @@
 		<!-- /SECTION -->
 
 
+		<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+		<script>
+		    // Wait for the document to be ready
+		    $(document).ready(function() {
+		        // Find the error alert element
+		        var $errorAlert = $('#errorAlert');
+		        
+		        // If the alert element exists
+		        if ($errorAlert.length) {
+		            // Set a timeout to hide the alert after 3 seconds
+		            setTimeout(function() {
+		                // Fade out the alert over 0.5 seconds
+		                $errorAlert.fadeOut(500);
+		            }, 3000); // 3000 milliseconds = 3 seconds
+		        }
+		    });
+		</script>
 
 <%@ include file="/views/user/layout/footer.jsp" %>

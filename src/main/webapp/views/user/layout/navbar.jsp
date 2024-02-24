@@ -13,7 +13,7 @@
 					<ul class="main-nav nav navbar-nav">
 						<li class="" id="mainLink"><a href="${pageContext.request.contextPath}/UserController?page=fetchByCategory&category_id=all">All</a></li>
 						<c:forEach items="${categories}" var="category">
-							<li class="${param.category_id == category.id ? 'active' : ''}"><a href="${pageContext.request.contextPath}/UserController?page=fetchByCategory&category_id=${category.id}">${category.name}</a></li>
+							<li class="${param.category_id == category.id ? 'active' : ''}"><a href="${pageContext.request.contextPath}/UserController?page=fetchByCategory&category_id=${category.id}&user_id=${customer.id}">${category.name}</a></li>
 						</c:forEach>
 					</ul>
 					<!-- /NAV -->

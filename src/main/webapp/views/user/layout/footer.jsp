@@ -78,25 +78,31 @@
 <script>
 
 $(document).ready(function() {
-
+	
+	$('#alert-error').hide(); // hide the error first
+	$("#alert-success").hide(); // hide the success mesage box first
+	
     $('#productForm').submit(function(event) {
         event.preventDefault(); // Prevent the default form submission
 
         var category = $('#categorySelect').val();
         var searchQuery = $('#searchInput').val();
+        var customerID = $("#customer_id").val();
 
         $.ajax({
             type: 'GET',
             url: 'http://localhost:9095/shop-dot-com/UserController?page=fetch', // Specify the URL of your servlet here
             data: {
                 category: category,
-                searchTerm: searchQuery
+                searchTerm: searchQuery,
+                customerID: customerID,
             },
             success: function(response) {
                 // Handle the response from the servlet
             	var products = JSON.parse(response.products);
                 var categories = JSON.parse(response.categories);
                 var gridContainer = $('.search-section .grid-container');
+                var customerID = response.customerID;
                 
                 if(searchQuery != ''){
                 	$('.main-section').hide();
@@ -116,6 +122,7 @@ $(document).ready(function() {
 				    console.log("Name:", item.name);
 				    console.log("Price:", item.price);
 				    console.log("Count:", item.count);
+				    console.log("customer:", customerID);
 				    // Access other properties as needed
 			});
              // Assuming `products` is your array of products
@@ -140,7 +147,9 @@ $(document).ready(function() {
                                     </div>
                                 </div>
                                 <div class="add-to-cart">
-                                    <button class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i> add to cart</button>
+                                	<a href="${pageContext.request.contextPath}/CartController?action=addToCart&product_id=\${product.id}&user_id=\${customerID}">
+                                		<button class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i> add to cart</button>
+                                	</a>
                                 </div>
                             </div>
                             <!-- /product -->
@@ -159,6 +168,97 @@ $(document).ready(function() {
             }
         });
     });
+    
+    
+ // Ajax request to send data to servlet
+    $('#quantity').on('change', function() {
+    var quantity = $(this).val();
+    var product_id = $("#product_id").val();
+	    $.ajax({
+	        type: 'GET',
+	        url: "http://localhost:9095/shop-dot-com/CartController?action=validateCount",
+	        data: { 
+	            quantity: quantity,
+	            product_Id: product_id
+	        },
+	        success: function(response) {
+	            var message = response.message;
+	            var count = response.maxQuantity;
+	            
+	            console.log(message);
+	            console.log(count)
+	
+	            if (quantity > count) {
+	                // If quantity exceeds max count, set the value to max count and show error
+	                $('#quantity').val(count);
+	                $('#alert-error').text("Only " + count + " number of products are available!").fadeIn(500).delay(2000).fadeOut(500);
+	            } else {
+	                // If quantity is within the limit, hide the error message
+	                $('#alert-error').fadeOut(500);
+	            }
+	        },
+	        error: function(xhr, status, error) {
+	            // Handle error
+	            console.error('Error sending data:', error);
+	        }
+	    });
+	});
+ 
+ 
+ // add to cart btn from detail page
+    $(".main-add-to-cart-btn").click(function(event) {
+        // Prevent default button behavior (optional)
+        event.preventDefault();
+        console.log("clicked")
+
+        // Get the product ID from the hidden input
+        var productId = $("#product_id").val();
+        var user_id = $("#user_id").val();
+
+        // Get the selected quantity from the number input
+        var quantity = parseInt($("#quantity").val());
+        console.log(productId);
+        console.log(quantity);
+        console.log(user_id);
+
+        // Send the data to the servlet using AJAX
+        $.ajax({
+            url: "http://localhost:9095/shop-dot-com/CartController?action=addToCartFromDetail",
+            method: "GET",
+            data: {
+                user_id: user_id,
+                product_id: productId,
+                quantity: quantity
+            },
+            success: function(response) {
+            	console.log("data sent");
+            	var success = response.success;
+	            var error = response.error;
+	            
+	            console.log(success);
+	            console.log(error);
+	            
+	            if(success !== undefined){
+	            	$('#alert-success').text("Add to cart successfully!").fadeIn(500).delay(2000).fadeOut(500);
+	            }else{
+	            	$('#alert-success').fadeOut(500);
+	            }
+	            
+	            if(error !== undefined){
+	            	$('#alert-error').text("The item already exist in cart").fadeIn(500).delay(2000).fadeOut(500);
+	            }else{
+	            	$('#alert-error').fadeOut(500);
+	            }
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                // Handle errors (e.g., display error message to user)
+                console.error("Error adding to cart:", textStatus, errorThrown);
+            }
+        });
+    });
+
+ 
+ 
 
     // Track input on the search input field
     $('#searchInput').on('input', function() {
@@ -173,6 +273,22 @@ $(document).ready(function() {
         // Add the 'active' class to the list item
         $('li#mainLink').addClass('active');
     }
+    
+    
+ // Find the error alert element
+    var $errorAlert = $('#alert-success');
+    
+    // If the alert element exists
+    if ($errorAlert.length) {
+        // Set a timeout to hide the alert after 3 seconds
+        setTimeout(function() {
+            // Fade out the alert over 0.5 seconds
+            $errorAlert.fadeOut(500);
+        }, 3000); // 3000 milliseconds = 3 seconds
+    }
+    
+ 
+    
 });
 
 </script>

@@ -321,6 +321,8 @@ public class UserController extends HttpServlet {
 	private void productDetail(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, SQLException {
 		String product_id = request.getParameter("product_id");
 		String seller_id = request.getParameter("seller_id");
+		String error = request.getParameter("error");
+		String success = request.getParameter("success");
 		// get product detail by seller id
 		Product product = (Product) productDAO.getFullDataByProductId(Integer.parseInt(product_id));
 		// get product images by seller id
@@ -339,13 +341,19 @@ public class UserController extends HttpServlet {
 		request.setAttribute("seller_id", seller_id);
 		request.setAttribute("categories", categoires);
 		request.setAttribute("related_products", related_product);
+		request.setAttribute("previous_product_id", product_id);
+		if(error != null) request.setAttribute("error", error);
+		if(success != null) request.setAttribute("success", success);
 		dispatcher = request.getRequestDispatcher("/views/user/product/detail.jsp");
 		dispatcher.forward(request, response);
 	}
 	
 	// fetch by Category
 	private void fetchByCategory(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, SQLException {
+		String user_id = request.getParameter("user_id");
 		String category_id = request.getParameter("category_id");
+		String error = request.getParameter("error");
+		String success = request.getParameter("success");
 		if(category_id.equals("all")) {
 			response.sendRedirect(request.getContextPath() + "/UserController?page=main");
 			return;
@@ -364,6 +372,8 @@ public class UserController extends HttpServlet {
 	        List<Category> categoires = categoryDAO.get();
 			List<Product> products = productDAO.getByCategoryID((page_number-1)*recordsPerPage,
                     recordsPerPage, Integer.parseInt(category_id));
+			List<Cart> carts = cartDAO.getProductinCartByUserId(Integer.parseInt(user_id));
+			
 			int noOfRecords = productDAO.getNoOfRecords();
 	        System.out.println(noOfRecords);
 	        int noOfPages = (int) Math.ceil(noOfRecords * 1.0 / recordsPerPage);
@@ -372,6 +382,10 @@ public class UserController extends HttpServlet {
 	        request.setAttribute("noOfPages", noOfPages);
 	        request.setAttribute("currentPage", page_number);
 			request.setAttribute("categories", categoires);
+			request.setAttribute("category_id", category_id);
+			request.setAttribute("carts", carts);
+			if(error != null) request.setAttribute("error", error);
+			if(success != null) request.setAttribute("success", success);
 			dispatcher = request.getRequestDispatcher("/views/user/product/category.jsp");
 			dispatcher.forward(request, response);
 		}
@@ -380,21 +394,25 @@ public class UserController extends HttpServlet {
 	// fetching
 	private void fetching(HttpServletRequest request, HttpServletResponse response)  throws ServletException, IOException, SQLException {
 		String searchTerm = request.getParameter("searchTerm");
+		String customer_id = request.getParameter("customerID");
 		// get the products
 		List<Product> products = productDAO.getBySearching(searchTerm);
 		List<Category> categoires = categoryDAO.get();
 		
 		System.out.println(searchTerm);
+		System.out.println(customer_id);
 		
 		// Convert data to JSON
 	    ObjectMapper mapper = new ObjectMapper();
 	    String productsJSON = mapper.writeValueAsString(products);
 	    String categoriesJSON = mapper.writeValueAsString(categoires);
+	    
 
 	    // Prepare JSON response
 	    JsonObject jsonResponse = new JsonObject();
 	    jsonResponse.addProperty("products", productsJSON);
 	    jsonResponse.addProperty("categories", categoriesJSON);
+	    jsonResponse.addProperty("customerID", customer_id);
 
 	    // Set content type and write JSON response
 	    response.setContentType("application/json");
@@ -408,7 +426,8 @@ public class UserController extends HttpServlet {
 	private void getSellerAndProduct(HttpServletRequest request, HttpServletResponse response)  throws ServletException, IOException, SQLException {
 		String seller_id = request.getParameter("seller_id");
 		String product_id = request.getParameter("product_id");
-		
+		String error = request.getParameter("error");
+		String success = request.getParameter("success");
 		// get all product
 		int page_number = 1;
         int recordsPerPage = 6;
@@ -438,6 +457,8 @@ public class UserController extends HttpServlet {
 		request.setAttribute("seller", seller);
 		request.setAttribute("product_count", total_product);
 		request.setAttribute("product_id", product_id);
+		if(success != null) request.setAttribute("success", success);
+		if(error != null) request.setAttribute("error", error);
 		dispatcher = request.getRequestDispatcher("/views/user/product/seller.jsp");
 		dispatcher.forward(request, response);
 	}
