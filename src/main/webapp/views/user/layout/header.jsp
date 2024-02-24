@@ -90,6 +90,7 @@
 							<div class="header-search">
 								<form method="get" action="#" id="productForm">
 									<input id="searchInput" class="input" placeholder="Search here">
+									<input id="customer_id" class="input" type="hidden"  value="${customer.id}">
 									<button type="submit" class="search-btn">Search</button>
 								</form>					
 							</div>
@@ -119,7 +120,7 @@
 									<div class="cart-dropdown">
 										<div class="cart-list">
 											<c:forEach items="${carts}" var="cart">
-												<div class="product-widget">
+											<div class="product-widget">
 												<div class="product-img">
 													<img src="${pageContext.request.contextPath}/assets/images/products/${cart.image}" alt="">
 												</div>
@@ -127,7 +128,11 @@
 													<h3 class="product-name"><a href="${pageContext.request.contextPath}/UserController?page=productDetail&product_id=${cart.product_id}">${cart.product_name }</a></h3>
 													<h4 class="product-price"><span class="qty">${cart.count}x</span>${cart.price} MMKs</h4>
 												</div>
-												<button class="delete"><i class="fa fa-close"></i></button>
+												<button class="delete">
+													<a href="${pageContext.request.contextPath}/CartController?action=deleteFromCart&cart_id=${cart.id}">
+														<i class="fa fa-close" style="color: white !important;"></i>
+													</a>
+												</button>
 											</div>
 											</c:forEach>
 										</div>
@@ -141,7 +146,7 @@
 										    <h5>SUBTOTAL : ${totalSubtotal} MMKs</h5>
 										</div>
 										<div class="cart-btns">
-											<a href="#">View Cart</a>
+											<a href="${pageContext.request.contextPath}/CartController?action=main&user_id=${customer.id}">View Cart</a>
 											<a href="#">Checkout  <i class="fa fa-arrow-circle-right"></i></a>
 										</div>
 									</div>

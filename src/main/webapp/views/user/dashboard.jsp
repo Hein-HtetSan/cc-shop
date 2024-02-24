@@ -21,6 +21,13 @@
       padding: 20px;
       border: 1px solid #ccc;
     }
+    .stock{
+    	background-color: #D10024;
+    	padding: 5px 1rem;
+    	border-radius: 15px;
+    	color: #fff;
+    	margin-bottom: .6rem !important;
+    }
   </style>
   
   
@@ -158,23 +165,36 @@
 										<div class="product">
 											<div class="product-img">
 												<img src="${pageContext.request.contextPath}/assets/images/products/${product.image}" alt="">
+												<div class="product-label">
+													<span class="stock new">
+														<c:if test="${product.count > 0 }">In Stock (${product.count })</c:if>
+														<c:if test="${product.count == 0 }">Out of Stock</c:if>
+													</span>
+												</div>
 											</div>
 											<div class="product-body">
 												<p class="product-category">${product.category_name}</p>
 												<p class="product-category" style="font-weight: bold;">Seller: ${product.seller_name}</p>
 												<h3 class="product-name"><a href="#">${product.name}</a></h3>
 												<h4 class="product-price">${product.price}MMKs</h4>
-												<div class="product-btns">
+												<div class="product-btns" style="margin-top: 10px !important;">
 													<button class="add-to-wishlist"><i class="fa fa-heart-o"></i><span class="tooltipp">add to wishlist</span></button>
 													<button class="quick-view"><a class="" href="${pageContext.request.contextPath}/UserController?page=productDetail&product_id=${product.id}"><i class="fa fa-eye"></i><span class="tooltipp">quick view</span></a></button>
 												</div>
 											</div>
 											<div class="add-to-cart">
-												<a href="${pageContext.request.contextPath}/CartController?action=addToCart&user_id=${customer.id}&product_id=${product.id}">
+												<c:if test="${product.count > 0 }">
+													<a href="${pageContext.request.contextPath}/CartController?action=addToCart&user_id=${customer.id}&product_id=${product.id}">
+														<button  class="add-to-cart-btn">
+															<i class="fa fa-shopping-cart"></i> add to cart
+														</button>
+													</a>
+												</c:if>
+												<c:if test="${product.count == 0}">
 													<button  class="add-to-cart-btn">
-														<i class="fa fa-shopping-cart"></i> add to cart
+															<i class="fa fa-exclamation"></i>Out of Stock
 													</button>
-												</a>
+												</c:if>
 											</div>
 										</div>
 										<!-- /product -->
@@ -191,20 +211,22 @@
 		</div>
 		<!-- /SECTION -->
 		
+		<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 		<script>
-    // Wait for the document to be ready
-    document.addEventListener('DOMContentLoaded', function() {
-        // Find the success alert element
-        var successAlert = document.getElementById('errorAlert');
-        
-        // If the alert element exists
-        if (successAlert) {
-            // Set a timeout to hide the alert after 3 seconds
-            setTimeout(function() {
-                successAlert.style.display = 'none'; // Hide the alert
-            }, 3000); // 3000 milliseconds = 3 seconds
-        }
-	    });
-	</script>
+		    // Wait for the document to be ready
+		    $(document).ready(function() {
+		        // Find the error alert element
+		        var $errorAlert = $('#errorAlert');
+		        
+		        // If the alert element exists
+		        if ($errorAlert.length) {
+		            // Set a timeout to hide the alert after 3 seconds
+		            setTimeout(function() {
+		                // Fade out the alert over 0.5 seconds
+		                $errorAlert.fadeOut(500);
+		            }, 3000); // 3000 milliseconds = 3 seconds
+		        }
+		    });
+		</script>
 
 <%@ include file="/views/user/layout/footer.jsp" %>

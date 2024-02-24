@@ -12,6 +12,7 @@ public class CartDAO {
 	Statement stmt = null;
 	PreparedStatement pst = null;
 	ResultSet rs = null;
+	private int noOfRecords;
 	
 	public CartDAO() throws ClassNotFoundException, SQLException {
 		super();
@@ -98,17 +99,19 @@ public class CartDAO {
 	public List<Cart> getProductinCartByUserId(int id){
 		List<Cart> carts = new ArrayList<Cart>();
 		Cart cart = null;
-		String query = "SELECT carts.*, products.name as product_name, products.price as price, images.name as image"
+		String query = "SELECT carts.*, products.name as product_name, products.price as price, MIN(images.name) AS image"
 				+ " FROM carts "
 				+ "LEFT JOIN products ON products.id = carts.product_id "
 				+ "LEFT JOIN customers ON customers.id = carts.customer_id "
 				+ "LEFT JOIN images ON products.id = images.product_id "
-				+ "WHERE carts.customer_id =" + id;
+				+ "WHERE carts.customer_id = ? GROUP BY carts.id, products.name, products.price";
 		try {
-			stmt = con.createStatement();
-			rs = stmt.executeQuery(query);
+			pst = con.prepareStatement(query);
+			pst.setInt(1, id);
+			rs = pst.executeQuery();
 			while(rs.next()) {
 				cart = new Cart();
+				cart.setId(rs.getInt("id"));
 				cart.setProduct_name(rs.getString("product_name"));
 				cart.setProduct_id(rs.getInt("product_id"));
 				cart.setCustomer_id(rs.getInt("customer_id"));
@@ -121,6 +124,88 @@ public class CartDAO {
 			e.printStackTrace();
 		}
 		return carts;
+	}
+	
+	// get cart by user id
+		public List<Cart> getProductinCartByUserIdWithPagination(int id, int offset, int noOfRecords){
+			List<Cart> carts = new ArrayList<Cart>();
+			Cart cart = null;
+			String query = "SELECT SQL_CALC_FOUND_ROWS carts.*, products.name as product_name, products.price as price, MIN(images.name) AS image"
+					+ " FROM carts "
+					+ "LEFT JOIN products ON products.id = carts.product_id "
+					+ "LEFT JOIN customers ON customers.id = carts.customer_id "
+					+ "LEFT JOIN images ON products.id = images.product_id "
+					+ "WHERE carts.customer_id = " +id+ " GROUP BY carts.id, products.name, products.price "
+					+ "ORDER BY updated_at DESC limit " + offset + ", " + noOfRecords;
+			try {
+				stmt = con.createStatement();
+				rs = stmt.executeQuery(query);
+				while(rs.next()) {
+					cart = new Cart();
+					cart.setId(rs.getInt("id"));
+					cart.setProduct_name(rs.getString("product_name"));
+					cart.setProduct_id(rs.getInt("product_id"));
+					cart.setCustomer_id(rs.getInt("customer_id"));
+					cart.setCount(rs.getInt("count"));;
+					cart.setPrice(rs.getInt("price"));
+					cart.setImage(rs.getString("image"));
+					carts.add(cart);
+				}
+				rs.close();
+				rs = stmt.executeQuery("SELECT FOUND_ROWS()");
+		        if(rs.next()) {
+		        	 this.noOfRecords = rs.getInt(1);
+		        }
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			
+			return carts;
+		}
+		
+		// get number of records
+				public int getNoOfRecords() {
+			        return noOfRecords;
+			    }
+	
+	// get cart item by product id
+	public Cart getByProductID(int id,int customer_id) {
+		Cart cart = null;
+		String query = "SELECT * FROM carts WHERE product_id = ? AND customer_id = ?";
+		try {
+			pst = con.prepareStatement(query);
+			pst.setInt(1, id);
+			pst.setInt(2, customer_id);
+			rs = pst.executeQuery();
+			while(rs.next()) {
+				cart = new Cart();
+				cart.setId(rs.getInt("id"));
+				cart.setProduct_id(rs.getInt("product_id"));
+				cart.setCustomer_id(rs.getInt("customer_id"));
+				cart.setCount(rs.getInt("count"));
+				cart.setPrice(rs.getInt("price"));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return cart;
+	}
+	
+	
+	// update item count
+	public boolean update(int cart_id, int change) {
+		boolean flag = false;
+		String query = "UPDATE carts SET count = ? WHERE id = ?";
+		try {
+			pst = con.prepareStatement(query);
+			pst.setInt(1, change);
+			pst.setInt(2, cart_id);
+			int updated = pst.executeUpdate();
+			if(updated > 0) flag = true;
+		}catch(SQLException e) {
+			e.printStackTrace();
+		}
+		return flag;
 	}
 
 }
