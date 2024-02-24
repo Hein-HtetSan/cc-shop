@@ -97,9 +97,12 @@
 						</div>
 						<!-- /SEARCH BAR -->
 
+						
 						<!-- ACCOUNT -->
 						<div class="col-md-3 clearfix">
 							<div class="header-ctn">
+							
+								
 								<!-- Wishlist -->
 								<div>
 									<a href="#">
@@ -109,6 +112,7 @@
 									</a>
 								</div>
 								<!-- /Wishlist -->
+								
 
 								<!-- Cart -->
 								<div class="dropdown">
@@ -147,7 +151,7 @@
 										</div>
 										<div class="cart-btns">
 											<a href="${pageContext.request.contextPath}/CartController?action=main&user_id=${customer.id}">View Cart</a>
-											<a href="#">Checkout  <i class="fa fa-arrow-circle-right"></i></a>
+											<a href="${pageContext.request.contextPath}/CheckoutController?page=main&user_id=${customer.id}">Checkout  <i class="fa fa-arrow-circle-right"></i></a>
 										</div>
 									</div>
 								</div>
@@ -162,6 +166,7 @@
 								</div>
 								<!-- /Menu Toogle -->
 							</div>
+							
 						</div>
 						<!-- /ACCOUNT -->
 					</div>
