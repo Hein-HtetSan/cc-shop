@@ -183,11 +183,9 @@ $(document).ready(function() {
 	        },
 	        success: function(response) {
 	            var message = response.message;
-	            var count = response.maxQuantity;
-	            
+	            var count = response.maxQuantity;	            
 	            console.log(message);
 	            console.log(count)
-	
 	            if (quantity > count) {
 	                // If quantity exceeds max count, set the value to max count and show error
 	                $('#quantity').val(count);

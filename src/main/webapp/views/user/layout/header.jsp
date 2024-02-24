@@ -120,7 +120,7 @@
 									<div class="cart-dropdown">
 										<div class="cart-list">
 											<c:forEach items="${carts}" var="cart">
-												<div class="product-widget">
+											<div class="product-widget">
 												<div class="product-img">
 													<img src="${pageContext.request.contextPath}/assets/images/products/${cart.image}" alt="">
 												</div>

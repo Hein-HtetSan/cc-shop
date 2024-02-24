@@ -20,6 +20,8 @@ public class OrderDAO {
 	
 	// create (customer_id, product_id, shipping_id, count , orderCode generated random)
 	
+	// cancel specific order by delete method
 	
+	// read order -> to track the order
 	
 }
