@@ -27,25 +27,25 @@
 						</div>
 					</div>
 					<ul class="nav">
-						<li class="nav-item <c:if test="${request.getRequestURI() eq 'http://localhost:8080/shop-dot-com/views/seller/dashboard.jsp'}">active</c:if>">
+						<li class="nav-item ${param.page == 'dashboard' ? 'active' : ''}">
 							<a href="${pageContext.request.contextPath}/SellerController?page=dashboard">
 								<i class="la la-dashboard"></i>
 								<p>Dashboard</p>
 							</a>
 						</li>
-						<li class="nav-item <c:if test="${request.getRequestURI() eq '/SellerController?page=product'}">active</c:if>">
+						<li class="nav-item ${param.page == 'product' ? 'active' : ''}">
 							<a href="${pageContext.request.contextPath}/SellerController?page=product&seller_id=${seller.id}">
 								<i class="la la-user"></i>
 								<p>Products</p>
 							</a>
 						</li>
-                        <li class="nav-item <c:if test = "${request.getRequestURL() eq '/SellerController?page=order' }">active</c:if>">
+                        <li class="nav-item ${param.page == 'order' ? 'active' : ''}">
 							<a href="${pageContext.request.contextPath}/SellerController?page=order">
 								<i class="las la-user-tie"></i>
 								<p>Order</p>
 							</a>
 						</li>
-                        <li class="nav-item <c:if test = "${request.getRequestURL() eq '/SellerController?page=history' }">active</c:if>">
+                        <li class="nav-item ${param.page == 'history' ? 'active' : ''}">
 							<a href="${pageContext.request.contextPath}/SellerController?page=history">
 								<i class="las la-store"></i>
 								<p>History</p>

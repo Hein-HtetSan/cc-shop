@@ -9,6 +9,9 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import com.google.gson.JsonObject;
+
 import DAO.*;
 import Models.*;
 import java.util.*;
@@ -23,6 +26,7 @@ public class CheckoutController extends HttpServlet {
 	CustomerDAO customerDAO = null;
 	CategoryDAO categoryDAO = null;
 	AddressDAO addressDAO = null;
+	OrderDAO orderDAO = null;
 
     public CheckoutController() throws ClassNotFoundException, SQLException {
         super();
@@ -31,6 +35,7 @@ public class CheckoutController extends HttpServlet {
         customerDAO = new CustomerDAO();
         categoryDAO = new CategoryDAO();
         addressDAO = new AddressDAO();
+        orderDAO = new OrderDAO();
     }
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -94,6 +99,62 @@ public class CheckoutController extends HttpServlet {
 	
 	// order action
 	private void order(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		String user_id = request.getParameter("userId");
+		String address_id = request.getParameter("addressId");
 		
+		
+		List<Cart> items = cartDAO.getProductinCartByUserId(Integer.parseInt(user_id));
+		String order_code = generateOrderCode(20);
+		int status = 0;
+		
+		for(Cart item : items) {
+			Order order = new Order();
+			order.setCount(item.getCount());
+			order.setCustomer_id(Integer.parseInt(user_id));
+			order.setOrder_code(order_code);
+			order.setPrice(item.getPrice());
+			order.setProduct_id(item.getProduct_id());
+			order.setShipping_id(Integer.parseInt(address_id));
+			order.setStatus(status);
+			
+			// inserted into order table one by one
+			boolean inserted = orderDAO.create(order);
+			if(inserted) System.out.println("saved");
+			
+			// then update the product count in product table
+			boolean update_count = productDAO.updateProductCount(item.getProduct_id(), item.getCount());
+			if(update_count) System.out.println("count updated");
+		}
+		// after all inserton are done then delete the cart
+		boolean delete_cart = cartDAO.delete(Integer.parseInt(user_id));
+		if(delete_cart) System.out.println("deleted from cart");
+		
+		// Prepare JSON response
+	    JsonObject jsonResponse = new JsonObject();
+	    jsonResponse.addProperty("status", "true");
+
+	    // Set content type and write JSON response
+	    response.setContentType("application/json");
+	    response.setCharacterEncoding("UTF-8");
+	    response.getWriter().write(jsonResponse.toString());
 	}
+	
+	// to generate random number
+	 public static String generateOrderCode(int length) {
+	        // Define the characters allowed in the order code
+	        String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+	        // Create a StringBuilder to build the order code
+	        StringBuilder orderCodeBuilder = new StringBuilder();
+	        // Create an instance of Random class
+	        Random random = new Random();
+	        // Build the order code with random characters
+	        for (int i = 0; i < length; i++) {
+	            // Get a random index from the characters string
+	            int randomIndex = random.nextInt(characters.length());
+	            // Append the character at the random index to the order code
+	            orderCodeBuilder.append(characters.charAt(randomIndex));
+	        }
+	        // Convert StringBuilder to String and return the order code
+	        return orderCodeBuilder.toString();
+	    }
 }

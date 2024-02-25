@@ -63,6 +63,7 @@
 					</ul>
 					<ul class="header-links pull-right">
 						<li><a href="${pageContext.request.contextPath}/UserController?page=profile&user_id=${customer.id}"><i class="fa fa-user-o"></i> My Account</a></li>
+						<li><a href=""><i class="fa fa-file"></i> History</a></li>
 						<li><a href="${pageContext.request.contextPath}/LoginController?page=userLogout"><i class="fa fa-power-off"></i> Logout</a></li>
 					</ul>
 				</div>
@@ -101,8 +102,7 @@
 						<!-- ACCOUNT -->
 						<div class="col-md-3 clearfix">
 							<div class="header-ctn">
-							
-								
+
 								<!-- Wishlist -->
 								<div>
 									<a href="#">

@@ -61,8 +61,8 @@
 			            	<c:if test="${product.count > 0 }">
 			            		<span class="bg-primary text-light px-2 py-1 rounded">In Stock - ${product.count}</span>
 			            	</c:if>
-			            	<c:if test="${product.count < 0 }">
-			            		<span class="bg-primary text-light px-2 py-1 rounded">Out of Stock</span>
+			            	<c:if test="${product.count == 0 }">
+			            		<span class="bg-danger text-light px-2 py-1 rounded">Out of Stock</span>
 			            	</c:if>
 			            </dd>
 			            

@@ -48,6 +48,12 @@
 		color: #fff;
 		background-color: #000;
 	}
+	.d-none{
+		display: none;
+	}
+	.checkout-status h4{
+		color: #D10024;
+	}
 </style>
 
 		<!-- BREADCRUMB -->
@@ -86,6 +92,12 @@
 							${error}
 						</div>
 					</c:if>
+					<div class="alert bg-danger text-center d-none" role="alert" id="alerterror">
+							<!-- error message goes here -->
+					</div>
+					<div class="alert bg-success text-center d-none" role="alert" id="alertsuccess">
+							<!-- error message goes here -->
+					</div>
 			
 				<!-- row -->
 				<div class="row">
@@ -146,19 +158,19 @@
 									<input type="hidden" name="action" value="add" >
 									<input type="hidden" name="user_id" value="${customer.id}" >
 									<div class="form-group">
-										<input class="input" type="text" name="street_address" placeholder="Street Address">
+										<input class="input" type="text" name="street_address" placeholder="Street Address" required>
 									</div>
 									<div class="form-group">
-										<input class="input" type="text" name="city" placeholder="City">
+										<input class="input" type="text" name="city" placeholder="City" required>
 									</div>
 									<div class="form-group">
-										<input class="input" type="text" name="state" placeholder="State">
+										<input class="input" type="text" name="state" placeholder="State" required>
 									</div>
 									<div class="form-group">
-										<input class="input" type="text" name="postal_code" placeholder="Postal Code">
+										<input class="input" type="text" name="postal_code" placeholder="Postal Code" required>
 									</div>
 									<div class="form-group">
-										<input class="input" type="text" name="country" placeholder="Country">
+										<input class="input" type="text" name="country" placeholder="Country" required>
 									</div>
 									<div class="form-group">
 										<button type="submit" class="new-address">Create new address</button>
@@ -169,43 +181,56 @@
 						<!-- /Shiping Details -->
 					</div>
 					
-					<!-- Order Details -->
-					<div class="col-md-5 order-details">
-						<div class="section-title text-center">
-							<h3 class="title">Your Order</h3>
-						</div>
-						<div class="order-summary">
-							<div class="order-col">
-								<div><strong>PRODUCT</strong></div>
-								<div><strong>TOTAL</strong></div>
-							</div>
-							<div class="order-products">
-								<c:forEach items="${items}" var="item">
+					<c:choose>
+						<c:when test="${items.size() > 0 }">
+							<!-- Order Details -->
+							<div class="col-md-5 order-details">
+								<div class="section-title text-center">
+									<h3 class="title">Your Order</h3>
+								</div>
+								<div class="order-summary">
+									<input type="hidden" id="user_id" value="${customer.id}" >
 									<div class="order-col">
-										<div>${item.count}x ${item.product_name}</div>
-										<div>${item.price} MMKs</div>
+										<div><strong>PRODUCT</strong></div>
+										<div><strong>TOTAL</strong></div>
 									</div>
-								</c:forEach>
+									<div class="order-products">
+										<c:forEach items="${items}" var="item">
+											<div class="order-col">
+												<div>${item.count}x ${item.product_name}</div>
+												<div>${item.price} MMKs</div>
+											</div>
+										</c:forEach>
+									</div>
+									<div class="order-col">
+										<div>Shiping</div>
+										<div><strong>FREE</strong></div>
+									</div>
+									<div class="order-col">
+										<div><strong>TOTAL</strong></div>
+										<div><strong class="order-total">${total_price} <small>MMKs</small></strong></div>
+									</div>
+								</div>
+								<div class="input-checkbox">
+									<input type="checkbox" id="terms">
+									<label for="terms">
+										<span></span>
+										I've read and accept the <a href="#">terms & conditions</a>
+									</label>
+								</div>
+								<a href="#" id="order-submit" class="primary-btn order-submit">Place order</a>
 							</div>
-							<div class="order-col">
-								<div>Shiping</div>
-								<div><strong>FREE</strong></div>
+							<!-- /Order Details -->
+						</c:when>
+						<c:otherwise>
+							<div class="col-md-5 checkout-status">
+								<h4 class="text-center">Go Buy Something! No Checkout Items</h4>
 							</div>
-							<div class="order-col">
-								<div><strong>TOTAL</strong></div>
-								<div><strong class="order-total">${total_price} <small>MMKs</small></strong></div>
-							</div>
-						</div>
-						<div class="input-checkbox">
-							<input type="checkbox" id="terms">
-							<label for="terms">
-								<span></span>
-								I've read and accept the <a href="#">terms & conditions</a>
-							</label>
-						</div>
-						<a href="#" id="order-submit" class="primary-btn order-submit">Place order</a>
+						</c:otherwise>
+					</c:choose>
+					<div class="col-md-5 checkout-status d-none">
+						<h4 class="text-center">Go Buy Something! No Checkout Items</h4>
 					</div>
-					<!-- /Order Details -->
 				</div>
 				<!-- row -->
 				
@@ -220,8 +245,6 @@
 		    $(document).ready(function() {
 		        // Find the error alert element
 		        var $errorAlert = $('#errorAlert');
-		        $('#alert-error').hide();
-		        $('#alert-success').hide();
 		        
 		        // If the alert element exists
 		        if ($errorAlert.length) {
@@ -237,6 +260,7 @@
 		        	e.preventDefault();
 		            // Find the checked radio button
 		            var selectedAddressId = $('.address-radio:checked').siblings('#address_id').val();
+		            var user_id = $("#user_id").val();
 
 		            // Check if any radio button is checked
 		            if (selectedAddressId) {
@@ -246,19 +270,31 @@
 		                    method: 'POST',
 		                    data: {
 		                        addressId: selectedAddressId,
+		                        userId: user_id,
 		                    },
 		                    success: function(response) {
-		                        // Handle success response if needed
-		                        console.log('Address ID sent successfully');
+		                    	var status = response.status;
+		                    	console.log(status);
+		                    	if (response.status === true || response.status === "true") {
+		                            $('#alertsuccess').text("Order success").removeClass('d-none');
+		                            setTimeout(function() {
+		    		                    $('#alertsuccess').addClass('d-none');
+		    		                }, 3000); // 3000 milliseconds = 3 seconds
+		                            $('.order-details').fadeOut();
+		    		                $(".checkout-status").removeClass("d-none");
+		                        } else {
+		                            console.error("Unexpected response status:", response.status);
+		                        }
 		                    },
 		                    error: function(xhr, status, error) {
-		                        // Handle error if needed
 		                        console.error('Error:', error);
 		                    }
 		                });
 		            } else {
-		                // Handle the case when no radio button is checked
-		                console.log('No address selected');
+		            	$('#alerterror').text("Please choose address to order").removeClass('d-none');
+		            	setTimeout(function() {
+		                    $('#alerterror').addClass('d-none');
+		                }, 3000); // 3000 milliseconds = 3 seconds
 		            }
 		        });
 		        
