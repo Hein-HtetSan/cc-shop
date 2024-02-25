@@ -8,12 +8,14 @@
 					<div class="user">
 						<div class="photo">
 						
-									<c:if test="${seller.image == 'assets/images/troll.jpg'}">
-                                		<img class="<c:if test='${seller.image != "assets/images/troll.jpg"}'> d-none </c:if>" src="${seller.image}">
-                                	</c:if>
-                                	<c:if test="${seller.image != null}">
-                                		<img class="<c:if test='${seller.image == "assets/images/troll.jpg"}'> d-none </c:if>" src="${pageContext.request.contextPath}/assets/images/admin/${seller.image}" class="rounded border p-2" style="width: 120px !important; height: 100px !important;">
-                                	</c:if>
+								<c:choose>
+                            		<c:when test="${seller.image == 'assets/images/troll.jpg'}">
+                            			<img src="${seller.image}" style="">
+                            		</c:when>
+                            		<c:otherwise>
+                            			<img src="${pageContext.request.contextPath}/assets/images/seller/${seller.image}" >
+                            		</c:otherwise>
+                            	</c:choose>
 						</div>
 						<div class="info">
 							<a class="" data-toggle="collapse" href="#collapseExample" aria-expanded="true">
@@ -41,13 +43,13 @@
 						</li>
                         <li class="nav-item ${param.page == 'order' ? 'active' : ''}">
 							<a href="${pageContext.request.contextPath}/SellerController?page=order">
-								<i class="las la-user-tie"></i>
+								<i class="las la-box"></i>
 								<p>Order</p>
 							</a>
 						</li>
                         <li class="nav-item ${param.page == 'history' ? 'active' : ''}">
 							<a href="${pageContext.request.contextPath}/SellerController?page=history">
-								<i class="las la-store"></i>
+								<i class="las la-file"></i>
 								<p>History</p>
 							</a>
 						</li>

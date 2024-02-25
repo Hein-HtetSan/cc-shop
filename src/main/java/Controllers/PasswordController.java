@@ -22,11 +22,13 @@ public class PasswordController extends HttpServlet {
 	AdminDAO adminDAO = null;
 	CustomerDAO customerDAO = null;
 	RequestDispatcher dispatcher = null;
+	SellerDAO sellerDAO = null;
        
     public PasswordController() throws ClassNotFoundException, SQLException {
         super();
         adminDAO = new AdminDAO();
         customerDAO = new CustomerDAO();
+        sellerDAO = new SellerDAO();
     }
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -43,6 +45,22 @@ public class PasswordController extends HttpServlet {
 				request.setAttribute("admin", get_admin);
 				request.getRequestDispatcher("/views/admin/profile/changePassword.jsp").forward(request, response);
 				break;
+				
+			case "sellerPasswordChange":
+				String seller_id = request.getParameter("seller_id");
+				String error = request.getParameter("error");
+				Seller get_seller;
+				try {
+					get_seller = sellerDAO.getById(Integer.parseInt(seller_id));
+					request.setAttribute("admin", get_seller);
+					request.getRequestDispatcher("/views/seller/profile/changePassword.jsp").forward(request, response);
+				} catch (NumberFormatException | SQLException e) {
+					e.printStackTrace();
+				}
+				if(error != null) {
+					request.setAttribute("error", error);
+				}
+				break;
 			}
 		}
 	}
@@ -54,6 +72,10 @@ public class PasswordController extends HttpServlet {
 			// update admin password
 			case "updateAdminPassword":
 				updateAdminPassword(request, response);
+				break;
+				
+			case "updateSellerPassword":
+				updateSellerPassword(request, response);
 				break;
 				
 			case "updateUserPassword":
@@ -162,4 +184,51 @@ public class PasswordController extends HttpServlet {
 			}
 		}
 
+		
+	// update seller password
+		private void updateSellerPassword(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+			HttpSession session = request.getSession();
+			String seller_id = request.getParameter("seller_id");
+			
+			Admin fetch_seller = adminDAO.getById(Integer.parseInt(seller_id));
+			String current_password = request.getParameter("current_password");
+			String new_password = request.getParameter("new_password");
+			String confirm_new_password = request.getParameter("confirm_new_password");
+			
+			if(!current_password.isEmpty() && !new_password.isEmpty() && !confirm_new_password.isEmpty()) {
+				boolean is_verified = Hash.verifyPassword(current_password, fetch_seller.getPassword());
+				System.out.println(is_verified);
+				// first check the current password
+				if(is_verified) {
+					// and then check new passowrd
+					System.out.println("success");
+					if(new_password.equals(confirm_new_password)) {
+						String hashed_password = Hash.hashPassword(new_password);
+						System.out.println("got hashed");
+						try {
+							if(sellerDAO.updatePassword(hashed_password, Integer.parseInt(seller_id))) {
+								System.out.println("got updated");
+								String success = "Updated Password successfully";
+								String encodedSuccess = URLEncoder.encode(success, "UTF-8");
+								response.sendRedirect(request.getContextPath() +"/SellerController?page=profile&seller_id="+seller_id+"&success="+encodedSuccess);
+							}
+						} catch (NumberFormatException | SQLException e) {
+							e.printStackTrace();
+						}
+					}else {
+						String error = "Password Don't Match";
+						String encodedError = URLEncoder.encode(error, "UTF-8");
+						response.sendRedirect(request.getContextPath() +"/PasswordController?page=sellerPasswordChange&admin_id="+seller_id+"&error="+encodedError);
+					}
+				}else {
+					String error = "Wrong Password!";
+					String encodedError = URLEncoder.encode(error, "UTF-8");
+					response.sendRedirect(request.getContextPath() +"/PasswordController?page=sellerPasswordChange&admin_id="+seller_id+"&error="+encodedError);
+				}
+			}else {
+				String error = "Don't miss, fill the feilds!";
+				String encodedError = URLEncoder.encode(error, "UTF-8");
+				response.sendRedirect(request.getContextPath() +"/PasswordController?page=sellerPasswordChange&admin_id="+seller_id+"&error="+encodedError);
+			}
+		}
 }

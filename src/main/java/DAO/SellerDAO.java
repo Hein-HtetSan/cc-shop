@@ -93,12 +93,25 @@ public class SellerDAO {
 			seller.setPhone(resultset.getString("phone"));
 			seller.setAddress(resultset.getString("address"));
 			seller.setCompany(resultset.getString("company"));
+			seller.setBusiness_id(resultset.getInt("business_id"));
 			seller.setBname(resultset.getString("business"));
 			seller.setImage(resultset.getString("image"));
 			seller.setRating(resultset.getInt("rating"));
 		}
 		return seller;
 	}
+	
+	// update password
+		public boolean updatePassword(String password, int id) throws SQLException {
+			boolean flag = false;
+			String query = "UPDATE sellers SET password=? WHERE id=?";
+			stmt = con.prepareStatement(query);
+			stmt.setString(1, password);
+			stmt.setInt(2, id);
+			int updatedRow = stmt.executeUpdate();
+			if(updatedRow > 0) flag = true;
+			return flag;
+		}
 	
 	// get by email
 		public Seller getSellerByEmail(String email) throws SQLException {
