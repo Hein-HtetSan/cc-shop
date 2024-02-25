@@ -108,17 +108,17 @@ public class CheckoutController extends HttpServlet {
 		int status = 0;
 		
 		for(Cart item : items) {
-			Order order = new Order();
-			order.setCount(item.getCount());
-			order.setCustomer_id(Integer.parseInt(user_id));
-			order.setOrder_code(order_code);
-			order.setPrice(item.getPrice());
-			order.setProduct_id(item.getProduct_id());
-			order.setShipping_id(Integer.parseInt(address_id));
-			order.setStatus(status);
+			Orders orders = new Orders();
+			orders.setCount(item.getCount());
+			orders.setCustomer_id(Integer.parseInt(user_id));
+			orders.setOrder_code(order_code);
+			orders.setPrice(item.getPrice());
+			orders.setProduct_id(item.getProduct_id());
+			orders.setShipping_id(Integer.parseInt(address_id));
+			orders.setStatus(status);
 			
 			// inserted into order table one by one
-			boolean inserted = orderDAO.create(order);
+			boolean inserted = orderDAO.create(orders);
 			if(inserted) System.out.println("saved");
 			
 			// then update the product count in product table
@@ -126,7 +126,7 @@ public class CheckoutController extends HttpServlet {
 			if(update_count) System.out.println("count updated");
 		}
 		// after all inserton are done then delete the cart
-		boolean delete_cart = cartDAO.delete(Integer.parseInt(user_id));
+		boolean delete_cart = cartDAO.deleteByUser(Integer.parseInt(user_id));
 		if(delete_cart) System.out.println("deleted from cart");
 		
 		// Prepare JSON response

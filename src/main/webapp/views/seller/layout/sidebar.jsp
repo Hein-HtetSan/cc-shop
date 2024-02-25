@@ -42,7 +42,7 @@
 							</a>
 						</li>
                         <li class="nav-item ${param.page == 'order' ? 'active' : ''}">
-							<a href="${pageContext.request.contextPath}/SellerController?page=order">
+							<a href="${pageContext.request.contextPath}/SellerController?page=order&seller_id=${seller.id}">
 								<i class="las la-box"></i>
 								<p>Order</p>
 							</a>

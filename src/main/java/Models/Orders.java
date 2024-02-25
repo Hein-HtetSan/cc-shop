@@ -1,6 +1,6 @@
 package Models;
 
-public class Order {
+public class Orders {
 	
 	// variable names which are same as names in database
 	private int id;
@@ -11,6 +11,21 @@ public class Order {
 	private int product_id;
 	private int customer_id;
 	private int shipping_id;
+	public String getCustomer_name() {
+		return customer_name;
+	}
+	public void setCustomer_name(String customer_name) {
+		this.customer_name = customer_name;
+	}
+	public String getProduct_name() {
+		return product_name;
+	}
+	public void setProduct_name(String product_name) {
+		this.product_name = product_name;
+	}
+	private String customer_name;
+	private String product_name;
+	
 	
 	// and then generated getter and setter 
 	// methods in order to manipulate with database

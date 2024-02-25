@@ -11,6 +11,7 @@ public class OrderDAO {
 	Statement stmt = null;
 	ResultSet rs = null;
 	PreparedStatement pst = null;
+	private int noOfRecords;
 	
 	public OrderDAO() throws ClassNotFoundException, SQLException {
 		con = Config.config.getConnections();
@@ -21,19 +22,19 @@ public class OrderDAO {
 	// delete
 	
 	// create (customer_id, product_id, shipping_id, count , orderCode generated random)
-	public boolean create(Order order) {
+	public boolean create(Orders orders) {
 		boolean flag = false;
 		String query = "INSERT INTO orders (order_code, price, count, status, product_id, customer_id, shipping_id) VALUES "
 				+ "(?,?,?,?,?,?,?)";
 		try {
 			pst = con.prepareStatement(query);
-			pst.setString(1, order.getOrder_code());
-			pst.setInt(2, order.getPrice());
-			pst.setInt(3, order.getCount());
-			pst.setInt(4, order.getStatus());
-			pst.setInt(5, order.getProduct_id());
-			pst.setInt(6, order.getCustomer_id());
-			pst.setInt(7, order.getShipping_id());
+			pst.setString(1, orders.getOrder_code());
+			pst.setInt(2, orders.getPrice());
+			pst.setInt(3, orders.getCount());
+			pst.setInt(4, orders.getStatus());
+			pst.setInt(5, orders.getProduct_id());
+			pst.setInt(6, orders.getCustomer_id());
+			pst.setInt(7, orders.getShipping_id());
 			int inserted = pst.executeUpdate();
 			if(inserted > 0) flag = true;
 		} catch (SQLException e) {
@@ -43,13 +44,31 @@ public class OrderDAO {
 	}
 	
 	// cancel specific order by delete method
-	public boolean delete(int id) {
+	public boolean delete(int product_id, String order_code) {
 		boolean flag = false;
-		String query = "DELETE FROM orders WHERE id = " + id;
+		String query = "DELETE FROM orders WHERE product_id = ? AND order_code = ?";
 		try {
-			stmt = con.createStatement();
-			int deleted = stmt.executeUpdate(query);
+			pst = con.prepareStatement(query);
+			pst.setInt(1, product_id);
+			pst.setString(2, order_code);
+			int deleted = pst.executeUpdate();
 			if(deleted > 0) flag = true;
+		}catch(SQLException e) {
+			e.printStackTrace();
+		}
+		return flag;
+	}
+	
+	// if seller call off then set status -> -2
+	public boolean callOffOrder(int product_id, String order_code) {
+		boolean flag = false;
+		String query = "UPDATE orders SET status = -2 WHERE product_id = ? AND order_code = ?";
+		try {
+			pst = con.prepareStatement(query);
+			pst.setInt(1, product_id);
+			pst.setString(2, order_code);
+			int updated = pst.executeUpdate();
+			if(updated > 0) flag = true;
 		}catch(SQLException e) {
 			e.printStackTrace();
 		}
@@ -59,19 +78,19 @@ public class OrderDAO {
 	
 	// read order -> to track the order (for user)
 //		public List<Order> getByUser(int id)
-		public List<Order> getByUser(int user_id){
-			List<Order> orders = new ArrayList<Order>();
+		public List<Orders> getByUser(int user_id){
+			List<Orders> orders = new ArrayList<Orders>();
 			String query = "SELECT * "
 					+ "FROM orders "
 					+ "LEFT JOIN products ON orders.product_id = products.id "
-					+ "LEFT JOIN addresses ON orders.address_id = addresses.id "
+					+ "LEFT JOIN addresses ON orders.shipping_id = addresses.id "
 					+ "LEFT JOIN customers ON customers.id = orders.customer_id "
 					+ "WHERE orders.customer_id = " + user_id;
 			try {
 				stmt = con.createStatement();
 				rs = stmt.executeQuery(query);
 				while(rs.next()) {
-					Order order = new Order();
+					Orders order = new Orders();
 					order.setId(rs.getInt("id"));
 					order.setCustomer_id(rs.getInt("customer_id"));
 					order.setOrder_code(rs.getString("order_code"));
@@ -88,26 +107,29 @@ public class OrderDAO {
 			return orders;
 		}
 		
-		public List<Order> getBySeller(int seller_id){
-			List<Order> orders = new ArrayList<Order>();
-			String query = "SELECT * "
+		public List<Orders> getBySeller(int seller_id){
+			List<Orders> orders = new ArrayList<Orders>();
+			String query = "SELECT orders.*,products.name as product_name, customers.name as customer_name "
 					+ "FROM orders "
 					+ "LEFT JOIN products ON orders.product_id = products.id "
-					+ "LEFT JOIN addresses ON orders.address_id = addresses.id "
+					+ "LEFT JOIN addresses ON orders.shipping_id = addresses.id "
 					+ "LEFT JOIN customers ON customers.id = orders.customer_id "
-					+ "WHERE products.seller_id = " + seller_id;
+					+ "WHERE orders.status = 0 AND products.seller_id = " + seller_id;
 			try {
 				stmt = con.createStatement();
 				rs = stmt.executeQuery(query);
 				while(rs.next()) {
-					Order order = new Order();
+					Orders order = new Orders();
 					order.setId(rs.getInt("id"));
 					order.setCustomer_id(rs.getInt("customer_id"));
 					order.setOrder_code(rs.getString("order_code"));
 					order.setPrice(rs.getInt("price"));
+					order.setCount(rs.getInt("count"));
 					order.setProduct_id(rs.getInt("product_id"));
 					order.setShipping_id(rs.getInt("shipping_id"));
 					order.setStatus(rs.getInt("status"));
+					order.setCustomer_name(rs.getString("customer_name"));
+					order.setProduct_name(rs.getString("product_name"));
 					orders.add(order);
 				}
 			} catch (SQLException e) {
@@ -116,6 +138,118 @@ public class OrderDAO {
 			}
 			return orders;
 		}
+		
+		public List<Orders> getBySellerWithPending(int seller_id){
+			List<Orders> orders = new ArrayList<Orders>();
+			String query = "SELECT orders.*,products.name as product_name, customers.name as customer_name "
+					+ "FROM orders "
+					+ "LEFT JOIN products ON orders.product_id = products.id "
+					+ "LEFT JOIN addresses ON orders.shipping_id = addresses.id "
+					+ "LEFT JOIN customers ON customers.id = orders.customer_id "
+					+ "WHERE orders.status = 0 AND products.seller_id = " + seller_id;
+			try {
+				stmt = con.createStatement();
+				rs = stmt.executeQuery(query);
+				while(rs.next()) {
+					Orders order = new Orders();
+					order.setId(rs.getInt("id"));
+					order.setCustomer_id(rs.getInt("customer_id"));
+					order.setOrder_code(rs.getString("order_code"));
+					order.setPrice(rs.getInt("price"));
+					order.setCount(rs.getInt("count"));
+					order.setProduct_id(rs.getInt("product_id"));
+					order.setShipping_id(rs.getInt("shipping_id"));
+					order.setStatus(rs.getInt("status"));
+					order.setCustomer_name(rs.getString("customer_name"));
+					order.setProduct_name(rs.getString("product_name"));
+					orders.add(order);
+				}
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			return orders;
+		}
+		
+		public List<Orders> getByOrderCodeWithPending(String order_code, int seller_id){
+			List<Orders> orders = new ArrayList<Orders>();
+			String query = "SELECT orders.*,products.name as product_name, customers.name as customer_name "
+					+ "FROM orders "
+					+ "LEFT JOIN products ON orders.product_id = products.id "
+					+ "LEFT JOIN addresses ON orders.shipping_id = addresses.id "
+					+ "LEFT JOIN customers ON customers.id = orders.customer_id "
+					+ "WHERE orders.status = 0 AND orders.order_code = ? AND products.seller_id = ?";
+			try {
+				pst = con.prepareStatement(query);
+				pst.setString(1, order_code);
+				pst.setInt(2, seller_id);
+				rs = pst.executeQuery();
+				while(rs.next()) {
+					Orders order = new Orders();
+					order.setId(rs.getInt("id"));
+					order.setCustomer_id(rs.getInt("customer_id"));
+					order.setOrder_code(rs.getString("order_code"));
+					order.setPrice(rs.getInt("price"));
+					order.setCount(rs.getInt("count"));
+					order.setProduct_id(rs.getInt("product_id"));
+					order.setShipping_id(rs.getInt("shipping_id"));
+					order.setStatus(rs.getInt("status"));
+					order.setCustomer_name(rs.getString("customer_name"));
+					order.setProduct_name(rs.getString("product_name"));
+					orders.add(order);
+				}
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			return orders;
+		}
+		
+		
+		public int getNoOfRecords() {
+	        return noOfRecords;
+	    }
+		
+		public List<Orders> getBySellerWithPaginationWithPending(int seller_id, int offset, int noOfRecords){
+			List<Orders> orders = new ArrayList<Orders>();
+			String query = "SELECT SQL_CALC_FOUND_ROWS orders.*,products.name as product_name, customers.name as customer_name "
+					+ "FROM orders "
+					+ "LEFT JOIN products ON orders.product_id = products.id "
+					+ "LEFT JOIN addresses ON orders.shipping_id = addresses.id "
+					+ "LEFT JOIN customers ON customers.id = orders.customer_id "
+					+ "WHERE orders.status = 0 AND products.seller_id = " + seller_id  + " ORDER BY updated_at DESC limit "+ offset + ", " + noOfRecords;
+			try {
+				stmt = con.createStatement();
+				rs = stmt.executeQuery(query);
+				while(rs.next()) {
+					Orders order = new Orders();
+					order.setId(rs.getInt("id"));
+					order.setCustomer_id(rs.getInt("customer_id"));
+					order.setOrder_code(rs.getString("order_code"));
+					order.setPrice(rs.getInt("price"));
+					order.setCount(rs.getInt("count"));
+					order.setProduct_id(rs.getInt("product_id"));
+					order.setShipping_id(rs.getInt("shipping_id"));
+					order.setStatus(rs.getInt("status"));
+					order.setCustomer_name(rs.getString("customer_name"));
+					order.setProduct_name(rs.getString("product_name"));
+					orders.add(order);
+					
+				}
+				rs.close();
+				rs = stmt.executeQuery("SELECT FOUND_ROWS()");
+		        if(rs.next()) {
+		        	 this.noOfRecords = rs.getInt(1);
+		        }
+
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			return orders;
+		}
+		
 		
 }
 	

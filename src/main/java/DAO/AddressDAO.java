@@ -80,6 +80,29 @@ public class AddressDAO {
 		return addresses;
 	}
 	
+	// get all the address
+		public Address getById(int id){
+			Address address = null;
+			String query = "SELECT * FROM addresses WHERE id = " + id;
+			try {
+				stmt = con.createStatement();
+				rs = stmt.executeQuery(query);
+				while(rs.next()) {
+					address = new Address();
+					address.setId(rs.getInt("id"));
+					address.setStreet_address(rs.getString("street_address"));
+					address.setCity(rs.getString("city"));
+					address.setState(rs.getString("state"));
+					address.setPostal_code(rs.getString("postal_code"));
+					address.setCountry(rs.getString("country"));
+					address.setCustomer_id(rs.getInt("customer_id"));
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			return address;
+		}
+	
 	// get the address by user id
 	public List<Address> getByUserID(int id){
 		List<Address> addresses = new ArrayList<Address>();

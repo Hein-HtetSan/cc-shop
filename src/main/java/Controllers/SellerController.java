@@ -27,18 +27,10 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.servlet.http.Part;
 
-import DAO.SellerDAO;
-import DAO.BusinessDAO;
-import DAO.CategoryDAO;
-import DAO.CustomerDAO;
-import DAO.ProductDAO;
-import Models.Seller;
-import Models.Admin;
-import Models.Business;
-import Models.Category;
-import Models.Customer;
-import Models.Product;
-import Models.Image;
+import com.mysql.cj.x.protobuf.MysqlxCrud.Order;
+
+import DAO.*;
+import Models.*;
 
 import java.util.*;
 
@@ -51,6 +43,7 @@ public class SellerController extends HttpServlet {
     BusinessDAO businessDAO = null;
     CategoryDAO categoryDAO = null;
     ProductDAO productDAO = null;
+    OrderDAO orderDAO = null;
     RequestDispatcher dispatcher = null;
 	
     public SellerController() throws ClassNotFoundException, SQLException {
@@ -60,6 +53,7 @@ public class SellerController extends HttpServlet {
         businessDAO = new BusinessDAO();
         categoryDAO = new CategoryDAO();
         productDAO = new ProductDAO();
+        orderDAO = new OrderDAO();
     }
     // Get Method
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -99,16 +93,7 @@ public class SellerController extends HttpServlet {
     				break;
     			
     			case "order":
-    				Seller seller3;
-					try {
-						seller3 = sellerDAO.getById(seller_id);
-						request.setAttribute("seller", seller3);
-						dispatcher = request.getRequestDispatcher("/views/seller/order/order.jsp");
-						dispatcher.forward(request, response);
-					} catch (SQLException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
+					orderPage(request, response);
 					break;
 			
     			case "history":
@@ -372,6 +357,41 @@ public class SellerController extends HttpServlet {
        
     }
     
+    // order page
+    private void orderPage(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    	String success = request.getParameter("success");
+    	String error = request.getParameter("error");
+    	String seller_id = request.getParameter("seller_id");
+    	int page_number = 1;
+        int recordsPerPage = 10;
+     // Get counts from utility method
+        if (request.getParameter("page_number") != null) {
+        	page_number = Integer.parseInt(request.getParameter("page_number")); 
+        }
+		try {
+			Seller seller = sellerDAO.getById(Integer.parseInt(seller_id));
+			List<Orders> orders = orderDAO.getBySellerWithPaginationWithPending(Integer.parseInt(seller_id), (page_number-1)*recordsPerPage,
+                    recordsPerPage);
+			List<Orders> total_order = orderDAO.getBySeller(Integer.parseInt(seller_id));
+		       
+	        int noOfRecords = orderDAO.getNoOfRecords();
+	        int noOfPages = (int) Math.ceil(noOfRecords * 1.0 / recordsPerPage);
+			
+	        if(error != null) request.setAttribute("error", error);
+	        if(success != null) request.setAttribute("success", success);
+			request.setAttribute("noOfPages", noOfPages);
+	        request.setAttribute("currentPage", page_number);
+			request.setAttribute("seller", seller);
+			request.setAttribute("orders", orders);
+			request.setAttribute("total_order", total_order.size());
+			
+			dispatcher = request.getRequestDispatcher("/views/seller/order/order.jsp");
+			dispatcher.forward(request, response);
+		} catch (NumberFormatException | SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    }
     
 	private String extractFileName(Part part) {
         String contentDisp = part.getHeader("content-disposition");
