@@ -95,6 +95,20 @@ public class CartDAO {
 		return flag;
 	}
 	
+	// delete the cart
+		public boolean deleteByUser(int customer_id) {
+			boolean flag = false;
+			String query = "DELETE FROM carts WHERE customer_id = " + customer_id;
+			try {
+				stmt = con.createStatement();
+				int deleted = stmt.executeUpdate(query);
+				if(deleted > 0) flag = true; 
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			return flag;
+		}
+	
 	// get cart by user id
 	public List<Cart> getProductinCartByUserId(int id){
 		List<Cart> carts = new ArrayList<Cart>();

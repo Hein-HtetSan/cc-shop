@@ -203,7 +203,7 @@ public class RegisterController extends HttpServlet {
 			String email = request.getParameter("email");
 			String password = request.getParameter("password");
 			String cpassword = request.getParameter("cpassword");
-			String image = "assets/image/troll.jpg";
+			String image = "assets/images/troll.jpg";
 			String phone = request.getParameter("phone");
 			String address = request.getParameter("address");
 			

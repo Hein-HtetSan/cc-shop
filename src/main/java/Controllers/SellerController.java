@@ -33,6 +33,7 @@ import DAO.CategoryDAO;
 import DAO.CustomerDAO;
 import DAO.ProductDAO;
 import Models.Seller;
+import Models.Admin;
 import Models.Business;
 import Models.Category;
 import Models.Customer;
@@ -68,6 +69,7 @@ public class SellerController extends HttpServlet {
     	HttpSession session = request.getSession();
     	
     	Seller seller = (Seller) session.getAttribute("seller");
+    	int seller_id  = seller.getId();
     	if(seller != null) {
     		
     		request.setAttribute("seller", seller);
@@ -77,8 +79,15 @@ public class SellerController extends HttpServlet {
     			
     			// seller main page --> redirect
     			case "dashboard":
-    				dispatcher = request.getRequestDispatcher("/views/seller/dashboard.jsp");
-    				dispatcher.forward(request, response);
+					try {
+						Seller seller2 = sellerDAO.getById(seller_id);
+						request.setAttribute("seller", seller2);
+	    				dispatcher = request.getRequestDispatcher("/views/seller/dashboard.jsp");
+	    				dispatcher.forward(request, response);
+					} catch (SQLException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
     				break;
 
     			case "product":
@@ -90,14 +99,38 @@ public class SellerController extends HttpServlet {
     				break;
     			
     			case "order":
-					dispatcher = request.getRequestDispatcher("/views/seller/order/order.jsp");
-					dispatcher.forward(request, response);
+    				Seller seller3;
+					try {
+						seller3 = sellerDAO.getById(seller_id);
+						request.setAttribute("seller", seller3);
+						dispatcher = request.getRequestDispatcher("/views/seller/order/order.jsp");
+						dispatcher.forward(request, response);
+					} catch (SQLException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 					break;
 			
     			case "history":
-		    		dispatcher = request.getRequestDispatcher("/views/seller/history/history.jsp");
-					dispatcher.forward(request, response);
+    				Seller seller4;
+					try {
+						seller4 = sellerDAO.getById(seller_id);
+						request.setAttribute("seller", seller4);
+			    		dispatcher = request.getRequestDispatcher("/views/seller/history/history.jsp");
+						dispatcher.forward(request, response);
+					} catch (SQLException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 					break;
+					
+    			case "profile":
+    				profile(request, response);
+    				break;
+    				
+    			case "editSeller":
+    				editSeller(request, response);
+    				break;
 					
     			
 
@@ -115,7 +148,9 @@ public class SellerController extends HttpServlet {
 		if(action != null) {
 			switch(action) {
 			
-			
+			case "updateProfile":
+				updateProfile(request, response);
+				break;
 			
 			}
 		}
@@ -140,6 +175,8 @@ public class SellerController extends HttpServlet {
         }
         List<Product> products = productDAO.getAllBySellerID((page_number-1)*recordsPerPage,
                                  recordsPerPage, Integer.parseInt(seller_id));
+        Seller seller = sellerDAO.getById(Integer.parseInt(seller_id));
+	
         int noOfRecords = productDAO.getNoOfRecords();
         // get products count
         int count = productDAO.getProductCountBySellerId(Integer.parseInt(seller_id));
@@ -154,6 +191,7 @@ public class SellerController extends HttpServlet {
         request.setAttribute("currentPage", page_number);
         request.setAttribute("seller_id", seller_id);
         request.setAttribute("product_count", count);
+    	request.setAttribute("seller", seller);
         dispatcher = request.getRequestDispatcher("/views/seller/product/product.jsp");
 		dispatcher.forward(request, response);
     }
@@ -190,5 +228,161 @@ public class SellerController extends HttpServlet {
 		dispatcher.forward(request, response);
     }
 	
+    // seller profile
+    private void profile(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    	String success = request.getParameter("success");
+		String seller_id = request.getParameter("seller_id");
+		Seller seller;
+		try {
+			seller = sellerDAO.getById(Integer.parseInt(seller_id));
+			
+			request.setAttribute("seller", seller);
+			if(success != null) request.setAttribute("success", success);
+			
+			dispatcher = request.getRequestDispatcher("views/seller/profile/index.jsp");
+			dispatcher.forward(request, response);
+			
+		} catch (NumberFormatException | SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
+		
+    }
+
+    // edit seller page
+    private void editSeller(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    	String seller_id = request.getParameter("seller_id");
+		try {
+			// get seller by id
+			Seller seller = sellerDAO.getById(Integer.parseInt(seller_id));
+			// get business
+			List<Business> businesses = businessDAO.get();
+			
+			request.setAttribute("seller", seller);
+			request.setAttribute("businesses", businesses);
+			System.out.println(seller);
+			dispatcher = request.getRequestDispatcher("views/seller/profile/edit.jsp");
+			dispatcher.forward(request, response);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    }
+
+    // update seller profile
+    private void updateProfile(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    	String name = request.getParameter("name");
+		String id = request.getParameter("seller_id");
+		String email = request.getParameter("email");
+		String phone = request.getParameter("phone");
+		String address = request.getParameter("address");
+		String company = request.getParameter("company");
+		String business_id = request.getParameter("business_id");
+		Part image = request.getPart("file");
+		boolean hasFileUpload = false;
+		String updated_filename = "assets/images/troll.jpg";
+		
+		// Iterate through the parts
+		for (Part part : request.getParts()) {
+		  // Check if the part is a file upload
+		   if (part.getSubmittedFileName() != null && !part.getSubmittedFileName().isEmpty()) {
+		        hasFileUpload = true;
+		        break; // No need to check further, we found at least one file upload
+		   }
+		}
+		
+		Seller seller = new Seller();
+		seller.setName(name);
+		seller.setEmail(email);
+		seller.setPhone(phone);
+		seller.setAddress(address);
+		seller.setCompany(company);
+		seller.setBusiness_id(Integer.parseInt(business_id));
+		seller.setId(Integer.parseInt(id));
+		
+		// update into database
+		boolean flag = false;
+		try {
+			flag = sellerDAO.update(seller);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		if(hasFileUpload) {
+			int min = 1000;
+		    int max = 10000;
+		    int random_number = (int) (Math.random()*(max-min+1)+min);  
+		    // Process the file upload
+		    String fileName = extractFileName(image);
+		    updated_filename = random_number + "_" + fileName;
+		    System.out.println("File Name: " + fileName);
+
+		    //Define destination directory
+	        String uploadDir = "C:\\Users\\acer\\Desktop\\cc-shop\\src\\main\\webapp\\assets\\images\\seller"; // Example: "C:/eclipse_workspace/upload"
+	        
+	        // Write file to the destination directory
+	        OutputStream out = null;
+	        InputStream fileContent = null;
+	        try {
+	            out = new FileOutputStream(new File(uploadDir + File.separator + updated_filename));
+	            fileContent = image.getInputStream();
+
+	            int read;
+	            final byte[] bytes = new byte[1024];
+	            while ((read = fileContent.read(bytes)) != -1) {
+	                out.write(bytes, 0, read);
+	            }
+	        } catch (FileNotFoundException fne) {
+	            // Handle file not found exception
+	            fne.printStackTrace();
+	        } finally {
+	            if (out != null) {
+	                out.close();
+	            }
+	            if (fileContent != null) {
+	                fileContent.close();
+	            }
+	        }
+		}
+        
+        Seller seller_image = new Seller();
+        // check whether the image is exist or not
+        if(hasFileUpload) {
+			seller_image.setImage(updated_filename);
+			seller_image.setId(Integer.parseInt(id));
+		}
+        boolean update_image;
+		try {
+			update_image = sellerDAO.updateImage(seller_image);
+			 if(flag || update_image) {
+		        	String success = "Updated Profile Successfully";
+					String encoded = URLEncoder.encode(success, "UTF-8");
+		    		response.sendRedirect(request.getContextPath() + "/SellerController?page=profile&success="+encoded+"&seller_id="+id);
+		        }else {
+		        	String error = "Can't update the profile";
+					String encoded = URLEncoder.encode(error, "UTF-8");
+		    		response.sendRedirect(request.getContextPath() + "/SellerController?page=profile&error="+encoded+"&seller_id="+id);
+		        }
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+       
+    }
+    
+    
+	private String extractFileName(Part part) {
+        String contentDisp = part.getHeader("content-disposition");
+        String[] tokens = contentDisp.split(";");
+        for (String token : tokens) {
+            if (token.trim().startsWith("filename")) {
+                return token.substring(token.indexOf('=') + 1).trim().replace("\"", "");
+            }
+        }
+        return "";
+	}
+    
+    
 }

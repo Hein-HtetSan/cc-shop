@@ -248,10 +248,12 @@
 		                	$("#cart-status").show();
 		                	$(".checkout-btn").hide();
 		                	$("#cart-list-summary").hide();
+		                	$(".store-pagination").hide();
 		                }else{
 		                	$("#cart-status").hide();
 		                	$("#cart-list-summary").show();
 		                	$(".checkout-btn").show();
+		                	$(".store-pagination").show();
 		                }
 		            },
 		            error: function(xhr, status, error) {

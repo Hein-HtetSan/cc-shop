@@ -1,6 +1,6 @@
 package Models;
 
-public class Record {
+public class History {
 	
 	// variable names which are same as names in database
 	private int id;

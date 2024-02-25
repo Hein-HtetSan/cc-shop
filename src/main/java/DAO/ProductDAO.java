@@ -403,8 +403,7 @@ public class ProductDAO {
 				}
 				return products;
 			}
-			
-			
+
 			
 			// delete image by id
 			public boolean deleteImageById(int id) {
@@ -466,7 +465,7 @@ public class ProductDAO {
 			}
 			
 			// get the full image by seller id
-						public List<Image> getFullImagesByProductId(int id) throws SQLException{
+			public List<Image> getFullImagesByProductId(int id) throws SQLException{
 							List<Image> images = new ArrayList<Image>(); // create admin object which is from model
 							String query = "select * from images WHERE product_id=" + id;
 							statement = con.createStatement();
@@ -550,7 +549,20 @@ public class ProductDAO {
 				return is_all_deleted;
 		}
 		
-		
+	
+	// udpate product count
+	public boolean updateProductCount(int product_id, int value) {
+		boolean flag = false;
+		String query = "UPDATE products SET count = count - " + value + " WHERE id = " + product_id;
+		try {
+			statement = con.createStatement();
+			int updated = statement.executeUpdate(query);
+			if(updated > 0) flag = true;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return flag;
+	}
 	
 	
 	// testing method
