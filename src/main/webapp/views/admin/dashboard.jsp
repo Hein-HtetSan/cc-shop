@@ -53,8 +53,8 @@
 											</div>
 											<div class="col-7 d-flex align-items-center">
 												<div class="numbers">
-													<p class="card-category">Visitors</p>
-													<h4 class="card-title">1,294</h4>
+													<p class="card-category">Customers</p>
+													<h4 class="card-title">${counts.user_count}</h4>
 												</div>
 											</div>
 										</div>
@@ -67,13 +67,13 @@
 										<div class="row">
 											<div class="col-5">
 												<div class="icon-big text-center">
-													<i class="la la-bar-chart"></i>
+													<i class="la la-user-tie"></i>
 												</div>
 											</div>
 											<div class="col-7 d-flex align-items-center">
 												<div class="numbers">
-													<p class="card-category">Businesses</p>
-													<h4 class="card-title">$1,345</h4>
+													<p class="card-category">Seller</p>
+													<h4 class="card-title">${counts.seller_count}</h4>
 												</div>
 											</div>
 										</div>
@@ -86,13 +86,13 @@
 										<div class="row">
 											<div class="col-5">
 												<div class="icon-big text-center">
-													<i class="la la-user"></i>
+													<i class="las la-boxes"></i>
 												</div>
 											</div>
 											<div class="col-7 d-flex align-items-center">
 												<div class="numbers">
-													<p class="card-category">Customers</p>
-													<h4 class="card-title">1303</h4>
+													<p class="card-category">Products</p>
+													<h4 class="card-title">${counts.product_count}</h4>
 												</div>
 											</div>
 										</div>
@@ -105,13 +105,13 @@
 										<div class="row">
 											<div class="col-5">
 												<div class="icon-big text-center">
-													<i class="la la-check-circle"></i>
+													<i class="la la-box"></i>
 												</div>
 											</div>
 											<div class="col-7 d-flex align-items-center">
 												<div class="numbers">
 													<p class="card-category">Order</p>
-													<h4 class="card-title">576</h4>
+													<h4 class="card-title">${counts.order_count}</h4>
 												</div>
 											</div>
 										</div>
@@ -122,6 +122,36 @@
 							
 							
 						</div>
+						
+						<!-- Pending order section -->
+						<div class="row">
+						
+							<div class="col-md-6">
+								<h5 class="fw-bold">Ready to Ship</h5>
+								<table class="table">
+									<thead class="thead-dark">
+										<th class="fw-bold">Order Code</th>
+										<th class="fw-bold">Status</th>
+										<th class="fw-bold">Status</th>
+									</thead>
+									<tbody>
+										<c:forEach items="${orders}" var="order">
+											<tr>
+												<td>
+													<a class="fw-bold text-primary fs-5" href="">${order.order_code}</a>
+												</td>
+												<td class="text-danger fw-bold">Ready to ship?</td>
+												<td>
+													<a href="${pageContext.request.contextPath}/" class="btn btn-success">Ship Now</a>
+												</td>
+											</tr>
+										</c:forEach>
+									</tbody>
+								</table>
+							</div>
+							
+						</div>
+						<!--  end of pending order section -->
 						
 
 					</div>

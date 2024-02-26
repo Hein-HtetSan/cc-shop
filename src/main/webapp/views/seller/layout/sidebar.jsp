@@ -42,21 +42,15 @@
 							</a>
 						</li>
                         <li class="nav-item ${param.page == 'order' ? 'active' : ''}">
-							<a href="${pageContext.request.contextPath}/SellerController?page=order">
+							<a href="${pageContext.request.contextPath}/SellerController?page=order&seller_id=${seller.id}">
 								<i class="las la-box"></i>
 								<p>Order</p>
 							</a>
 						</li>
                         <li class="nav-item ${param.page == 'history' ? 'active' : ''}">
-							<a href="${pageContext.request.contextPath}/SellerController?page=history">
+							<a href="${pageContext.request.contextPath}/SellerController?page=history&seller_id=${seller.id}">
 								<i class="las la-file"></i>
 								<p>History</p>
-							</a>
-						</li>
-                        <li class="nav-item ">
-							<a href="">
-								<i class="las la-list"></i>
-								<p>Setting</p>
 							</a>
 						</li>
 					</ul>

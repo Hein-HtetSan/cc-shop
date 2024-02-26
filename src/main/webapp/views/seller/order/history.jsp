@@ -47,20 +47,20 @@
 						<nav aria-label="Page navigation example">
 							<ul class="pagination">
 							  <c:if test="${currentPage != 1}">
-							      <li class="page-item"><a href="${pageContext.request.contextPath}/SellerController?page=order&page_number=${currentPage - 1}&seller_id=${seller.id}" class="page-link">Previous</a></li>
+							      <li class="page-item"><a href="${pageContext.request.contextPath}/SellerController?page=history&page_number=${currentPage - 1}&seller_id=${seller.id}" class="page-link">Previous</a></li>
 								</c:if> 
 							  <c:forEach begin="1" end="${noOfPages}" var="i"> 
 					    		    <c:choose> 
 					    		        <c:when test="${currentPage eq i}"> 
-								            <li class="page-item"><a class="page-link bg-primary text-light" href="${pageContext.request.contextPath}/SellerController?page=order&page_number=${i}&seller_id=${seller.id}">${i}</a></td> 
+								            <li class="page-item"><a class="page-link bg-primary text-light" href="${pageContext.request.contextPath}/SellerController?page=history&page_number=${i}&seller_id=${seller.id}">${i}</a></td> 
 								        </c:when> 
 						   		        <c:otherwise> 
-								            <li class="page-item"><a class="page-link" href="${pageContext.request.contextPath}/SellerController?page=order&page_number=${i}&seller_id=${seller.id}">${i}</a></td> 
+								            <li class="page-item"><a class="page-link" href="${pageContext.request.contextPath}/SellerController?page=history&page_number=${i}&seller_id=${seller.id}">${i}</a></td> 
 						 		        </c:otherwise> 
 					    		    </c:choose> 
 					   		 </c:forEach> 
 						  <c:if test="${currentPage lt noOfPages}">
-						      <li class="page-item"><a href="${pageContext.request.contextPath}/SellerController?page=order&page_number=${currentPage + 1}&seller_id=${seller.id}" class="page-link">Next</a></td>
+						      <li class="page-item"><a href="${pageContext.request.contextPath}/SellerController?page=history&page_number=${currentPage + 1}&seller_id=${seller.id}" class="page-link">Next</a></td>
 						  </c:if>
 						  </ul>
 						</nav>
@@ -80,28 +80,23 @@
 					      <th scope="col" style="color: white">Price</th>
 					      <th scope="col" style="color: white">Qty</th>
 					      <th scope="col" style="color: white">Total Price</th>
-					      <th scope="col" style="color: white">Action</th>
-					      <th scope="col" style="color: white">Order Date</th>
+					      <th scope="col" style="color: white">Order Complete Date</th>
 					      <th scope="col" style="color: white">Status</th>
 					    </tr>
 					  </thead>
 					  <tbody>
 					    <c:forEach items="${orders}" var="order">
 					    	<tr>
-						      <td><a href="${pageContext.request.contextPath}/OrderController?page=detail&seller_id=${seller.id}&order_code=${order.order_code}" class="btn btn-link fw-bold">${order.order_code}</a></td>
+						      <td><a href="${pageContext.request.contextPath}/OrderController?page=detailOfHistory&seller_id=${seller.id}&order_code=${order.order_code}" class="btn btn-link fw-bold">${order.order_code}</a></td>
 						      <td>${order.customer_name}</td>
 						      <td class="fw-bold text-danger" >${order.product_name}</td>
 						      <td class="">${order.price} MMKs</td>
 						      <td>${order.count} </td>
 						      <td class="fw-bold text-primary">${order.count * order.price } MMKs</td>
-						      <td>
-						      	<a href="${pageContext.request.contextPath}/OrderController?page=delete&seller_id=${seller.id}&order_code=${order.order_code}&product_id=${order.product_id}" class="btn btn-sm btn-danger mb-1">Call off</a>
-						      	<a href="${pageContext.request.contextPath}/OrderController?page=transfer&seller_id=${seller.id}&order_code=${order.order_code}&product_id=${order.product_id}" class="btn btn-sm btn-success">Transfer to warehouse</a>
-						      </td>
 						      <td>${order.updated_at}</td>
 						      <td class="text-warning">
 						      <c:choose>
-						      	<c:when test="${order.status==0}"><span class="text-warning fw-bold">Pending</span></c:when>
+						      	<c:when test="${order.status==1}"><span class="text-success fw-bold">Complete</span></c:when>
 						      </c:choose>
 						      </td>
 						    </tr>

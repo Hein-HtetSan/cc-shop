@@ -103,9 +103,6 @@
 	                                	<c:if test="${admin.image != null}">
 	                                		<img class=" image <c:if test='${admin.image == "assets/images/troll.jpg"}'> d-none </c:if>" src="${pageContext.request.contextPath}/assets/images/admin/${admin.image}" class="rounded border p-2" style="width: 120px !important; height: 100px !important;">
 	                                	</c:if>
-                                        
-                                        <label for="image" class="plus-icon text-muted"> <i class="las la-pen pen-2"></i> </label>
-                                        <input type="file" class="image-file" id="image">
                                     </div>
                                 </div>
                                 </form>
@@ -153,6 +150,11 @@
             }, 3000); // 3000 milliseconds = 3 seconds
         }
 	    });
+    
+    var status = document.getElementById("status").value;
+	if(status == "wrong_password"){
+		Swal.fire("Sorry","Current Password was wrong","error");
+	}
 	</script>
 
 </body>
