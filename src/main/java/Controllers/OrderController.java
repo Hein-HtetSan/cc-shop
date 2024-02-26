@@ -39,6 +39,10 @@ public class OrderController extends HttpServlet {
 				detailOfOrder(request, response);
 				break;
 				
+			case "detailOfHistory":
+				detailOfOrderCompleted(request, response);
+				break;
+				
 			case "delete":
 				deleteOrder(request, response);
 				break;
@@ -83,6 +87,34 @@ public class OrderController extends HttpServlet {
 		dispatcher = request.getRequestDispatcher("/views/seller/order/detail.jsp");
 		dispatcher.forward(request, response);
 	}
+	
+	private void detailOfOrderCompleted(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		String seller_id = request.getParameter("seller_id");
+		String order_code = request.getParameter("order_code");
+		
+		List<Orders> orders = orderDAO.getByOrderCodeWithComplete(order_code, Integer.parseInt(seller_id)); // get the order code by seller id where the status 0
+		
+		System.out.println(orders);
+		// Get the first order in the list
+	    Orders firstOrder = orders.get(0);
+	    // Get the shipping ID of the first order
+	    int shipping_id = firstOrder.getShipping_id();
+	    // Retrieve the address associated with the shipping ID
+	    Address address = addressDAO.getById(shipping_id);
+	    
+	    double total = 0.0;
+	    for(Orders o : orders) {
+	    	double temp = o.getPrice() * o.getCount();
+	    	total += temp;
+	    }
+		
+		request.setAttribute("address", address);
+		request.setAttribute("orders", orders);
+		request.setAttribute("total", total);
+		
+		dispatcher = request.getRequestDispatcher("/views/seller/order/historyOfDetail.jsp");
+		dispatcher.forward(request, response);
+	}
 
 	// delete order from seller
 	private void deleteOrder(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -104,7 +136,22 @@ public class OrderController extends HttpServlet {
 
 	// transfer to admin
 	private void transferToAdmin(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		String seller_id = request.getParameter("seller_id");
+		String order_code = request.getParameter("order_code");
+		String product_id = request.getParameter("product_id");
 		
+		// update the status to 1
+		boolean flag = orderDAO.transferOrder(Integer.parseInt(product_id), order_code);
+		
+		if(flag) {
+			String success = "Successfully transfered to warehouse.";
+			String encoded = URLEncoder.encode(success, "UTF-8");
+    		response.sendRedirect(request.getContextPath() + "/SellerController?page=order&success="+encoded+"&seller_id="+seller_id);
+		}else {
+			String success = "Can't transfer to warehouse.";
+			String encoded = URLEncoder.encode(success, "UTF-8");
+    		response.sendRedirect(request.getContextPath() + "/SellerController?page=order&error="+encoded+"&seller_id="+seller_id);
+		}
 	}
 
 }

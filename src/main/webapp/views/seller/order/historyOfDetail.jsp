@@ -31,9 +31,13 @@
 								</div>
 							</c:if>
 
+		
+
         <div class="row d-flex align-items-center justify-content-around py-4">
         	
 			<div class="col-md-6 flex-column d-flex align-items-center justify-content-center px-3">
+			
+				<h4>Completed Order</h4>
 			
 				<div class="card shadow rounded">
 					<div class="card-header">
@@ -83,7 +87,7 @@
 					</div>
 				</div>
 			
-				<a class="btn btn-primary " href="${pageContext.request.contextPath}/SellerController?page=order&seller_id=${seller.id}">Understand</a>
+				<a class="btn btn-primary " href="${pageContext.request.contextPath}/SellerController?page=history&seller_id=${seller.id}">Understand</a>
 			</div>
 			
 		</div>

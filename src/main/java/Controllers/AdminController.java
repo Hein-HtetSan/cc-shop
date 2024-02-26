@@ -34,6 +34,7 @@ public class AdminController extends HttpServlet {
     ProductDAO productDAO = null;
     CategoryDAO categoryDAO = null;
     BusinessDAO businessDAO = null;
+    OrderDAO orderDAO = null;
   
     RequestDispatcher dispatcher = null;
 	
@@ -45,6 +46,7 @@ public class AdminController extends HttpServlet {
         productDAO = new ProductDAO();
         categoryDAO = new CategoryDAO();
         businessDAO = new BusinessDAO();
+        orderDAO = new OrderDAO();
     }
     
     // do get
@@ -337,15 +339,7 @@ public class AdminController extends HttpServlet {
         			dispatcher.forward(request, response);
         			
         		case "dashboard": // dashboard page in admin panel
-        			Map<String, Integer> counts = null;
-					try {
-						counts = getAllCount();
-						request.setAttribute("counts", counts);
-	        			dispatcher = request.getRequestDispatcher("views/admin/dashboard.jsp");
-	        			dispatcher.forward(request, response);
-					} catch (SQLException e) {
-						e.printStackTrace();
-					}
+        			dashboard(request, response);
         			break;
         			
             	
@@ -360,10 +354,34 @@ public class AdminController extends HttpServlet {
         }else {
         	response.sendRedirect("views/admin/form.jsp");
         }
-    	
-    	
-    	
     }
+    
+    
+    // dashboard page
+    private void dashboard(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    	Map<String, Integer> counts = null;
+		try {
+			// get all count for sidebar
+			counts = getAllCount();
+			
+			// get all order count where status = 1
+			
+			// get all customer count
+			
+			// get all seller count
+			
+			// get all prdouct count
+			List<Orders> orders = orderDAO.getOrderWithStatusOne();
+			
+			request.setAttribute("orders", orders);
+			request.setAttribute("counts", counts);
+			dispatcher = request.getRequestDispatcher("views/admin/dashboard.jsp");
+			dispatcher.forward(request, response);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+    }
+    
     
     // get all user
     private void getAllUser(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, SQLException {
@@ -566,6 +584,7 @@ public class AdminController extends HttpServlet {
         List<Category> categoryList = categoryDAO.get();
         List<Seller> sellerList = sellerDAO.get();
         List<Business> businessList = businessDAO.get();
+        List<Orders> orders = orderDAO.getOrderWithStatusOne();
         
         counts.put("user_count", userList.size());
         counts.put("product_count", productList.size());
@@ -573,6 +592,7 @@ public class AdminController extends HttpServlet {
         counts.put("category_count", categoryList.size());
         counts.put("store_count", sellerList.size());
         counts.put("business_count", businessList.size());
+        counts.put("order_count", orders.size());
 
         return counts;
     }

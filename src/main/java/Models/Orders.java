@@ -11,6 +11,23 @@ public class Orders {
 	private int product_id;
 	private int customer_id;
 	private int shipping_id;
+	private String created_at;
+	private String updated_at;
+	
+	public String getCreated_at() {
+		return created_at;
+	}
+	public void setCreated_at(String created_at) {
+		this.created_at = created_at;
+	}
+	public String getUpdated_at() {
+		return updated_at;
+	}
+	public void setUpdated_at(String updated_at) {
+		this.updated_at = updated_at;
+	}
+
+	
 	public String getCustomer_name() {
 		return customer_name;
 	}

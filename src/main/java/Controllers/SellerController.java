@@ -97,16 +97,7 @@ public class SellerController extends HttpServlet {
 					break;
 			
     			case "history":
-    				Seller seller4;
-					try {
-						seller4 = sellerDAO.getById(seller_id);
-						request.setAttribute("seller", seller4);
-			    		dispatcher = request.getRequestDispatcher("/views/seller/history/history.jsp");
-						dispatcher.forward(request, response);
-					} catch (SQLException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
+    				history(request, response);
 					break;
 					
     			case "profile":
@@ -138,6 +129,42 @@ public class SellerController extends HttpServlet {
 				break;
 			
 			}
+		}
+	}
+	
+	// history page
+	private void history(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		String success = request.getParameter("success");
+    	String error = request.getParameter("error");
+    	String seller_id = request.getParameter("seller_id");
+    	int page_number = 1;
+        int recordsPerPage = 10;
+     // Get counts from utility method
+        if (request.getParameter("page_number") != null) {
+        	page_number = Integer.parseInt(request.getParameter("page_number")); 
+        }
+		try {
+			Seller seller = sellerDAO.getById(Integer.parseInt(seller_id));
+			List<Orders> orders = orderDAO.getBySellerWithPaginationWithComplete(Integer.parseInt(seller_id), (page_number-1)*recordsPerPage,
+                    recordsPerPage);
+			List<Orders> total_order = orderDAO.getBySeller(Integer.parseInt(seller_id));
+		       
+	        int noOfRecords = orderDAO.getNoOfRecords();
+	        int noOfPages = (int) Math.ceil(noOfRecords * 1.0 / recordsPerPage);
+			
+	        if(error != null) request.setAttribute("error", error);
+	        if(success != null) request.setAttribute("success", success);
+			request.setAttribute("noOfPages", noOfPages);
+	        request.setAttribute("currentPage", page_number);
+			request.setAttribute("seller", seller);
+			request.setAttribute("orders", orders);
+			request.setAttribute("total_order", total_order.size());
+			
+			dispatcher = request.getRequestDispatcher("/views/seller/order/history.jsp");
+			dispatcher.forward(request, response);
+		} catch (NumberFormatException | SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
 	

@@ -68,7 +68,14 @@
 							<h3 class="title">Profile</h3>
 						</div>
 						<div class="seller-img-wrapper">
-							<img class="seller-image" src="${seller.image}" >
+							<c:choose>
+								<c:when test="${seller.image == 'assets/images/troll.jpg'}">
+									<img class="seller-image" src="${seller.image}" >
+								</c:when>
+								<c:otherwise>
+									<img class="seller-image" src="${pageContext.request.contextPath}/assets/images/seller/${seller.image}" >
+								</c:otherwise>
+							</c:choose>
 						</div>
 						<div class="profile-summary">							
 							<div class="col-4">

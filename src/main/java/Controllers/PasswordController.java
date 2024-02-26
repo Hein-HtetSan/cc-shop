@@ -49,10 +49,12 @@ public class PasswordController extends HttpServlet {
 			case "sellerPasswordChange":
 				String seller_id = request.getParameter("seller_id");
 				String error = request.getParameter("error");
+				
 				Seller get_seller;
 				try {
 					get_seller = sellerDAO.getById(Integer.parseInt(seller_id));
-					request.setAttribute("admin", get_seller);
+					if(error != null) request.setAttribute("error", error);
+					request.setAttribute("seller", get_seller);
 					request.getRequestDispatcher("/views/seller/profile/changePassword.jsp").forward(request, response);
 				} catch (NumberFormatException | SQLException e) {
 					e.printStackTrace();
@@ -218,17 +220,17 @@ public class PasswordController extends HttpServlet {
 					}else {
 						String error = "Password Don't Match";
 						String encodedError = URLEncoder.encode(error, "UTF-8");
-						response.sendRedirect(request.getContextPath() +"/PasswordController?page=sellerPasswordChange&admin_id="+seller_id+"&error="+encodedError);
+						response.sendRedirect(request.getContextPath() +"/PasswordController?page=sellerPasswordChange&seller_id="+seller_id+"&error="+encodedError);
 					}
 				}else {
 					String error = "Wrong Password!";
 					String encodedError = URLEncoder.encode(error, "UTF-8");
-					response.sendRedirect(request.getContextPath() +"/PasswordController?page=sellerPasswordChange&admin_id="+seller_id+"&error="+encodedError);
+					response.sendRedirect(request.getContextPath() +"/PasswordController?page=sellerPasswordChange&seller_id="+seller_id+"&error="+encodedError);
 				}
 			}else {
 				String error = "Don't miss, fill the feilds!";
 				String encodedError = URLEncoder.encode(error, "UTF-8");
-				response.sendRedirect(request.getContextPath() +"/PasswordController?page=sellerPasswordChange&admin_id="+seller_id+"&error="+encodedError);
+				response.sendRedirect(request.getContextPath() +"/PasswordController?page=sellerPasswordChange&seller_id="+seller_id+"&error="+encodedError);
 			}
 		}
 }

@@ -81,6 +81,7 @@
 					      <th scope="col" style="color: white">Qty</th>
 					      <th scope="col" style="color: white">Total Price</th>
 					      <th scope="col" style="color: white">Action</th>
+					      <th scope="col" style="color: white">Order Date</th>
 					      <th scope="col" style="color: white">Status</th>
 					    </tr>
 					  </thead>
@@ -94,9 +95,10 @@
 						      <td>${order.count} </td>
 						      <td class="fw-bold text-primary">${order.count * order.price } MMKs</td>
 						      <td>
-						      	<a href="${pageContext.request.contextPath}/OrderController?page=delete&seller_id=${seller.id}&order_code=${order.order_code}&product_id=${order.product_id}" class="btn btn-sm btn-danger">Call off</a>
+						      	<a href="${pageContext.request.contextPath}/OrderController?page=delete&seller_id=${seller.id}&order_code=${order.order_code}&product_id=${order.product_id}" class="btn btn-sm btn-danger mb-1">Call off</a>
 						      	<a href="${pageContext.request.contextPath}/OrderController?page=transfer&seller_id=${seller.id}&order_code=${order.order_code}&product_id=${order.product_id}" class="btn btn-sm btn-success">Transfer to warehouse</a>
 						      </td>
+						      <td>${order.updated_at}</td>
 						      <td class="text-warning">
 						      <c:choose>
 						      	<c:when test="${order.status==0}"><span class="text-warning fw-bold">Pending</span></c:when>

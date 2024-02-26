@@ -41,6 +41,7 @@ public class UserController extends HttpServlet {
 	ProductDAO productDAO = null;
 	SellerDAO sellerDAO = null;
 	CartDAO cartDAO = null;
+	OrderDAO orderDAO = null;
 	
 
     public UserController() throws ClassNotFoundException, SQLException {
@@ -50,6 +51,7 @@ public class UserController extends HttpServlet {
         productDAO = new ProductDAO();
         sellerDAO = new SellerDAO();
         cartDAO = new CartDAO();
+        orderDAO = new OrderDAO();
     }
 
     // do get method
@@ -70,6 +72,10 @@ public class UserController extends HttpServlet {
 					} catch (ServletException | IOException | SQLException e) {
 						e.printStackTrace();
 					}
+    				break;
+    				
+    			case "order":
+    				orderPage(request, response);
     				break;
     				
     			case "productDetail":
@@ -133,6 +139,27 @@ public class UserController extends HttpServlet {
     	}else {
     		response.sendRedirect("views/user/form.jsp");
     	}
+    }
+    
+    // order page
+    private void orderPage(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    	String user_id = request.getParameter("user_id");
+    	String error = request.getParameter("error");
+    	String success = request.getParameter("success");
+    	
+		try {
+			List<String> orders = orderDAO.getDistinctDuplicatedOrderCodes(Integer.parseInt(user_id));
+			
+	        if(error != null) request.setAttribute("error", error);
+	        if(success != null) request.setAttribute("success", success);
+			request.setAttribute("orders", orders);
+			
+			dispatcher = request.getRequestDispatcher("/views/user/order/order.jsp");
+			dispatcher.forward(request, response);
+		} catch (NumberFormatException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
     }
     
     // do post method
@@ -420,7 +447,7 @@ public class UserController extends HttpServlet {
 	    response.getWriter().write(jsonResponse.toString());
 		
 	}
-	
+
 	
 	// get seller and his product
 	private void getSellerAndProduct(HttpServletRequest request, HttpServletResponse response)  throws ServletException, IOException, SQLException {

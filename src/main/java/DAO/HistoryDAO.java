@@ -29,6 +29,8 @@ public class HistoryDAO {
 			pst.setInt(5, history.getCustomer_id());
 			pst.setInt(6, history.getShipping_id());
 			pst.setInt(7, history.getSeller_id());
+			int inserted = pst.executeUpdate();
+			if(inserted > 0) flag = true;
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
