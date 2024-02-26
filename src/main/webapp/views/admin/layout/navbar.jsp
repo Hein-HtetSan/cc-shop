@@ -104,7 +104,7 @@
 										</div>
 									</li>
 									<div class="dropdown-divider"></div>
-									<a class="dropdown-item" href="#"><i class="las la-envelope"></i> Inbox</a>
+									<a class="dropdown-item" href="${pageContext.request.contextPath}/MessageController?page=messagePage"><i class="las la-envelope"></i> Inbox</a>
 									<div class="dropdown-divider"></div>
 									<a class="dropdown-item text-danger" href="${pageContext.request.contextPath}/LoginController?page=adminLogout"><i class="las la-power-off "></i> Logout</a>
 								</ul>

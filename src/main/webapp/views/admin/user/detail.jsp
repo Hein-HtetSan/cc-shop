@@ -8,8 +8,6 @@
 
 
 	<div class="wrapper">
-	
-	
 		<!-- #### Main header #### -->
 		<%@ include file="../layout/navbar.jsp" %>
 		<!-- #### End of main header #### -->
@@ -18,7 +16,6 @@
 		<%@ include file="../layout/sidebar.jsp" %>
 		<!-- ### End of sidebar -->
 			</div>
-
 			<div class="main-panel">
 				<div class="content">
 					<div class="container-fluid">
