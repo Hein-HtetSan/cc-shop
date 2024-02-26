@@ -20,7 +20,7 @@
 		<%@ include file="/views/seller/layout/sidebar.jsp" %>
 		<!-- ### End of sidebar -->
 	</div>
-	<div class="main-panel">
+	<div class="main-panel"> 
 		<div class="content">
 			<div class="container-fluid">
 				<div class="row">

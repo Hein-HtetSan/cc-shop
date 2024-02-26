@@ -80,6 +80,7 @@
 			          <hr />
 			          	<a href="#" class="btn btn-primary border border-secondary py-2 "> Update </a>
 			          	<a href="#" class="btn btn-primary border border-secondary py-2 "> Save </a>
+			          	<a href="${pageContext.request.contextPath }/SellerController?page=product" class="btn btn-primary border border-secondary py-2 "> Back </a>
 			          </div>
 
 			        </div>

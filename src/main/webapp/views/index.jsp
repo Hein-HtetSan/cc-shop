@@ -240,7 +240,7 @@
                 <div class="col-12">
                     <div class="cta-content text-center">
                         <h2 class="wow fadeInUp" data-wow-delay="300ms">Are You Looking For Something To Buy??</h2>
-                        <h6 class="wow fadeInUp" data-wow-delay="400ms">လိုအပ်ချက်တိုင်းပြည့်စုံဖို့ CCShop မှာ ဈေးဝယ်စို့</h6>
+                        <h6 class="wow fadeInUp" data-wow-delay="400ms">For your needs, CC shop is always here.</h6>
                         <a href="#" class="btn south-btn mt-50 wow fadeInUp" data-wow-delay="500ms">Buy Now</a>
                     </div>
                 </div>

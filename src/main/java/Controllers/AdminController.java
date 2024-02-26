@@ -28,6 +28,7 @@ public class AdminController extends HttpServlet {
     ProductDAO productDAO = null;
     CategoryDAO categoryDAO = null;
     BusinessDAO businessDAO = null;
+    MessageDAO messageDAO=null;
   
     RequestDispatcher dispatcher = null;
 	
@@ -39,6 +40,7 @@ public class AdminController extends HttpServlet {
         productDAO = new ProductDAO();
         categoryDAO = new CategoryDAO();
         businessDAO = new BusinessDAO();
+        messageDAO =new MessageDAO();
     }
     
     // do get

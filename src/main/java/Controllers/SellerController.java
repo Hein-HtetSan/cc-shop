@@ -95,6 +95,12 @@ public class SellerController extends HttpServlet {
     				dispatcher = request.getRequestDispatcher("/views/seller/product/insert_image.jsp");
     				dispatcher.forward(request, response);
     				break;
+    				
+    			case "detailPage":
+    				dispatcher = request.getRequestDispatcher("/views/seller/detail/detail.jsp");
+    				dispatcher.forward(request, response);
+    				break;
+    				
     			}
     		}
     	}else {
