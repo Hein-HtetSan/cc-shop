@@ -90,14 +90,21 @@
 							<ul class="dropdown-menu dropdown-user">
 								<li>
 									<div class="user-box">
-										<div class="u-img"><img src="${admin.image}" alt="user"></div>
+										
+										<c:if test="${admin.image == 'assets/images/troll.jpg'}">
+	                                		<div class="u-img <c:if test='${admin.image != "assets/images/troll.jpg"}'> d-none </c:if>"><img src="${admin.image}" alt="user"></div>
+	                                	</c:if>
+	                                	<c:if test="${admin.image != null}">
+	                                		<div class="u-img <c:if test='${admin.image == "assets/images/troll.jpg"}'> d-none </c:if>"><img src="{pageContext.request.contextPath}/assets/images/admin/${admin.image}" alt="user"></div>
+	                                	</c:if>
+	                                	
 										<div class="u-text">
 											<h4 class="">${admin.name}</h4>
 											<p class="text-muted">${admin.email}</p><a href="${pageContext.request.contextPath}/AdminController?page=profile&admin_id=${admin.id}" class="btn btn-rounded btn-danger btn-sm">View Profile</a></div>
 										</div>
 									</li>
 									<div class="dropdown-divider"></div>
-									<a class="dropdown-item" href="#"><i class="las la-envelope"></i> Inbox</a>
+									<a class="dropdown-item" href="${pageContext.request.contextPath}/MessageController?page=messagePage"><i class="las la-envelope"></i> Inbox</a>
 									<div class="dropdown-divider"></div>
 									<a class="dropdown-item text-danger" href="${pageContext.request.contextPath}/LoginController?page=adminLogout"><i class="las la-power-off "></i> Logout</a>
 								</ul>

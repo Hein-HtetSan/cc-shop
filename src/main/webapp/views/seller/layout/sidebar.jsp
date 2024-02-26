@@ -7,7 +7,15 @@
 				<div class="scrollbar-inner sidebar-wrapper">
 					<div class="user">
 						<div class="photo">
-							<img src="${seller.image}">
+						
+								<c:choose>
+                            		<c:when test="${seller.image == 'assets/images/troll.jpg'}">
+                            			<img src="${seller.image}" style="">
+                            		</c:when>
+                            		<c:otherwise>
+                            			<img src="${pageContext.request.contextPath}/assets/images/seller/${seller.image}" >
+                            		</c:otherwise>
+                            	</c:choose>
 						</div>
 						<div class="info">
 							<a class="" data-toggle="collapse" href="#collapseExample" aria-expanded="true">
@@ -21,34 +29,28 @@
 						</div>
 					</div>
 					<ul class="nav">
-						<li class="nav-item <c:if test="${request.getRequestURI() eq 'http://localhost:8080/shop-dot-com/views/seller/dashboard.jsp'}">active</c:if>">
+						<li class="nav-item ${param.page == 'dashboard' ? 'active' : ''}">
 							<a href="${pageContext.request.contextPath}/SellerController?page=dashboard">
 								<i class="la la-dashboard"></i>
 								<p>Dashboard</p>
 							</a>
 						</li>
-						<li class="nav-item <c:if test="${request.getRequestURI() eq '/SellerController?page=product'}">active</c:if>">
-							<a href="${pageContext.request.contextPath}/SellerController?page=product">
+						<li class="nav-item ${param.page == 'product' ? 'active' : ''}">
+							<a href="${pageContext.request.contextPath}/SellerController?page=product&seller_id=${seller.id}">
 								<i class="la la-user"></i>
 								<p>Products</p>
 							</a>
 						</li>
-                        <li class="nav-item <c:if test = "${request.getRequestURL() eq '/SellerController?page=order' }">active</c:if>">
-							<a href="${pageContext.request.contextPath}/SellerController?page=order">
-								<i class="las la-user-tie"></i>
+                        <li class="nav-item ${param.page == 'order' ? 'active' : ''}">
+							<a href="${pageContext.request.contextPath}/SellerController?page=order&seller_id=${seller.id}">
+								<i class="las la-box"></i>
 								<p>Order</p>
 							</a>
 						</li>
-                        <li class="nav-item <c:if test = "${request.getRequestURL() eq '/SellerController?page=history' }">active</c:if>">
-							<a href="${pageContext.request.contextPath}/SellerController?page=history">
-								<i class="las la-store"></i>
+                        <li class="nav-item ${param.page == 'history' ? 'active' : ''}">
+							<a href="${pageContext.request.contextPath}/SellerController?page=history&seller_id=${seller.id}">
+								<i class="las la-file"></i>
 								<p>History</p>
-							</a>
-						</li>
-                        <li class="nav-item ">
-							<a href="">
-								<i class="las la-list"></i>
-								<p>Setting</p>
 							</a>
 						</li>
 					</ul>

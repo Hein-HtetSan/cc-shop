@@ -80,7 +80,10 @@ public class SellerDAO {
 	// get by customer id
 	public Seller getById(int id) throws SQLException {
 		Seller seller = new Seller();
-		String query = "SELECT sellers.*, businesses.name as business FROM sellers LEFT JOIN businesses ON sellers.business_id = businesses.id WHERE sellers.id=" + id;
+		String query = "SELECT sellers.*, businesses.name as business, MAX(products.rating) as rating FROM sellers "
+				+ "LEFT JOIN businesses ON sellers.business_id = businesses.id "
+				+ "LEFT JOIN products ON sellers.id = products.seller_id "
+				+ "WHERE sellers.id=" + id;
 		statement = con.createStatement();
 		resultset = statement.executeQuery(query);
 		if(resultset.next()) {
@@ -90,10 +93,25 @@ public class SellerDAO {
 			seller.setPhone(resultset.getString("phone"));
 			seller.setAddress(resultset.getString("address"));
 			seller.setCompany(resultset.getString("company"));
+			seller.setBusiness_id(resultset.getInt("business_id"));
 			seller.setBname(resultset.getString("business"));
+			seller.setImage(resultset.getString("image"));
+			seller.setRating(resultset.getInt("rating"));
 		}
 		return seller;
 	}
+	
+	// update password
+		public boolean updatePassword(String password, int id) throws SQLException {
+			boolean flag = false;
+			String query = "UPDATE sellers SET password=? WHERE id=?";
+			stmt = con.prepareStatement(query);
+			stmt.setString(1, password);
+			stmt.setInt(2, id);
+			int updatedRow = stmt.executeUpdate();
+			if(updatedRow > 0) flag = true;
+			return flag;
+		}
 	
 	// get by email
 		public Seller getSellerByEmail(String email) throws SQLException {

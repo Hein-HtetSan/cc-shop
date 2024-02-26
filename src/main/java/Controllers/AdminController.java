@@ -1,7 +1,11 @@
 package Controllers;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
@@ -9,6 +13,7 @@ import java.util.*;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -19,6 +24,7 @@ import javax.servlet.http.Part;
 import Models.*;
 import DAO.*;
 
+@MultipartConfig
 
 public class AdminController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
@@ -28,8 +34,10 @@ public class AdminController extends HttpServlet {
     ProductDAO productDAO = null;
     CategoryDAO categoryDAO = null;
     BusinessDAO businessDAO = null;
+
     MessageDAO messageDAO=null;
-  
+
+    OrderDAO orderDAO = null;
     RequestDispatcher dispatcher = null;
 	
     public AdminController() throws ClassNotFoundException, SQLException {
@@ -40,7 +48,10 @@ public class AdminController extends HttpServlet {
         productDAO = new ProductDAO();
         categoryDAO = new CategoryDAO();
         businessDAO = new BusinessDAO();
+
         messageDAO =new MessageDAO();
+
+        orderDAO = new OrderDAO();
     }
     
     // do get
@@ -251,6 +262,26 @@ public class AdminController extends HttpServlet {
 						e.printStackTrace();
 					}
         			break;
+        			
+        		// product detail page
+        		case "productDetail":
+        			String productId = request.getParameter("product_id");
+        			
+        			Product product;
+					try {
+						// get product detail by seller id
+						product = (Product) productDAO.getFullDataBySellerId(Integer.parseInt(productId));
+						// get product images by seller id
+	        			List<Image> images = productDAO.getFullImagesBySellerId(Integer.parseInt(productId));
+	        			request.setAttribute("images", images);
+	        			request.setAttribute("product", product);
+	        			dispatcher = request.getRequestDispatcher("/views/admin/product/detail.jsp");
+	        			dispatcher.forward(request, response);
+					} catch (NumberFormatException | SQLException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+        			break;
         		
         		}
         	}
@@ -299,6 +330,7 @@ public class AdminController extends HttpServlet {
     					e.printStackTrace();
     				}
         			break;
+        			
         		case "profile": // profile page in admin panel
         			String success = request.getParameter("success");
         			String admin_id = request.getParameter("admin_id");
@@ -310,16 +342,9 @@ public class AdminController extends HttpServlet {
         			
         			dispatcher = request.getRequestDispatcher("views/admin/profile/index.jsp");
         			dispatcher.forward(request, response);
+        			
         		case "dashboard": // dashboard page in admin panel
-        			Map<String, Integer> counts = null;
-					try {
-						counts = getAllCount();
-						request.setAttribute("counts", counts);
-	        			dispatcher = request.getRequestDispatcher("views/admin/dashboard.jsp");
-	        			dispatcher.forward(request, response);
-					} catch (SQLException e) {
-						e.printStackTrace();
-					}
+        			dashboard(request, response);
         			break;
         			
             	
@@ -334,10 +359,34 @@ public class AdminController extends HttpServlet {
         }else {
         	response.sendRedirect("views/admin/form.jsp");
         }
-    	
-    	
-    	
     }
+    
+    
+    // dashboard page
+    private void dashboard(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    	Map<String, Integer> counts = null;
+		try {
+			// get all count for sidebar
+			counts = getAllCount();
+			
+			// get all order count where status = 1
+			
+			// get all customer count
+			
+			// get all seller count
+			
+			// get all prdouct count
+			List<Orders> orders = orderDAO.getOrderWithStatusOne();
+			
+			request.setAttribute("orders", orders);
+			request.setAttribute("counts", counts);
+			dispatcher = request.getRequestDispatcher("views/admin/dashboard.jsp");
+			dispatcher.forward(request, response);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+    }
+    
     
     // get all user
     private void getAllUser(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, SQLException {
@@ -360,6 +409,8 @@ public class AdminController extends HttpServlet {
         int noOfPages = (int) Math.ceil(noOfRecords * 1.0 / recordsPerPage);
         
         String success = request.getParameter("success");
+        String error = request.getParameter("error");
+        if(error != null) request.setAttribute("error", error);
         if(success != null) request.setAttribute("success", success);
         
         request.setAttribute("userList", list);
@@ -390,6 +441,8 @@ public class AdminController extends HttpServlet {
         int noOfPages = (int) Math.ceil(noOfRecords * 1.0 / recordsPerPage);
         
         String success = request.getParameter("success");
+        String error = request.getParameter("error");
+        if(error != null) request.setAttribute("error", error);
         if(success != null) request.setAttribute("success", success);
         
         request.setAttribute("sellerList", list);
@@ -420,6 +473,8 @@ public class AdminController extends HttpServlet {
         int noOfPages = (int) Math.ceil(noOfRecords * 1.0 / recordsPerPage);
         
         String success = request.getParameter("success");
+        String error = request.getParameter("error");
+        if(error != null) request.setAttribute("error", error);
         if(success != null) request.setAttribute("success", success);
         
         request.setAttribute("productList", list);
@@ -450,6 +505,8 @@ public class AdminController extends HttpServlet {
         int noOfPages = (int) Math.ceil(noOfRecords * 1.0 / recordsPerPage);
         
         String success = request.getParameter("success");
+        String error = request.getParameter("error");
+        if(error != null) request.setAttribute("error", error);
         if(success != null) request.setAttribute("success", success);
         
         request.setAttribute("sellerList", list);
@@ -481,6 +538,8 @@ public class AdminController extends HttpServlet {
         int noOfPages = (int) Math.ceil(noOfRecords * 1.0 / recordsPerPage);
         
         String success = request.getParameter("success");
+        String error = request.getParameter("error");
+        if(error != null) request.setAttribute("error", error);
         if(success != null) request.setAttribute("success", success);
         
         request.setAttribute("categoryList", list);
@@ -511,6 +570,8 @@ public class AdminController extends HttpServlet {
         int noOfPages = (int) Math.ceil(noOfRecords * 1.0 / recordsPerPage);
         
         String success = request.getParameter("success");
+        String error = request.getParameter("error");
+        if(error != null) request.setAttribute("error", error);
         if(success != null) request.setAttribute("success", success);
         
         request.setAttribute("businessList", list);
@@ -528,6 +589,7 @@ public class AdminController extends HttpServlet {
         List<Category> categoryList = categoryDAO.get();
         List<Seller> sellerList = sellerDAO.get();
         List<Business> businessList = businessDAO.get();
+        List<Orders> orders = orderDAO.getOrderWithStatusOne();
         
         counts.put("user_count", userList.size());
         counts.put("product_count", productList.size());
@@ -535,6 +597,7 @@ public class AdminController extends HttpServlet {
         counts.put("category_count", categoryList.size());
         counts.put("store_count", sellerList.size());
         counts.put("business_count", businessList.size());
+        counts.put("order_count", orders.size());
 
         return counts;
     }
@@ -553,33 +616,6 @@ public class AdminController extends HttpServlet {
 		String action = request.getParameter("action");
 		if(action != null) {
 			switch(action) {
-			// update image
-    		case "updateImage":
-    			String UPLOAD_PATH = "assets/images/";
-    			
-    			String id = request.getParameter("admin_id");
-    			Part part = request.getPart("image");
-    	        String fileName = part.getSubmittedFileName();
-    	        String contentType = part.getContentType();
-    	        
-    	        String imageName = generateUniqueImageName(fileName); // Generate unique name
-    	        File imageFile = new File(UPLOAD_PATH, imageName);
-    	        String image_with_path = UPLOAD_PATH + imageName;
-    	        
-    	        Admin new_image_of_admin = new Admin();
-    	        new_image_of_admin.setImage(image_with_path);
-    	        new_image_of_admin.setId(Integer.parseInt(id));
-    	        
-    	        try {
-					boolean flag = adminDAO.updateImage(new_image_of_admin);
-					if(flag) {
-						response.sendRedirect(request.getContextPath()+"/AdminController?page=profile&admin_id="+id);
-					}
-				} catch (SQLException e) {
-					e.printStackTrace();
-				}
-    	        
-    			break;
     			
     		// update profile
         	case "updateProfile":
@@ -591,6 +627,44 @@ public class AdminController extends HttpServlet {
         			updatedAdmin.setName(request.getParameter("name"));
         			updatedAdmin.setEmail(request.getParameter("email"));
         			updatedAdmin.setPhone(request.getParameter("phone"));
+        			
+        			Part image = request.getPart("file");
+        			
+        			int min = 1000;
+				    int max = 10000;
+				    int random_number = (int) (Math.random()*(max-min+1)+min);  
+				    // Process the file upload
+				    String fileName = extractFileName(image);
+				    String updated_filename = random_number + "_" + fileName;
+				    System.out.println("File Name: " + fileName);
+
+				    //Define destination directory
+			        String uploadDir = "C:\\Users\\acer\\Desktop\\cc-shop\\src\\main\\webapp\\assets\\images\\admin"; // Example: "C:/eclipse_workspace/upload"
+			        
+			        // Write file to the destination directory
+			        OutputStream out = null;
+			        InputStream fileContent = null;
+			        try {
+			            out = new FileOutputStream(new File(uploadDir + File.separator + updated_filename));
+			            fileContent = image.getInputStream();
+
+			            int read;
+			            final byte[] bytes = new byte[1024];
+			            while ((read = fileContent.read(bytes)) != -1) {
+			                out.write(bytes, 0, read);
+			            }
+			        } catch (FileNotFoundException fne) {
+			            // Handle file not found exception
+			            fne.printStackTrace();
+			        } finally {
+			            if (out != null) {
+			                out.close();
+			            }
+			            if (fileContent != null) {
+			                fileContent.close();
+			            }
+			        }
+			        
 					if(adminDAO.update(updatedAdmin)) {
 						Admin re_get_admin = adminDAO.getById(Integer.parseInt(admin_Id));
 						session.setAttribute("admin", re_get_admin);
@@ -608,7 +682,16 @@ public class AdminController extends HttpServlet {
 	}
 
 	
-	
+	private String extractFileName(Part part) {
+        String contentDisp = part.getHeader("content-disposition");
+        String[] tokens = contentDisp.split(";");
+        for (String token : tokens) {
+            if (token.trim().startsWith("filename")) {
+                return token.substring(token.indexOf('=') + 1).trim().replace("\"", "");
+            }
+        }
+        return "";
+    }
 
 
 }

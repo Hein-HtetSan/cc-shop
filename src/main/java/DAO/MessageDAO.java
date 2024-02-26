@@ -14,8 +14,8 @@ import Models.Message;
 public class MessageDAO {
 
 	Connection con = null;
-	Statement statement = null;
-	PreparedStatement stmt = null;
+	Statement stmt = null;
+	PreparedStatement pst = null;
 	ResultSet resultSet = null;
 	
 	public MessageDAO() throws ClassNotFoundException, SQLException{
@@ -23,17 +23,16 @@ public class MessageDAO {
 	}
 	
 	public List<Message> get(){
-		List<Message> messages = null;  // create empty admin list to store admins
-		Message mes = null; // create admin object which is from model
-		// surround with try and catch block 
+		List<Message> messages = null; 
+		Message mes = null; 
 		try {
-			messages = new ArrayList<Message>(); // create ArrayList admin object
-			String query = "SELECT * FROM message"; // prepare query
-			statement = con.createStatement(); // create statement
-			resultSet = statement.executeQuery(query); // execute that query and store that into resultset variable
+			messages = new ArrayList<Message>();
+			String query = "SELECT * FROM message"; 
+			stmt = con.createStatement(); // create statement
+			resultSet = stmt.executeQuery(query); // execute that query and store that into resultset variable
 			while(resultSet.next()) {  // until end
-				mes = new Message(); // create message object
-				mes.setId(resultSet.getInt("id"));  // set admin id from admin table's data
+				mes = new Message();
+				mes.setId(resultSet.getInt("id")); 
 				mes.setName(resultSet.getString("name"));
 				mes.setEmail(resultSet.getString("email"));
 				mes.setPhone(resultSet.getString("phone"));
@@ -46,7 +45,31 @@ public class MessageDAO {
 		return messages; // return that list
 	}
 	
-	public static void main(String[] args) {
+	public boolean create(Message mes) {
+
+		boolean flag=false;
+		
+		String query ="insert into message(name,phone,email,message) values(?,?,?,?)";
+		
+		try {
+			pst=con.prepareStatement(query);
+			
+			pst.setString(1,mes.getName());
+			pst.setString(2,mes.getPhone());
+			pst.setString(3,mes.getEmail());
+			pst.setString(4,mes.getMessage());
+			
+			//insert ဆို
+			int inserted=pst.executeUpdate();
+			if(inserted>0)flag=true;
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+		return flag;
 		
 	}
 

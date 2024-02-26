@@ -7,6 +7,8 @@ public class Message {
 	private String phone;
 	private String email;
 	private String message;
+	private String createdAt;
+	private String updatedAt;
 	
 	
 	public int getId() {
@@ -39,6 +41,19 @@ public class Message {
 	public void setMessage(String message) {
 		this.message = message;
 	}
+	public String getCreatedAt() {
+		return createdAt;
+	}
+	public void setCreatedAt(String createdAt) {
+		this.createdAt = createdAt;
+	}
+	public String getUpdatedAt() {
+		return updatedAt;
+	}
+	public void setUpdatedAt(String updatedAt) {
+		this.updatedAt = updatedAt;
+	}
+	
 	
 	
 }
