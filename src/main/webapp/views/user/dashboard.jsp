@@ -2,7 +2,9 @@
     pageEncoding="ISO-8859-1"%>
 
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-
+<%@ page import="java.util.*" %>
+<%@ page import="Models.Whistlist" %>
+<%@ page import="DAO.WhistlistDAO" %>
 
 
 <%@ include file="/views/user/layout/header.jsp" %>
@@ -178,7 +180,24 @@
 												<h3 class="product-name"><a href="#">${product.name}</a></h3>
 												<h4 class="product-price">${product.price}MMKs</h4>
 												<div class="product-btns" style="margin-top: 10px !important;">
-													<button class="add-to-wishlist"><i class="fa fa-heart-o"></i><span class="tooltipp">add to wishlist</span></button>
+												<!-- check the wishlist table -->
+							                    <c:set var="is_whistlist_exsit" value="${whistDAO.get_by_customer_id_and_product_id(product.id, customer.id)}"/>
+							                    <c:choose>
+							                        <c:when test="${is_whistlist_exsit}">
+							                            <button class="add-to-wishlist">
+							                                <a class="" href="${pageContext.request.contextPath}/WhistlistController?action=removeFromWhistList&product_id=${product.id}&user_id=${customer.id}">
+							                                    <i class="fas fa-heart"></i><span class="tooltipp">Remove from wishlist</span>
+							                                </a>
+							                            </button>
+							                        </c:when>
+							                        <c:otherwise>
+							                            <button class="add-to-wishlist">
+							                                <a class="" href="${pageContext.request.contextPath}/WhistlistController?action=addToWhistList&product_id=${product.id}&user_id=${customer.id}">
+							                                    <i class="fa fa-heart-o"></i><span class="tooltipp">add to wishlist</span>
+							                                </a>
+							                            </button>
+							                        </c:otherwise>
+							                    </c:choose>
 													<button class="quick-view"><a class="" href="${pageContext.request.contextPath}/UserController?page=productDetail&product_id=${product.id}"><i class="fa fa-eye"></i><span class="tooltipp">quick view</span></a></button>
 												</div>
 											</div>

@@ -43,8 +43,8 @@
 									<li><a href="${pageContext.request.contextPath}/UserController?page=profile&user_id=${customer.id}">My Account</a></li>
 									<li><a href="${pageContext.request.contextPath}/CartController?action=main&user_id=${customer.id}">View Cart</a></li>
 									<li><a href="#">Wishlist</a></li>
-									<li><a href="${pageContext.request.contextPath}/UserController?page=order&user_id=${customer.id}">Track My Order</a></li>
-								
+									<li><a href="${pageContext.request.contextPath}/UserController?page=order&user_id=${customer.id}&filter_value=all">Track My Order</a></li>
+									<li><a href="${pageContext.request.contextPath}/UserController?page=history&user_id=${customer.id}&date=all&status=all">History</a></li>
 								</ul>
 							</div>
 						</div>
@@ -127,7 +127,11 @@ $(document).ready(function() {
                                     <h3 class="product-name">\${product.name}</h3>
                                     <h4 class="product-price">\${product.price} MMKs</h4>
                                     <div class="product-btns">
-                                        <button class="add-to-wishlist"><i class="fa fa-heart-o"></i><span class="tooltipp">add to wishlist</span></button>
+                                        <button class="add-to-wishlist">
+                                        <a class="" href="${pageContext.request.contextPath}/WhistlistController?action=addToWhistList&product_id=\${product.id}&user_id=\${customer.id}"> 
+                                        	<i class="fa fa-heart-o"></i><span class="tooltipp">add to wishlist</span>
+                                        </a>
+                                        </button>
                                         <!-- You can set the href attribute dynamically -->
                                         <button class="quick-view"><a class="" href="${pageContext.request.contextPath}/UserController?page=productDetail&product_id=\${product.id}"><i class="fa fa-eye"></i><span class="tooltipp">quick view</span></a></button>
                                     </div>

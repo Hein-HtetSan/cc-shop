@@ -557,10 +557,10 @@ public class OrderDAO {
 		
 		// get confirmed order at by userid
 		// get by user id
-				public List<Orders> getByUserWithPaginationWithComplete(int customer_id, int offset, int noOfRecords, String filter_status){
+				public List<Orders> getByUserWithPaginationWithComplete(int customer_id, int offset, int noOfRecords, String date,String status){
 					List<Orders> orders = new ArrayList<Orders>();
 					String query = null;
-					if(filter_status.equals("all")) {
+					if(date.equals("all") && status.equals("all")) {
 						query = "SELECT SQL_CALC_FOUND_ROWS orders.*, orders.count as count, products.name as product_name, customers.name as customer_name, MIN(images.name) as image_name " +
 								"FROM orders " +
 								"LEFT JOIN products ON orders.product_id = products.id " +
@@ -575,7 +575,39 @@ public class OrderDAO {
 								" GROUP BY orders.id, products.id " +
 								"ORDER BY status " +
 								"LIMIT "+ offset + ", " + noOfRecords;
-					}else if(filter_status.equals("recently")) {
+					}else if(date.equals("recently") && status.equals("all")) {
+						query = "SELECT SQL_CALC_FOUND_ROWS orders.*, orders.count as count, products.name as product_name, customers.name as customer_name, MIN(images.name) as image_name " +
+								"FROM orders " +
+								"LEFT JOIN products ON orders.product_id = products.id " +
+								"LEFT JOIN addresses ON orders.shipping_id = addresses.id " +
+								"LEFT JOIN customers ON customers.id = orders.customer_id " +
+								"LEFT JOIN ( " +
+								"    SELECT product_id, MIN(name) as name " +
+								"    FROM images " +
+								"    GROUP BY product_id " +
+								") AS images ON images.product_id = products.id " +
+								"WHERE orders.status IN (-2,2,-1) AND orders.customer_id = " + customer_id +
+								" AND orders.updated_at > DATE_SUB(NOW(), INTERVAL 5 DAY) "+
+								" GROUP BY orders.id, products.id " +
+								"ORDER BY status " +
+								"LIMIT "+ offset + ", " + noOfRecords;
+					}else if(date.equals("past") && status.equals("all")) {
+						query = "SELECT SQL_CALC_FOUND_ROWS orders.*, orders.count as count, products.name as product_name, customers.name as customer_name, MIN(images.name) as image_name " +
+								"FROM orders " +
+								"LEFT JOIN products ON orders.product_id = products.id " +
+								"LEFT JOIN addresses ON orders.shipping_id = addresses.id " +
+								"LEFT JOIN customers ON customers.id = orders.customer_id " +
+								"LEFT JOIN ( " +
+								"    SELECT product_id, MIN(name) as name " +
+								"    FROM images " +
+								"    GROUP BY product_id " +
+								") AS images ON images.product_id = products.id " +
+								"WHERE orders.status IN (-2,2,-1) AND orders.customer_id = " + customer_id +
+								" AND orders.updated_at < DATE_SUB(NOW(), INTERVAL 5 DAY) "+
+								" GROUP BY orders.id, products.id " +
+								"ORDER BY status " +
+								"LIMIT "+ offset + ", " + noOfRecords;
+					}else if(date.equals("recently") || status.equals("-1") || status.equals("2")) {
 						query = "SELECT SQL_CALC_FOUND_ROWS orders.*, orders.count as count, products.name as product_name, customers.name as customer_name, MIN(images.name) as image_name " +
 					               "FROM orders " +
 					               "LEFT JOIN products ON orders.product_id = products.id " +
@@ -586,13 +618,13 @@ public class OrderDAO {
 					               "    FROM images " +
 					               "    GROUP BY product_id " +
 					               ") AS images ON images.product_id = products.id " +
-					               "WHERE orders.status IN (-2,2,-1) AND orders.customer_id = " + customer_id +
+					               "WHERE orders.status IN ("+Integer.parseInt(status)+") AND orders.customer_id = " + customer_id +
 					               " AND orders.updated_at > DATE_SUB(NOW(), INTERVAL 5 DAY) " +
 					               "GROUP BY orders.id, products.id " +
 					               "ORDER BY orders.updated_at DESC " +
 					               "LIMIT " + offset + ", " + noOfRecords;
 
-					}else if(filter_status.equals("past")) {
+					}else if(date.equals("past") || status.equals("-1") || status.equals("2")) {
 						query = "SELECT SQL_CALC_FOUND_ROWS orders.*, orders.count as count, products.name as product_name, customers.name as customer_name, MIN(images.name) as image_name " +
 					             "FROM orders " +
 					             "LEFT JOIN products ON orders.product_id = products.id " +
@@ -603,7 +635,7 @@ public class OrderDAO {
 					             "    FROM images " +
 					             "    GROUP BY product_id " +
 					             ") AS images ON images.product_id = products.id " +
-					             "WHERE orders.status IN (-2,2,-1) AND orders.customer_id = " + customer_id +
+					             "WHERE orders.status IN ("+Integer.parseInt(status)+") AND orders.customer_id = " + customer_id +
 					             " AND orders.updated_at < DATE_SUB(NOW(), INTERVAL 5 DAY) " +
 					             "GROUP BY orders.id, products.id " +
 					             "ORDER BY orders.updated_at DESC " +

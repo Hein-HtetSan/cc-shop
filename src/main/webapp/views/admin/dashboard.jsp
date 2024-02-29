@@ -137,7 +137,7 @@
 									<form method="GET" action="${pageContext.request.contextPath}/AdminController?page=dashboard&admin_id=${admin.id}" class="" style="width: 250px; display: flex;">
 										<input type="hidden" name="page" value="dashboard">
 										<input type="hidden" name="admin_id" value="${admin.id}">
-										<select name="filter_value" class="form-control">
+										<select name="filter_value" class="form-control" style="height: 50px ">
 											<option value="today" <c:if test="${param.filter_value == 'today'}">selected</c:if>>Today</option>
 											<option value="yesterday"  <c:if test="${param.filter_value == 'yesterday'}">selected</c:if>>Yesterday</option>
 											<option value="lastday"  <c:if test="${param.filter_value == 'lastday'}">selected</c:if>>Last Day</option>
@@ -146,7 +146,7 @@
 									</form>
 								</div>
 								
-								<table class="table">
+								<table class="table mt-3">
 									<thead class="thead-dark">
 										<th class="fw-bold">Order Code</th>
 										<th class="fw-bold">Status</th>

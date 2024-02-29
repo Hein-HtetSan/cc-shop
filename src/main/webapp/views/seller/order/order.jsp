@@ -96,7 +96,7 @@
 						      <td class="fw-bold text-primary">${order.count * order.price } MMKs</td>
 						      <td>
 						      	<a href="${pageContext.request.contextPath}/OrderController?page=delete&seller_id=${seller.id}&order_code=${order.order_code}&product_id=${order.product_id}" class="btn btn-sm btn-danger mb-1">Call off</a>
-						      	<a href="${pageContext.request.contextPath}/OrderController?page=transfer&seller_id=${seller.id}&order_code=${order.order_code}&product_id=${order.product_id}" class="btn btn-sm btn-success">Transfer to warehouse</a>
+						      	<a href="${pageContext.request.contextPath}/OrderController?page=transfer&seller_id=${seller.id}&order_code=${order.order_code}&product_id=${order.product_id}" class="btn btn-sm btn-success">Transfer to Headquarter</a>
 						      </td>
 						      <td>${order.updated_at}</td>
 						      <td class="text-warning">

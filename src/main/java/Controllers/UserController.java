@@ -42,6 +42,7 @@ public class UserController extends HttpServlet {
 	SellerDAO sellerDAO = null;
 	CartDAO cartDAO = null;
 	OrderDAO orderDAO = null;
+	WhistlistDAO whistlistDAO = null;
 	
 
     public UserController() throws ClassNotFoundException, SQLException {
@@ -52,6 +53,7 @@ public class UserController extends HttpServlet {
         sellerDAO = new SellerDAO();
         cartDAO = new CartDAO();
         orderDAO = new OrderDAO();
+        whistlistDAO = new WhistlistDAO();
     }
 
     // do get method
@@ -211,35 +213,36 @@ public class UserController extends HttpServlet {
     // history page
     private void historyPage(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
     	String user_id = request.getParameter("user_id");
-    	String filter_value = request.getParameter("filter_value");
+    	String date = request.getParameter("date");
+    	String status = request.getParameter("status");
     	int page_number = 1;
         int recordsPerPage = 5;
      // Get counts from utility method
     	List<Orders> orders = null;
     	
-    	if(filter_value == null) {
+    	if(date == null || status == null) {
     		orders = orderDAO.getByUserWithPaginationWithComplete(Integer.parseInt(user_id), (page_number-1)*recordsPerPage,
-                    recordsPerPage, "all");
+                    recordsPerPage, "all", "all");
     	}
     	
         if (request.getParameter("page_number") != null) {
         	page_number = Integer.parseInt(request.getParameter("page_number")); 
         }
 		try {
-			if(filter_value.equals("all")) {
+			if(date.equals("all")) {
 				orders = orderDAO.getByUserWithPaginationWithComplete(Integer.parseInt(user_id), (page_number-1)*recordsPerPage,
-	                    recordsPerPage, filter_value);
-			}else if(filter_value.equals("recently")) {
+	                    recordsPerPage, date, status);
+			}else if(date.equals("recently")) {
 				// show all pending
 				orders = orderDAO.getByUserWithPaginationWithComplete(Integer.parseInt(user_id), (page_number-1)*recordsPerPage,
-	                    recordsPerPage, filter_value);
-			}else if(filter_value.equals("past")) {
+	                    recordsPerPage, date, status);
+			}else if(date.equals("past")) {
 				// show all complete
 				orders = orderDAO.getByUserWithPaginationWithComplete(Integer.parseInt(user_id), (page_number-1)*recordsPerPage,
-	                    recordsPerPage, filter_value);
+	                    recordsPerPage, date, status);
 			}else{
 				orders = orderDAO.getByUserWithPaginationWithComplete(Integer.parseInt(user_id), (page_number-1)*recordsPerPage,
-	                    recordsPerPage, "all");
+	                    recordsPerPage, "all", status);
 			}
 			
 			for(Orders order : orders) {
@@ -430,6 +433,8 @@ public class UserController extends HttpServlet {
         List<Product> products = productDAO.getAll((page_number-1)*recordsPerPage,  // get product with pagination
                                  recordsPerPage);
         List<Product> get_all_products = productDAO.get();   // get all product 
+        int whistlist_count = whistlistDAO.getCountByCustomerID(user_id); // get the whistlist count
+//        List<Product> whistlist_products = whistlistDAO.getByCustomerID(user_id);
         int product_count = get_all_products.size(); // get the product count
         List<Cart> carts = cartDAO.getProductinCartByUserId(user_id);
         
@@ -444,6 +449,8 @@ public class UserController extends HttpServlet {
         request.setAttribute("currentPage", page_number);
 		request.setAttribute("categories", categoires);
 		request.setAttribute("total_product", product_count);
+//		request.setAttribute("whistlists", whistlist_products);
+		request.setAttribute("whistlist_count", whistlist_count);
 		request.setAttribute("carts", carts);
 		dispatcher = request.getRequestDispatcher("/views/user/dashboard.jsp");
 		dispatcher.forward(request, response);
