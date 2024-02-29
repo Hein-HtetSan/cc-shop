@@ -168,7 +168,7 @@ public class CustomerDAO {
 	// update customer
 	public boolean update(Customer customer) throws SQLException {
 		boolean flag = false;
-		String query = "UPDATE customers SET name=?, email=?, phone=?, address=? WHERE id=?";
+		String query = "UPDATE customers SET name=?, email=?, phone=?, address=?, updated_at = current_timestamp WHERE id=?";
 		stmt = con.prepareStatement(query);
 		stmt.setString(1, customer.getName());
 		stmt.setString(2, customer.getEmail());

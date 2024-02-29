@@ -118,7 +118,7 @@ public class RegisterController extends HttpServlet {
 					if(flag) {  // if flag true, then go dashboard.
 						Admin retrieveAdmin = adminDAO.getAdminByEmail(email);
 						session.setAttribute("admin", retrieveAdmin);
-						response.sendRedirect(request.getContextPath() + "/AdminController?page=dashboard");
+						response.sendRedirect(request.getContextPath() + "/AdminController?page=dashboard&filter_value=today");
 					}
 	        	}else {
 	        		String success = "Created product successfully!";

@@ -27,6 +27,7 @@ public class CheckoutController extends HttpServlet {
 	CategoryDAO categoryDAO = null;
 	AddressDAO addressDAO = null;
 	OrderDAO orderDAO = null;
+	NoteDAO noteDAO = null;
 
     public CheckoutController() throws ClassNotFoundException, SQLException {
         super();
@@ -36,13 +37,13 @@ public class CheckoutController extends HttpServlet {
         categoryDAO = new CategoryDAO();
         addressDAO = new AddressDAO();
         orderDAO = new OrderDAO();
+        noteDAO = new NoteDAO();
     }
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String page = request.getParameter("page");
 		if(page != null) {
 			switch(page) {
-				
 			case "main":
 				checkoutPage(request, response);
 				break;
@@ -101,10 +102,11 @@ public class CheckoutController extends HttpServlet {
 	private void order(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String user_id = request.getParameter("userId");
 		String address_id = request.getParameter("addressId");
+		String note = request.getParameter("note");
 		
 		
 		List<Cart> items = cartDAO.getProductinCartByUserId(Integer.parseInt(user_id));
-		String order_code = generateOrderCode(20);
+		String order_code = generateOrderCode(20); // get the order code
 		int status = 0;
 		
 		for(Cart item : items) {
@@ -128,6 +130,20 @@ public class CheckoutController extends HttpServlet {
 		// after all inserton are done then delete the cart
 		boolean delete_cart = cartDAO.deleteByUser(Integer.parseInt(user_id));
 		if(delete_cart) System.out.println("deleted from cart");
+
+		if(note != null) {
+			// save the noted
+			Note note_object = new Note();
+			note_object.setCustomer_id(Integer.parseInt(user_id));
+			note_object.setOrder_code(order_code);
+			note_object.setText(note);
+//			note_object.
+			boolean noted = noteDAO.create(note_object);
+			if(noted) System.out.println("added note");
+		}else {
+			System.out.println("not noted");
+		}
+		
 		
 		// Prepare JSON response
 	    JsonObject jsonResponse = new JsonObject();
