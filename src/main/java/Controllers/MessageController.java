@@ -2,6 +2,7 @@ package Controllers;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.List;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -33,6 +34,10 @@ public class MessageController extends HttpServlet {
 		if(page!= null) {
 			switch(page) {
 			case "messagePage":
+				
+				List<Message> messages = messageDAO.get();
+				
+				request.setAttribute("messages", messages);
 				dispatcher=request.getRequestDispatcher("/views/admin/message/message.jsp");
 				dispatcher.forward(request, response);
 				break;

@@ -518,12 +518,11 @@
 	<script>
 	var status=document.getElementById("status").value;
 	if(status=="Message Sent Successfully"){
-	Swal.fire({
-        title: 'Success',
-        text: 'Message Sent Successfully',
-        icon: 'success',
-        confirmButtonText: 'OK'
-	});
+		Swal.fire({
+			  title: "Success",
+			  text: "Message Sent Successfully",
+			  icon: "success"
+			});
 	}
 	
 	</script>

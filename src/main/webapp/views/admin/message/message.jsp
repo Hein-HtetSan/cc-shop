@@ -2,7 +2,7 @@
     pageEncoding="ISO-8859-1"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
     
-    
+    <%@ page import="java.util.*" %>
     
     <%@ include file="../layout/header.jsp" %>
 
@@ -25,7 +25,7 @@
 				<div class="content">
 					<div class="container-fluid">
 
-						<h4 class="page-title">Messages</h4>
+						<h4 class="page-title">This is Messages Page</h4>
 						
 						<c:if test="${not empty success }">
 						<div class="alert alert-success text-center " role="alert" id="errorAlert">
@@ -39,18 +39,32 @@
 						</c:if>
 						
 
-                        <!-- Content goes here  -->
+                        <!-- Table  -->
                         <div class="row">
-
-
-							
+								<table class="table">
+								
+								<thead class="thead-dark col-12">
+								<tr>
+								<th class="col-2">Name</th>
+								<th class="col-2">Email</th>
+								<th class="col-3">Phone</th>
+								<th class="col-4">Message</th>
+								</tr>
+								</thead>
+								<c:forEach items="${messages}" var="message">
+								<tbody>
+								
+								<tr>
+								<td>${message.name}</td>
+								<td>${message.email}</td>
+								<td>${message.phone}</td>
+								<td>${message.message}</td>
+								</tr>					
+								</tbody>
+								</c:forEach>							
+								</table>
 						</div>
-						
-						<!-- Pending order section -->
-						<div class="row">
 
-						</div>
-						<!--  end of pending order section -->
 						
 
 					</div>
