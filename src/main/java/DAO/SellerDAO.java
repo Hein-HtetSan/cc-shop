@@ -104,7 +104,7 @@ public class SellerDAO {
 	// update password
 		public boolean updatePassword(String password, int id) throws SQLException {
 			boolean flag = false;
-			String query = "UPDATE sellers SET password=? WHERE id=?";
+			String query = "UPDATE sellers SET password=?, updated_at = current_timestamp WHERE id=?";
 			stmt = con.prepareStatement(query);
 			stmt.setString(1, password);
 			stmt.setInt(2, id);
@@ -186,7 +186,7 @@ public class SellerDAO {
 	// update customer
 	public boolean update(Seller seller) throws SQLException {
 		boolean flag = false;
-		String query = "UPDATE sellers SET name=?, email=?, phone=?, address=?, company=?, business_id=? WHERE id=?";
+		String query = "UPDATE sellers SET name=?, email=?, phone=?, address=?, company=?, business_id=?, updated_at = current_timestamp WHERE id=?";
 		stmt = con.prepareStatement(query);
 		stmt.setString(1, seller.getName());
 		stmt.setString(2, seller.getEmail());
@@ -203,7 +203,7 @@ public class SellerDAO {
 	// update image
 	public boolean updateImage(Seller seller) throws SQLException {
 		boolean flag = false;
-		String query = "UPDATE sellers SET image=? WHERE id=?";
+		String query = "UPDATE sellers SET image=?, updated_at = current_timestamp WHERE id=?";
 		stmt = con.prepareStatement(query);
 		stmt.setString(1, seller.getImage());
 		stmt.setInt(2, seller.getId());

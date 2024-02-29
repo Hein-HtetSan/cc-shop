@@ -143,7 +143,7 @@
 							<!-- Order notes -->
 							<div class="order-notes" style="margin-bottom: 2rem;">
 								<h5>Notes</h5>
-								<textarea class="input" placeholder="Order Notes"></textarea>
+								<textarea class="input" id="notes" placeholder="Order Notes"></textarea>
 							</div>
 							<!-- /Order notes -->
 							
@@ -261,6 +261,7 @@
 		            // Find the checked radio button
 		            var selectedAddressId = $('.address-radio:checked').siblings('#address_id').val();
 		            var user_id = $("#user_id").val();
+		            var note = $("#notes").val();
 
 		            // Check if any radio button is checked
 		            if (selectedAddressId) {
@@ -271,6 +272,7 @@
 		                    data: {
 		                        addressId: selectedAddressId,
 		                        userId: user_id,
+		                        note: note,
 		                    },
 		                    success: function(response) {
 		                    	var status = response.status;
@@ -282,6 +284,8 @@
 		    		                }, 3000); // 3000 milliseconds = 3 seconds
 		                            $('.order-details').fadeOut();
 		    		                $(".checkout-status").removeClass("d-none");
+		    		                $("#notes").val('');
+		    		                $('.address-radio').check(false);
 		                        } else {
 		                            console.error("Unexpected response status:", response.status);
 		                        }

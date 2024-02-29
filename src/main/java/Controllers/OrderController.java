@@ -22,11 +22,15 @@ public class OrderController extends HttpServlet {
 	RequestDispatcher dispatcher = null;
 	OrderDAO orderDAO = null;
 	AddressDAO addressDAO = null;
-       
+    HistoryDAO historyDAO = null;   
+    NoteDAO noteDAO = null;
+	
     public OrderController() throws ClassNotFoundException, SQLException {
         super();
         orderDAO = new OrderDAO();
         addressDAO = new AddressDAO();
+        historyDAO = new HistoryDAO();
+        noteDAO = new NoteDAO();
     }
 
 
@@ -43,12 +47,20 @@ public class OrderController extends HttpServlet {
 				detailOfOrderCompleted(request, response);
 				break;
 				
+			case "orderCancel":
+				orderCancel(request, response);
+				break;
+				
 			case "delete":
 				deleteOrder(request, response);
 				break;
 				
 			case "transfer":
 				transferToAdmin(request, response);
+				break;
+				
+			case "shipOrder":
+				shipOrder(request, response);
 				break;
 			
 			}
@@ -57,6 +69,60 @@ public class OrderController extends HttpServlet {
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
+	}
+	
+	// ship the ordre
+	private void shipOrder(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		String order_code = request.getParameter("order_code");
+		String product_id = request.getParameter("product_id");
+		String filter_value = request.getParameter("filter_value");
+		String admin_id = request.getParameter("admin_id");
+		
+		System.out.println(filter_value);
+		
+		boolean flag = orderDAO.shipOrder(order_code, Integer.parseInt(product_id));
+		if(flag) {
+			System.out.println("updated product status");
+			// get the order item
+			Orders order = orderDAO.getByCodeAndProductID(order_code, Integer.parseInt(product_id));
+			History history = new History();
+			history.setCount(order.getCount());
+			history.setCustomer_id(order.getCustomer_id());
+			history.setOrder_code(order.getOrder_code());
+			history.setPrice(order.getPrice());
+			history.setProduct_id(order.getProduct_id());
+			history.setSeller_id(order.getSeller_id());
+			history.setShipping_id(order.getShipping_id());
+			boolean inserted_history = historyDAO.create(history);
+			if(inserted_history) {
+				System.out.println("updated to history ");
+	        	String success = "Shipped to the Customer!";
+				String encoded = URLEncoder.encode(success, "UTF-8");
+				response.sendRedirect(request.getContextPath() + "/AdminController?page=dashboard&admin_id="+admin_id+"&filter_value="+filter_value+"&success="+encoded);
+			}
+		}
+		
+	}
+	
+	// order canceling
+	private void orderCancel(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		String user_id = request.getParameter("user_id");
+		String filter_value = request.getParameter("filter_value");
+		String order_code = request.getParameter("order_code");
+		String product_id = request.getParameter("product_id");
+		
+		boolean flag = orderDAO.orderCancelByUser(order_code, Integer.parseInt(product_id));
+		if(flag) {
+			String success = "You canceled the order";
+			String encoded = URLEncoder.encode(success, "UTF-8");
+			response.sendRedirect(request.getContextPath() + "/UserController?page=order&user_id="+user_id+
+					"&filter_value="+filter_value+"&success="+success);
+		}else {
+			String error = "You can't canceled the order";
+			String encoded = URLEncoder.encode(error, "UTF-8");
+			response.sendRedirect(request.getContextPath() + "/UserController?page=order&user_id="+user_id+
+					"&filter_value="+filter_value+"&error="+error);
+		}
 	}
 	
 	// order detail
@@ -79,7 +145,11 @@ public class OrderController extends HttpServlet {
 	    	double temp = o.getPrice() * o.getCount();
 	    	total += temp;
 	    }
+	    
+	    // get the note
+	    Note note = noteDAO.getByOrderCode(order_code);
 		
+	    request.setAttribute("note", note);
 		request.setAttribute("address", address);
 		request.setAttribute("orders", orders);
 		request.setAttribute("total", total);
