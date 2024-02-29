@@ -18,6 +18,9 @@
 		align-items: start;
 		justify-content: center;
 	}
+	.main-wrapper select{
+		width: 200px;
+	}
 	.item-wrapper{
 		display: flex;
 		padding: 2rem !important;
@@ -99,17 +102,32 @@
 
 				
 				
-						<div class="row main-wrapper" style="margin-bottom: 1rem;">
+					<div class="row main-wrapper" style="margin-bottom: 1rem;">
 						<div class="col-md-8">
+							<h4 class="text-muted">Filter</h4>
 							<form method="GET" action="${pageContext.request.contextPath}/UserController?page=history&user_id=${customer.id}" class="" style="width: 250px; display: flex;">
 								<input type="hidden" name="page" value="history">
 								<input type="hidden" name="user_id" value="${customer.id}">
-								<select name="filter_value" class="form-control">
-									<option value="all" <c:if test="${param.filter_value == 'all'}">selected</c:if>>All</option>
-									<option value="recently"  <c:if test="${param.filter_value == 'recently'}">selected</c:if>>Recently</option>
-									<option value="past"  <c:if test="${param.filter_value == 'past'}">selected</c:if>>Previous</option>
-								</select>
-								<button type="submit" class="btn btn-primary"> Filter</button>
+								<div>
+									<label class="form-label">Date</label>
+									<select name="date" class="form-control">
+										<option value="all" <c:if test="${param.date == 'all'}">selected</c:if>>All</option>
+										<option value="recently"  <c:if test="${param.date == 'recently'}">selected</c:if>>Recently</option>
+										<option value="past"  <c:if test="${param.date == 'past'}">selected</c:if>>Past</option>
+									</select>
+								</div>
+								
+								<div>
+									<label class="form-label">Status</label>
+									<select name="status" class="form-control">
+										<option value="all" <c:if test="${param.status == 'all'}">selected</c:if>>All</option>
+										<option value="-1"  <c:if test="${param.status == '-1'}">selected</c:if>>Canceled</option>
+										<option value="2"  <c:if test="${param.status == '2'}">selected</c:if>>On the way</option>
+									</select>
+								</div>
+								<div>
+									<button type="submit" class="btn btn-primary" style="margin-top: 2.5rem;">Search</button>
+								</div>
 							</form>
 						</div>
 					</div>
@@ -153,11 +171,14 @@
 								</div>
 								<div class="">
 									<c:choose>
-										<c:when test="${order.status == 0}">
-											<a href="${pageContext.request.contextPath}/OrderController?page=orderCancel&product_id=${order.product_id}&order_code=${order.order_code}&user_id=${customer.id}&filter_value=${param.filter_value}" class="btn btn-danger" href="">Cancel Order</a>
+										<c:when test="${order.status == 2}">
+											<span class="text-success alert alert-success" style="color: green;">You package is on the way</span>
 										</c:when>
-										<c:when test="${order.status == 1}">
-											<span class="text-info">Your order will be arrived soon!</span>
+										<c:when test="${order.status == -1}">
+											<span class="text-danger alert alert-danger"  >You canceled the order!</span>
+										</c:when>
+										<c:when test="${order.status == -2}">
+											<span class="text-warning alert alert-info">Seller canceled the order!</span>
 										</c:when>
 									</c:choose>
 								</div>
@@ -172,20 +193,20 @@
 						<div class="store-filter clearfix">
 							<ul class="store-pagination">
 								<c:if test="${currentPage != 1}">
-									<li><a href="${pageContext.request.contextPath}/UserController?page=history&page_number=${currentPage - 1}&user_id=${customer.id}&filter_value=${param.filter_value}"><i class="fa fa-angle-left"></i></a></li>
+									<li><a href="${pageContext.request.contextPath}/UserController?page=history&page_number=${currentPage - 1}&user_id=${customer.id}&date=${param.date}&status=${param.status}"><i class="fa fa-angle-left"></i></a></li>
 								</c:if>
 								<c:forEach begin="1" end="${noOfPages}" var="i"> 
 									<c:choose> 
 								       <c:when test="${currentPage eq i}"> 
-								       		<li class="active" ><a style="color: white !important;" class="text-light" href="${pageContext.request.contextPath}/UserController?page=history&page_number=${i}&user_id=${customer.id}&filter_value=${param.filter_value}">${i}</a></li>
+								       		<li class="active" ><a style="color: white !important;" class="text-light" href="${pageContext.request.contextPath}/UserController?page=history&page_number=${i}&user_id=${customer.id}&date=${param.date}&status=${param.status}">${i}</a></li>
 								       </c:when>
 								       <c:otherwise> 
-								       		<li class=""><a href="${pageContext.request.contextPath}/UserController?page=history&page_number=${i}&user_id=${customer.id}&filter_value=${param.filter_value}">${i}</a></li>
+								       		<li class=""><a href="${pageContext.request.contextPath}/UserController?page=history&page_number=${i}&user_id=${customer.id}&date=${param.date}&status=${param.status}">${i}</a></li>
 								       </c:otherwise>
 								    </c:choose>
 								</c:forEach>
 								<c:if test="${currentPage lt noOfPages}">
-									<li><a href="${pageContext.request.contextPath}/UserController?page=history&page_number=${currentPage + 1}&user_id=${customer.id}&filter_value=${param.filter_value}"><i class="fa fa-angle-right"></i></a></li>
+									<li><a href="${pageContext.request.contextPath}/UserController?page=history&page_number=${currentPage + 1}&user_id=${customer.id}&date=${param.date}&status=${param.status}"><i class="fa fa-angle-right"></i></a></li>
 								</c:if>
 							</ul>
 						</div>

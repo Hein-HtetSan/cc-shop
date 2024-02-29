@@ -63,7 +63,7 @@
 						<li class="nav-item ${param.page == 'category' ? 'active' : ''}">
 							<a href="${pageContext.request.contextPath}/AdminController?page=category">
 								<i class="las la-clipboard-list"></i>
-								<p>Category</p>
+								<p>Product Category</p>
 								<span class="badge badge-count">${counts.category_count}</span>
 							</a>
 						</li>

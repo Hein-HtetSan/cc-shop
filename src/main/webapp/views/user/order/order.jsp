@@ -161,7 +161,7 @@
 											<a href="${pageContext.request.contextPath}/OrderController?page=orderCancel&product_id=${order.product_id}&order_code=${order.order_code}&user_id=${customer.id}&filter_value=${param.filter_value}" class="btn btn-danger" href="">Cancel Order</a>
 										</c:when>
 										<c:when test="${order.status == 1}">
-											<span class="text-info">Your order will be arrived soon!</span>
+											<span class="text-success alert alert-success">Your package is at warehouse</span>
 										</c:when>
 									</c:choose>
 								</div>

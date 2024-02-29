@@ -63,7 +63,7 @@
 					</ul>
 					<ul class="header-links pull-right">
 						<li><a href="${pageContext.request.contextPath}/UserController?page=profile&user_id=${customer.id}"><i class="fa fa-user-o"></i> My Account</a></li>
-						<li><a href="${pageContext.request.contextPath}/UserController?page=history&user_id=${customer.id}&filter_value=all"><i class="fa fa-file"></i> History</a></li>
+						<li><a href="${pageContext.request.contextPath}/UserController?page=history&user_id=${customer.id}&date=all&status=all"><i class="fa fa-file"></i> History</a></li>
 						<li><a href="${pageContext.request.contextPath}/UserController?page=order&user_id=${customer.id}&filter_value=all"><i class="fa fa-car"></i>Order</a></li>
 						<li><a href="${pageContext.request.contextPath}/LoginController?page=userLogout"><i class="fa fa-power-off"></i> Logout</a></li>
 					</ul>
@@ -109,7 +109,7 @@
 									<a href="#">
 										<i class="fa fa-heart-o"></i>
 										<span>Your Wishlist</span>
-										<div class="qty">2</div>
+										<div class="qty">${whistlist_count}</div>
 									</a>
 								</div>
 								<!-- /Wishlist -->
