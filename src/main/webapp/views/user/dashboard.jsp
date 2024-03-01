@@ -94,7 +94,7 @@
 					<div class="col-md-4 col-xs-6">
 						<div class="shop">
 							<div class="shop-img">
-								<img src="${pageContext.request.contextPath}/assets/customer/img/shop03.png" alt="">
+								<img src="${pageContext.request.contextPath}/assets/landing/img/licensed-image.jpg" alt="">
 							</div>
 							<div class="shop-body">
 								<h3>Cosmetics<br>Collection</h3>
@@ -108,7 +108,7 @@
 					<div class="col-md-4 col-xs-6">
 						<div class="shop">
 							<div class="shop-img">
-								<img src="${pageContext.request.contextPath}/assets/customer/img/shop02.png" alt="">
+								<img src="${pageContext.request.contextPath}/assets/landing/img/fashion.jpg" alt="">
 							</div>
 							<div class="shop-body">
 								<h3>Fashion<br>Collection</h3>
@@ -181,12 +181,13 @@
 												<h4 class="product-price">${product.price}MMKs</h4>
 												<div class="product-btns" style="margin-top: 10px !important;">
 												<!-- check the wishlist table -->
-							                    <c:set var="is_whistlist_exsit" value="${whistDAO.get_by_customer_id_and_product_id(product.id, customer.id)}"/>
+							                    <c:set var="is_whistlist_exsit" value="${whistlistDAO.get_by_customer_id_and_product_id(product.id, customer.id)}"/>
+							                    
 							                    <c:choose>
 							                        <c:when test="${is_whistlist_exsit}">
 							                            <button class="add-to-wishlist">
 							                                <a class="" href="${pageContext.request.contextPath}/WhistlistController?action=removeFromWhistList&product_id=${product.id}&user_id=${customer.id}">
-							                                    <i class="fas fa-heart"></i><span class="tooltipp">Remove from wishlist</span>
+							                                    <i class="fa fa-heart"></i><span class="tooltipp">Remove from wishlist </span>
 							                                </a>
 							                            </button>
 							                        </c:when>

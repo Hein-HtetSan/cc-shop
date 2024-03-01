@@ -378,7 +378,7 @@ public class AdminController extends HttpServlet {
 	        }
 	        // filter value is null
 	        if(filter_value == null) {
-	        	orders = orderDAO.getOrderWithStatusOne((page_number - 1) * recordsPerPage, recordsPerPage, "today");
+	        	orders = orderDAO.getOrderWithStatusOne((page_number - 1) * recordsPerPage, recordsPerPage, "all");
 	        }else {
 	        	orders = orderDAO.getOrderWithStatusOne((page_number - 1) * recordsPerPage, recordsPerPage, filter_value);
 	        }

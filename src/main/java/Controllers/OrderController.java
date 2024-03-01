@@ -177,6 +177,10 @@ public class OrderController extends HttpServlet {
 	    	double temp = o.getPrice() * o.getCount();
 	    	total += temp;
 	    }
+	    // get the note
+	    Note note = noteDAO.getByOrderCode(order_code);
+		
+	    request.setAttribute("note", note);
 		
 		request.setAttribute("address", address);
 		request.setAttribute("orders", orders);
