@@ -189,6 +189,15 @@ public class OrderDAO {
 			             + "WHERE orders.status = 1 "
 			             + "AND (DATE(orders.updated_at) = " + today + ") "
 			             + "ORDER BY updated_at DESC LIMIT " + offset + ", " + noOfRecords;
+		}else if(filter_value.equals("all")) {
+			// Construct the query
+			 query = "SELECT SQL_CALC_FOUND_ROWS orders.*, products.name AS product_name, customers.name AS customer_name "
+			             + "FROM orders "
+			             + "LEFT JOIN products ON orders.product_id = products.id "
+			             + "LEFT JOIN addresses ON orders.shipping_id = addresses.id "
+			             + "LEFT JOIN customers ON customers.id = orders.customer_id "
+			             + "WHERE orders.status = 1 "
+			             + "ORDER BY updated_at DESC LIMIT " + offset + ", " + noOfRecords;
 		}else if(filter_value.equals("yesterday")) {
 			// Construct the query
 			 query = "SELECT SQL_CALC_FOUND_ROWS orders.*, products.name AS product_name, customers.name AS customer_name "
@@ -207,7 +216,7 @@ public class OrderDAO {
 			             + "LEFT JOIN addresses ON orders.shipping_id = addresses.id "
 			             + "LEFT JOIN customers ON customers.id = orders.customer_id "
 			             + "WHERE orders.status = 1 "
-			             + "AND (DATE(orders.updated_at) < " + lastDate +  ") "
+			             + "AND (DATE(orders.updated_at) = " + lastDate +") "
 			             + "ORDER BY updated_at DESC LIMIT " + offset + ", " + noOfRecords;
 		}
 		try {

@@ -134,16 +134,21 @@
 							<div class="col-md-6">
 								<div class="d-flex aling-items-center justify-content-between">
 									<h5 class="fw-bold">Ready to Ship <i class="las la-track"></i></h5>
+									
+									
 									<form method="GET" action="${pageContext.request.contextPath}/AdminController?page=dashboard&admin_id=${admin.id}" class="" style="width: 250px; display: flex;">
 										<input type="hidden" name="page" value="dashboard">
 										<input type="hidden" name="admin_id" value="${admin.id}">
 										<select name="filter_value" class="form-control" style="height: 50px ">
+											<option value="all" <c:if test="${param.filter_value == 'all'}">selected</c:if>>All</option>
 											<option value="today" <c:if test="${param.filter_value == 'today'}">selected</c:if>>Today</option>
 											<option value="yesterday"  <c:if test="${param.filter_value == 'yesterday'}">selected</c:if>>Yesterday</option>
 											<option value="lastday"  <c:if test="${param.filter_value == 'lastday'}">selected</c:if>>Last Day</option>
 										</select>
 										<button type="submit" class="btn btn-primary "> Filter</button>
 									</form>
+									
+									
 								</div>
 								
 								<table class="table mt-3">
