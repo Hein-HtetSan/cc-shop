@@ -67,11 +67,37 @@
 		align-items: center;
 		justify-content: end;
 	}
-
+		#loading-wrapper{
+			position: absolute;
+			top: 0;
+			right: 0;
+			width: 100%;
+			height: 100vh;
+			overflow: hidden;
+			 /* Adjust the alpha value (0.5 in this case) to control transparency */
+			z-index: 100;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+		}
+		#loading{
+			border: none;
+			box-shadow: 1px 1px 5px #ccc;
+			border-radius: 10px;
+			z-index: 100;
+			width: 60px;
+		}
+		.d-none{
+			display: none !important;
+		}
 
 </style>
 
-
+			<!-- loading  -->
+						<div id="loading-wrapper" class="d-none">
+							<img src="${pageContext.request.contextPath}/assets/loading.gif" id="loading">
+						</div>
+						<!-- end of loading -->
 		<!-- BREADCRUMB -->
 		<div id="breadcrumb" class="section">
 			<!-- container -->
@@ -158,7 +184,7 @@
 								<div class="">
 									<c:choose>
 										<c:when test="${order.status == 0}">
-											<a href="${pageContext.request.contextPath}/OrderController?page=orderCancel&product_id=${order.product_id}&order_code=${order.order_code}&user_id=${customer.id}&filter_value=${param.filter_value}" class="btn btn-danger" href="">Cancel Order</a>
+											<a href="${pageContext.request.contextPath}/OrderController?page=orderCancel&product_id=${order.product_id}&order_code=${order.order_code}&user_id=${customer.id}&filter_value=${param.filter_value}" id="cancel-btn" class="btn btn-danger" href="">Cancel Order</a>
 										</c:when>
 										<c:when test="${order.status == 1}">
 											<span class="text-success alert alert-success">Your package is at warehouse</span>
@@ -202,6 +228,12 @@
 		<!-- /SECTION -->
 		
 		<script>
+		// click the button then loading start
+		document.getElementById("cancel-btn").addEventListener("click", function(event) {
+		       console.log("clicked");
+				document.getElementById("loading-wrapper").classList.remove("d-none");
+		   });
+		
     // Wait for the document to be ready
     document.addEventListener('DOMContentLoaded', function() {
         // Find the success alert element

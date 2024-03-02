@@ -118,6 +118,23 @@ public class CustomerDAO {
 		return customer;
 	}
 	
+	// get customer email by id
+	public String getEamilByID(int id) {
+		String email = null;
+		String query = "SELECT * FROM customers WHERE id = " + id;
+		try {
+			statement = con.createStatement();
+			resultset = statement.executeQuery(query);
+			if(resultset.next()) {
+				email = resultset.getString("email");
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return email;
+	}
+	
 	// create new customer
 	public boolean create(Customer customer) throws SQLException {
 		boolean flag = false;
