@@ -111,7 +111,7 @@
               </div>
             </form>
             <hr>
-            <a href="${pageContext.request.contextPath}/views/user/form.jsp" class="btn btn-link " style="display: block; text-align: center;">Already have an account!</a>
+            <a href="${pageContext.request.contextPath}/views/seller/form.jsp" class="btn btn-link " style="display: block; text-align: center;">Already have an account!</a>
               <a href="${pageContext.request.contextPath}/views/index.jsp" class="btn btn-link " style="display: block; text-align: center;">Back</a>
           </div>
         </div>

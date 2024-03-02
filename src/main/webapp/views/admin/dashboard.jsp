@@ -5,9 +5,46 @@
     
     
     <%@ include file="./layout/header.jsp" %>
+    
+    <!-- Loading bar -->
+    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/assets/loading-bar/loading-bar.css"/>
+	<script type="text/javascript" src="${pageContext.request.contextPath}/assets/loading-bar/loading-bar.js"></script>
+	
+	<style>
+		#loading-wrapper{
+			position: absolute;
+			top: 0;
+			right: 0;
+			width: 100%;
+			height: 100vh;
+			 /* Adjust the alpha value (0.5 in this case) to control transparency */
+			z-index: 100;
+			display: flex;
+			overflow: hidden;
+			align-items: center;
+			justify-content: center;
+		}
+		#loading{
+			border: none;
+			box-shadow: 1px 1px 5px #ccc;
+			border-radius: 10px;
+			z-index: 100;
+			width: 60px;
+		}
+		.d-none{
+			display: none;
+		}
+	</style>
 
 
 	<div class="wrapper">
+	
+		
+						<!-- loading  -->
+						<div id="loading-wrapper" class="d-none">
+							<img src="${pageContext.request.contextPath}/assets/loading.gif" id="loading">
+						</div>
+						<!-- end of loading -->
 	
 	
 		<!-- #### Main header #### -->
@@ -18,6 +55,8 @@
 		<%@ include file="./layout/sidebar.jsp" %>
 		<!-- ### End of sidebar -->
 			</div>
+			
+			
 
 
 
@@ -26,6 +65,8 @@
 					<div class="container-fluid">
 
 						<h4 class="page-title">Dashboard</h4>
+						
+						
 						
 						<c:if test="${not empty success }">
 						<div class="alert alert-success text-center " role="alert" id="errorAlert">
@@ -168,7 +209,7 @@
 												<td class="text-secondary fw-bold">Ready to ship?</td>
 												<td> ${order.updated_at}</td>
 												<td>
-													<a href="${pageContext.request.contextPath}/OrderController?page=shipOrder&order_code=${order.order_code}&product_id=${order.product_id}&admin_id=${param.admin_id}&filter_value=${param.filter_value}" class="btn btn-success">Ship Now</a>
+													<a href="${pageContext.request.contextPath}/OrderController?page=shipOrder&order_code=${order.order_code}&product_id=${order.product_id}&admin_id=${param.admin_id}&filter_value=${param.filter_value}" id="ship-now" class="btn btn-success">Ship Now</a>
 												</td>
 											</tr>
 										</c:forEach>
@@ -215,8 +256,13 @@
 
 
 
+<script src="https://cdn.jsdelivr.net/npm/loading-bar/dist/loading-bar.min.js"></script>
     <!-- Bootstrap JS (optional, for some features) -->
    <script>
+   document.getElementById("ship-now").addEventListener("click", function(event) {
+       console.log("clicked");
+		document.getElementById("loading-wrapper").classList.remove("d-none");
+   });
     // Wait for the document to be ready
     document.addEventListener('DOMContentLoaded', function() {
         // Find the success alert element
@@ -230,6 +276,8 @@
             }, 3000); // 3000 milliseconds = 3 seconds
         }
 	    });
+	    
+	    console.log("loading bar is ready");
 	</script>
 
 </body>

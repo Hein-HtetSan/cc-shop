@@ -54,7 +54,39 @@
 	.checkout-status h4{
 		color: #D10024;
 	}
+
+		#loading-wrapper{
+			position: absolute;
+			top: 0;
+			right: 0;
+			width: 100%;
+			height: 100%;
+			overflow: hidden;
+			 /* Adjust the alpha value (0.5 in this case) to control transparency */
+			z-index: 100;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+		}
+		#loading{
+			border: none;
+			box-shadow: 1px 1px 5px #ccc;
+			border-radius: 10px;
+			z-index: 100;
+			width: 60px;
+		}
+		.d-none{
+			display: none !important;
+		}
+
 </style>
+
+
+							<!-- loading  -->
+						<div id="loading-wrapper" class="d-none">
+							<img src="${pageContext.request.contextPath}/assets/loading.gif" id="loading">
+						</div>
+						<!-- end of loading -->
 
 		<!-- BREADCRUMB -->
 		<div id="breadcrumb" class="section">
@@ -79,7 +111,6 @@
 		<div class="section">
 			<!-- container -->
 			<div class="container">
-			
 			
 				<!-- alert -->
 					<c:if test="${not empty success }">
@@ -241,8 +272,13 @@
 		
 		<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 		<script>
+	
 		    // Wait for the document to be ready
 		    $(document).ready(function() {
+		    	
+				$("#order-submit").click(function() {
+					$("#loading-wrapper").removeClass("d-none");
+				});
 		        // Find the error alert element
 		        var $errorAlert = $('#errorAlert');
 		        
@@ -275,6 +311,7 @@
 		                        note: note,
 		                    },
 		                    success: function(response) {
+		                    	$("#loading-wrapper").addClass("d-none"); // if success then add d-none
 		                    	var status = response.status;
 		                    	console.log(status);
 		                    	if (response.status === true || response.status === "true") {
@@ -286,6 +323,7 @@
 		    		                $(".checkout-status").removeClass("d-none");
 		    		                $("#notes").val('');
 		    		                $('.address-radio').check(false);
+		    		                
 		                        } else {
 		                            console.error("Unexpected response status:", response.status);
 		                        }

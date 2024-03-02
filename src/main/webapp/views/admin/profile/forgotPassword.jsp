@@ -1,7 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-
+<%@ page import="java.util.*" %>
+<%@ page import="Models.*" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -45,10 +46,10 @@
 </style>
 <body>
 
-	<c:if test="${not empty error}">
-	    <div class="alert alert-danger d-flex justify-content-between"  role="error" id="errorAlert">
-	  		${error}
-		</div>
+	<c:if test="${!empty error}">
+    <div class="alert alert-danger d-flex justify-content-between"  role="error" id="errorAlert">
+  		${error}
+	</div>
 	</c:if>
   
   <div class="container">
@@ -56,29 +57,25 @@
     <div class="row d-flex align-items-center justify-content-center">
       <div class="col-md-7">
         <div class="card">
-          <img src="${pageContext.request.contextPath}/assets/landing/img/core-img/ccshop.png" alt="" width="200" style="margin-left: 5rem; margin-bottom: -2rem;">
+          <img src="${pageContext.request.contextPath}/assets/landing/img/core-img/ccshop.png" alt="" width="200" style="margin-left: 5rem; 
+          margin-bottom: -3rem;">
           <div class="card-header">
-            <h3 class="text-center fw-bold text-danger">WELCOME BACK</h3>
+            <h3 class="text-center fw-bold">REGISTER</h3>
+            <span class="text-center text-primary">Register for admin account.</span>
           </div>
           <hr>
           <div class="card-body">
-            <form action="${pageContext.request.contextPath}/LoginController?page=adminLogin" method="post">
+            <form action="${pageContext.request.contextPath}/RegisterController?page=adminRegister" method="post">
               <div class="form-group">
                 <label for="" class="form-label">Email</label>
                 <input type="email" class="form-control" name="email">
               </div>
               <div class="form-group">
-                <label for="" class="form-label">Password</label>
-                <input type="password" class="form-control" name="password">
-              </div>
-              <div class="form-group">
-                <button class="btn btn-primary" type="submit">Login</button>
+                <button class="btn btn-primary" type="submit">Get OTP</button>
               </div>
             </form>
             <hr>
-            <a href="${pageContext.request.contextPath}/views/admin/register.jsp" class="btn btn-link " style="display: block; text-align: center;">Register account</a>
-              <a href="${pageContext.request.contextPath}/views/admin/register.jsp" class="btn btn-link btn-primary" style="display: block; text-align: center;">Forgot Password?</a>
-              <a href="${pageContext.request.contextPath}/views/index.jsp" class="btn btn-link " style="display: block; text-align: center;">Back</a>
+              <a href="${pageContext.request.contextPath}/views/admin/form.jsp" class="btn btn-link " style="display: block; text-align: center;">Back</a>
           </div>
         </div>
       </div>

@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.net.URLEncoder;
 import java.sql.SQLException;
 
+import javax.mail.MessagingException;
+import javax.mail.internet.AddressException;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -14,6 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.*;
 import Models.*;
 import DAO.*;
+import java.util.Date;
 
 @WebServlet("/OrderController")
 public class OrderController extends HttpServlet {
@@ -24,6 +27,8 @@ public class OrderController extends HttpServlet {
 	AddressDAO addressDAO = null;
     HistoryDAO historyDAO = null;   
     NoteDAO noteDAO = null;
+    SellerDAO sellerDAO = null;
+    CustomerDAO customerDAO = null;
 	
     public OrderController() throws ClassNotFoundException, SQLException {
         super();
@@ -31,6 +36,8 @@ public class OrderController extends HttpServlet {
         addressDAO = new AddressDAO();
         historyDAO = new HistoryDAO();
         noteDAO = new NoteDAO();
+        sellerDAO = new SellerDAO();
+        customerDAO = new CustomerDAO();
     }
 
 
@@ -80,6 +87,31 @@ public class OrderController extends HttpServlet {
 		
 		System.out.println(filter_value);
 		
+		Orders order_detail;
+		// Get the current date and time
+        Date currentDate = new Date();
+		try {
+			order_detail = orderDAO.getByCodeAndProductID(order_code, Integer.parseInt(product_id));
+			String html = "<h3>Your package will be arrived soon!</h3>"
+					+ "<h5>Order Code: "+ order_code +"</h5>"
+					+ "<p style='display: block;'>Date: " + currentDate.toString()  + "</p>"
+					+ "<b style='display: block;'>Product : " + order_detail.getProduct_name() + "</b>"
+					+ "<b style='display: block;'>Count : " + order_detail.getCount() + "</b>"
+					+ "<b style='display: block;'>Price : " + order_detail.getPrice() + " MMKs</b>"
+					+ "<p>Your order is on the way. The delivery will be arrived to you soon.</p>";
+			Config.mail.sendEmail(customerDAO.getEamilByID(order_detail.getCustomer_id()), "Delivery is On The Way", html);
+			System.out.println("mail sent to customer");
+		} catch (NumberFormatException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (AddressException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (MessagingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 		boolean flag = orderDAO.shipOrder(order_code, Integer.parseInt(product_id));
 		if(flag) {
 			System.out.println("updated product status");
@@ -110,7 +142,36 @@ public class OrderController extends HttpServlet {
 		String filter_value = request.getParameter("filter_value");
 		String order_code = request.getParameter("order_code");
 		String product_id = request.getParameter("product_id");
+		// send mail to seller
+		Customer customer;
+		Orders order;
+		// Get the current date and time
+        Date currentDate = new Date();
+		try {
+			customer = customerDAO.getById(Integer.parseInt(user_id)); // get the customer information
+			order = orderDAO.getByCodeAndProductID(order_code, Integer.parseInt(product_id));
+			String html = "<h4>Order Canceled</h4>"
+					+ "<h5>Order Code: "+ order_code +"</h5>"
+					+ "<p>Name: " + customer.getName() + "</p><br>"
+					+ "<p>Email: " + customer.getEmail() + "</p><br>"
+					+ "<p>Date: " + currentDate.toString()  + "</p><br>"
+					+ "<b>Product : " + order.getProduct_name() + "</b><br>"
+					+ "<b>Count : " + order.getCount() + "</b><br>"
+					+ "<b>Price : " + order.getPrice() + "</b><br>";
+			Config.mail.sendEmail(sellerDAO.getEmailByProductID(Integer.parseInt(product_id)), "Customer Cancaled the packages", html);
+			System.out.println("mail sent to seller");
+		} catch (NumberFormatException | SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (AddressException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (MessagingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
+		// order cancel by user
 		boolean flag = orderDAO.orderCancelByUser(order_code, Integer.parseInt(product_id));
 		if(flag) {
 			String success = "You canceled the order";
@@ -196,6 +257,35 @@ public class OrderController extends HttpServlet {
 		String product_id = request.getParameter("product_id");
 		String order_code = request.getParameter("order_code");
 		
+		// send mail to seller
+				Seller seller;
+				Orders order;
+				// Get the current date and time
+		        Date currentDate = new Date();
+				try {
+					seller = sellerDAO.getById(Integer.parseInt(seller_id));
+					order = orderDAO.getByCodeAndProductID(order_code, Integer.parseInt(product_id));
+					String html = "<h4>Seller Canceled the Order</h4>"
+							+ "<h5>Order Code: "+ order_code +"</h5>"
+							+ "<p>Seller Name: " + seller.getName() + "</p><br>"
+							+ "<p>Seller Email: " + seller.getEmail() + "</p><br>"
+							+ "<p>Date: " + currentDate.toString()  + "</p><br>"
+							+ "<b>Product : " + order.getProduct_name() + "</b><br>"
+							+ "<b>Count : " + order.getCount() + "</b><br>"
+							+ "<b>Price : " + order.getPrice() + " MMKs</b><br>";
+					Config.mail.sendEmail(customerDAO.getEamilByID(order.getCustomer_id()), "Customer Cancaled the packages", html);
+					System.out.println("mail sent to customer");
+				} catch (NumberFormatException | SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (AddressException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (MessagingException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+		
 		boolean flag = orderDAO.callOffOrder(Integer.parseInt(product_id), order_code);
 		if(flag) {
 			String success = "You've removed order Successfully";
@@ -213,6 +303,32 @@ public class OrderController extends HttpServlet {
 		String seller_id = request.getParameter("seller_id");
 		String order_code = request.getParameter("order_code");
 		String product_id = request.getParameter("product_id");
+		
+		Orders order;
+		// Get the current date and time
+        Date currentDate = new Date();
+		try {
+			order = orderDAO.getByCodeAndProductID(order_code, Integer.parseInt(product_id));
+			String html = "<h4>Package successfully transfer to Headquarter</h4>"
+					+ "<h5>Order Code: "+ order_code +"</h5>"
+					+ "<p style='display: block;'>Date: " + currentDate.toString()  + "</p>"
+					+ "<b style='display: block;'>Product : " + order.getProduct_name() + "</b>"
+					+ "<b style='display: block;'>Count : " + order.getCount() + "</b>"
+					+ "<b style='display: block;'>Price : " + order.getPrice() + "</b>"
+					+ "<p>Notification: your package is successfully transfer to headquarter. The package will be arrived to you soon. "
+					+ "The headquarter is packaging the order and send to you soon.</p>";
+			Config.mail.sendEmail(customerDAO.getEamilByID(order.getCustomer_id()), "Customer Cancaled the packages", html);
+			System.out.println("mail sent to customer");
+		} catch (NumberFormatException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (AddressException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (MessagingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 		// update the status to 1
 		boolean flag = orderDAO.transferOrder(Integer.parseInt(product_id), order_code);

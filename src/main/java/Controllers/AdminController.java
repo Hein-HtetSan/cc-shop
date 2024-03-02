@@ -309,6 +309,7 @@ public class AdminController extends HttpServlet {
     				} catch (ServletException | IOException | SQLException e) {
     					e.printStackTrace();
     				} 
+        			break;
         		case "product": // product page in admin panel
         			try {
     					getAllProduct(request, response); // get all product
@@ -496,6 +497,7 @@ public class AdminController extends HttpServlet {
         request.setAttribute("currentPage", page_number);
         dispatcher = request.getRequestDispatcher("views/admin/product/list.jsp"); 
         dispatcher.forward(request, response);
+        return;
 	}
 	
 	// get all store

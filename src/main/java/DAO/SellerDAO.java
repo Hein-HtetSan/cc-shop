@@ -212,6 +212,24 @@ public class SellerDAO {
 		return flag;
 	}
 	
+	// get seller email by product id
+	public String getEmailByProductID(int product_id) {
+		String email = null;
+		String query = "SELECT sellers.email as email FROM sellers LEFT JOIN products ON sellers.id = products.seller_id WHERE "
+				+ "products.id=" + product_id;
+		try {
+			statement = con.createStatement();
+			resultset = statement.executeQuery(query);
+			if(resultset.next()) {
+				email = resultset.getString("email");
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return email;
+	}
+	
 	// testing method
 	public static void main(String args[]) throws SQLException, ClassNotFoundException {
 		// create new instance of boject Customer DAO

@@ -34,7 +34,7 @@ public class mail {
 		props.put("mail.smtp.port", "465");
 		Session session = Session.getDefaultInstance(props, new javax.mail.Authenticator() {
 			protected PasswordAuthentication getPasswordAuthentication() {
-				return new PasswordAuthentication("hein37905@gmail.com", "lyki oikb gfpa phrk");
+				return new PasswordAuthentication("office.ccshop69@gmail.com", "qaei xlzn ewmk pexz");
 			}
 		});
 		

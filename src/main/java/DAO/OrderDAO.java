@@ -79,7 +79,7 @@ public class OrderDAO {
 	// get order by code and product id
 	public Orders getByCodeAndProductID(String order_code, int product_id) {
 		Orders order = null;
-		String query = "SELECT orders.*, products.seller_id as seller_id FROM orders "
+		String query = "SELECT orders.*, products.seller_id as seller_id, products.name as product_name FROM orders "
 				+ "LEFT JOIN products ON orders.product_id = products.id "
 				+ "WHERE orders.product_id = ? AND orders.order_code = ? "
 				+ "GROUP BY orders.id";
@@ -99,6 +99,7 @@ public class OrderDAO {
 				order.setUpdated_at(rs.getString("updated_at"));
 				order.setShipping_id(rs.getInt("shipping_id"));
 				order.setSeller_id(rs.getInt("seller_id"));
+				order.setProduct_name(rs.getString("product_name"));
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
