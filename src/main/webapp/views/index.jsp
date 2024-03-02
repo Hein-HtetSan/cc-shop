@@ -44,6 +44,9 @@
 
     <!-- Style CSS -->
     <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/landing/style.css">
+    
+    <!--sweet alert cdn link-->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 
 </head>
 
@@ -240,7 +243,7 @@
                 <div class="col-12">
                     <div class="cta-content text-center">
                         <h2 class="wow fadeInUp" data-wow-delay="300ms">Are You Looking For Something To Buy??</h2>
-                        <h6 class="wow fadeInUp" data-wow-delay="400ms">လိုအပ်ချက်တိုင်းပြည့်စုံဖို့ CCShop မှာ ဈေးဝယ်စို့</h6>
+                        <h6 class="wow fadeInUp" data-wow-delay="400ms">For your needs, CC shop is always here.</h6>
                         <a href="#" class="btn south-btn mt-50 wow fadeInUp" data-wow-delay="500ms">Buy Now</a>
                     </div>
                 </div>
@@ -484,12 +487,12 @@
                 <!-- Contact Form Area -->
                 <div class="col-12 col-lg-8" >
                     <div class="contact-form">
-                        <form action="#" method="post">
+                        <form action="${pageContext.request.contextPath}/MessageController?action=sendMessage" method="post">
                             <div class="form-group">
-                                <input type="text" class="form-control" name="text" id="contact-name" placeholder="Your Name">
+                                <input type="text" class="form-control" name="name" id="contact-name" placeholder="Your Name">
                             </div>
                             <div class="form-group">
-                                <input type="number" class="form-control" name="number" id="contact-number" placeholder="Your Phone">
+                                <input type="number" class="form-control" name="phone" id="contact-number" placeholder="Your Phone">
                             </div>
                             <div class="form-group">
                                 <input type="email" class="form-control" name="email" id="contact-email" placeholder="Your Email">
@@ -505,11 +508,24 @@
         </div>
     </section>
 
+	<c:if test="${not empty status}"> <input type="hidden" id="status" value="${status}"> </c:if>
     <!-- Contact Info End -->
 
    <!-- ##### Footer Area Start ##### -->
    <%@ include file="./layout/footer.jsp" %>
 <!-- ##### Footer Area End ##### -->
+
+	<script>
+	var status=document.getElementById("status").value;
+	if(status=="Message Sent Successfully"){
+		Swal.fire({
+			  title: "Success",
+			  text: "Message Sent Successfully",
+			  icon: "success"
+			});
+	}
+	
+	</script>
 
     <!-- jQuery (Necessary for All JavaScript Plugins) -->
     <script src="${pageContext.request.contextPath}/assets/landing/js/jquery/jquery-2.2.4.min.js"></script>
@@ -523,6 +539,8 @@
     <script src="${pageContext.request.contextPath}/assets/landing/js/jquery-ui.min.js"></script>
     <!-- Active js -->
     <script src="${pageContext.request.contextPath}/assets/landing/js/active.js"></script>
+
+
 
 </body>
 
