@@ -87,7 +87,7 @@
       <div class="col-md-7">
         <div class="card">
           <div class="card-body" style="padding-top: 10rem;">
-            <form action="${pageContext.request.contextPath}/OTPController?page=adminOTP" method="post">
+            <form action="${pageContext.request.contextPath}/OTPController?page=userOTP" method="post">
             	
               <div class="form-group">
                 <label for="" class="form-label">Email</label>
@@ -99,7 +99,7 @@
               </div>
             </form>
             <hr>
-              <a href="${pageContext.request.contextPath}/views/admin/form.jsp" class="btn btn-link " style="display: block; text-align: center;">Back</a>
+              <a href="${pageContext.request.contextPath}/views/user/form.jsp" class="btn btn-link " style="display: block; text-align: center;">Back</a>
           </div>
         </div>
       </div>

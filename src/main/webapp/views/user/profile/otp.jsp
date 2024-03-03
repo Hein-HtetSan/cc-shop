@@ -75,11 +75,11 @@
 		</div>
 	</c:if>
 	
-		<!-- loading  -->
-		<div id="loading-wrapper" class="d-none">
-			<img src="${pageContext.request.contextPath}/assets/loading.gif" id="loading">
-		</div>
-		<!-- end of loading -->
+						<!-- loading  -->
+						<div id="loading-wrapper" class="d-none">
+							<img src="${pageContext.request.contextPath}/assets/loading.gif" id="loading">
+						</div>
+						<!-- end of loading -->
   
   <div class="container">
 
@@ -87,19 +87,20 @@
       <div class="col-md-7">
         <div class="card">
           <div class="card-body" style="padding-top: 10rem;">
-            <form action="${pageContext.request.contextPath}/OTPController?page=adminOTP" method="post">
-            	
+            <form action="${pageContext.request.contextPath}/OTPController?page=userCheckOTP" method="post">
+            	<input type="hidden" name="email" value="${email}">
               <div class="form-group">
-                <label for="" class="form-label">Email</label>
-                <p class="alert alert-info">Enter your email to get one time password.</p>
-                <input type="email" class="form-control" name="email" placeholder="Email">
+                <label for="" class="form-label">Enter OTP</label>
+                <p class="alert alert-success">OTP is succssfully sent to your email : <b>${email}</b>. So, please check your email inbox.</p>
+                <input type="text" class="form-control" name="otp" placeholder="OTP">
               </div>
-              <div class="form-group">
-                <button class="btn btn-primary" type="submit" id="get-otp">Get OTP</button>
-              </div>
+				<div class="form-group" style="display: flex; align-items: center; justify-content: space-between; width: 300px;">
+				    <button class="btn btn-primary" type="submit" id="get-otp">Submit</button>
+				    <a href="${pageContext.request.contextPath}/OTPController?action=resendUserOTP&email=${email}" class="btn btn-warning" id="resend-otp">Resend OTP</a>
+				</div>
             </form>
             <hr>
-              <a href="${pageContext.request.contextPath}/views/admin/form.jsp" class="btn btn-link " style="display: block; text-align: center;">Back</a>
+              <a href="${pageContext.request.contextPath}/views/user/profile/forgotPassword.jsp" class="btn btn-link " style="display: block; text-align: center;">Back</a>
           </div>
         </div>
       </div>
@@ -114,8 +115,14 @@
 		       console.log("clicked");
 				document.getElementById("loading-wrapper").classList.remove("d-none");
 		   });
+		document.getElementById("resend-otp").addEventListener("click", function(event) {
+		       console.log("clicked");
+				document.getElementById("loading-wrapper").classList.remove("d-none");
+		   });
 	    // Wait for the document to be ready
 	    document.addEventListener('DOMContentLoaded', function() {
+	    	
+	        
         // Find the success alert element
         var alert = document.getElementById('errorAlert');
 	    

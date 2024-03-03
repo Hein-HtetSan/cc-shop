@@ -317,7 +317,7 @@ public class OrderController extends HttpServlet {
 					+ "<b style='display: block;'>Price : " + order.getPrice() + "</b>"
 					+ "<p>Notification: your package is successfully transfer to headquarter. The package will be arrived to you soon. "
 					+ "The headquarter is packaging the order and send to you soon.</p>";
-			Config.mail.sendEmail(customerDAO.getEamilByID(order.getCustomer_id()), "Customer Cancaled the packages", html);
+			Config.mail.sendEmail(customerDAO.getEamilByID(order.getCustomer_id()), "Your package is transfer to Headquarter", html);
 			System.out.println("mail sent to customer");
 		} catch (NumberFormatException e) {
 			// TODO Auto-generated catch block

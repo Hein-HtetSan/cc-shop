@@ -323,6 +323,34 @@ public class ProductDAO {
 					        }
 							return products; // return that list
 						}
+						
+		// get product by product id
+						public Product getProductsByID(int product_id) throws SQLException{
+							Product product = null; // create admin object which is from model
+							String query = "select products.*, categories.name as category_name, MIN(images.name) AS image_name, sellers.name as seller_name FROM products "
+									+ "LEFT JOIN categories ON products.category_id = categories.id "
+									+ "LEFT JOIN sellers ON products.seller_id = sellers.id "
+									+ "LEFT JOIN images ON images.product_id = products.id  WHERE products.id="+product_id+" GROUP BY "
+									+ "products.id "
+									+ "ORDER BY updated_at DESC ";
+							statement = con.createStatement();
+					        resultSet = statement.executeQuery(query);
+					        if(resultSet.next()) {
+					             product = new Product();
+					            product.setId(resultSet.getInt("id"));
+					            product.setName(resultSet.getString("name"));
+					            product.setPrice(resultSet.getInt("price"));
+					            product.setDescription(resultSet.getString("description"));
+					            product.setCount(resultSet.getInt("count"));
+					            product.setRating(resultSet.getInt("rating"));
+					            product.setCategory_id(resultSet.getInt("category_id"));
+					            product.setSeller_id(resultSet.getInt("seller_id"));
+					            product.setSeller_name(resultSet.getString("seller_name"));
+					            product.setCategory_name(resultSet.getString("category_name"));
+					            product.setImage(resultSet.getString("image_name"));
+					        }
+							return product; // return that list
+						}
 			
 			
 			public Product getFullDataBySellerId(int id) throws SQLException{

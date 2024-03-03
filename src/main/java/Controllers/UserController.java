@@ -493,6 +493,12 @@ public class UserController extends HttpServlet {
 		String category_id = request.getParameter("category_id");
 		String error = request.getParameter("error");
 		String success = request.getParameter("success");
+		
+		int whistlist_count = 0;
+		if(user_id != null) {
+			whistlist_count = whistlistDAO.getCountByCustomerID(Integer.parseInt(user_id)); // get the whistlist count
+		}
+		
 		if(category_id.equals("all")) {
 			response.sendRedirect(request.getContextPath() + "/UserController?page=main");
 			return;
@@ -522,6 +528,7 @@ public class UserController extends HttpServlet {
 	        request.setAttribute("currentPage", page_number);
 			request.setAttribute("categories", categoires);
 			request.setAttribute("category_id", category_id);
+			request.setAttribute("whistlist_count", whistlist_count);
 			request.setAttribute("carts", carts);
 			if(error != null) request.setAttribute("error", error);
 			if(success != null) request.setAttribute("success", success);
@@ -540,6 +547,9 @@ public class UserController extends HttpServlet {
 		
 		System.out.println(searchTerm);
 		System.out.println(customer_id);
+		for(Product product : products) {
+			System.out.println(product.getName());
+		}
 		
 		// Convert data to JSON
 	    ObjectMapper mapper = new ObjectMapper();

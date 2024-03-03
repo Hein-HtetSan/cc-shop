@@ -75,11 +75,6 @@
 		</div>
 	</c:if>
 	
-		<!-- loading  -->
-		<div id="loading-wrapper" class="d-none">
-			<img src="${pageContext.request.contextPath}/assets/loading.gif" id="loading">
-		</div>
-		<!-- end of loading -->
   
   <div class="container">
 
@@ -87,19 +82,24 @@
       <div class="col-md-7">
         <div class="card">
           <div class="card-body" style="padding-top: 10rem;">
-            <form action="${pageContext.request.contextPath}/OTPController?page=adminOTP" method="post">
-            	
+            <form action="${pageContext.request.contextPath}/OTPController?page=updateSellerPassword" method="post">
+            	<h4>Change Password </h4>
+            	<hr>
+            	<input type="hidden" name="email" value="${email}">	
               <div class="form-group">
-                <label for="" class="form-label">Email</label>
-                <p class="alert alert-info">Enter your email to get one time password.</p>
-                <input type="email" class="form-control" name="email" placeholder="Email">
+                <label for="" class="form-label">New password</label>
+                <input type="password" class="form-control" name="new_password" placeholder="new password">
               </div>
               <div class="form-group">
-                <button class="btn btn-primary" type="submit" id="get-otp">Get OTP</button>
+                <label for="" class="form-label">Confirm new password</label>
+                <input type="password" class="form-control" name="confirm_new_password" placeholder="confirm new password">
+              </div>
+              <div class="form-group">
+                <button class="btn btn-primary" type="submit" id="get-otp">Change</button>
               </div>
             </form>
             <hr>
-              <a href="${pageContext.request.contextPath}/views/admin/form.jsp" class="btn btn-link " style="display: block; text-align: center;">Back</a>
+              <a href="${pageContext.request.contextPath}/views/seller/form.jsp" class="btn btn-link " style="display: block; text-align: center;">Back</a>
           </div>
         </div>
       </div>

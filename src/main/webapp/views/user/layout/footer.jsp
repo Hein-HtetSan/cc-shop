@@ -127,13 +127,10 @@ $(document).ready(function() {
                                     <h3 class="product-name">\${product.name}</h3>
                                     <h4 class="product-price">\${product.price} MMKs</h4>
                                     <div class="product-btns">
-                                        <button class="add-to-wishlist">
-                                        <a class="" href="${pageContext.request.contextPath}/WhistlistController?action=addToWhistList&product_id=\${product.id}&user_id=\${customer.id}"> 
-                                        	<i class="fa fa-heart-o"></i><span class="tooltipp">add to wishlist</span>
-                                        </a>
-                                        </button>
                                         <!-- You can set the href attribute dynamically -->
-                                        <button class="quick-view"><a class="" href="${pageContext.request.contextPath}/UserController?page=productDetail&product_id=\${product.id}"><i class="fa fa-eye"></i><span class="tooltipp">quick view</span></a></button>
+                                        <button class="quick-view"><a class="" href="${pageContext.request.contextPath}/UserController?page=productDetail&product_id=\${product.id}"><i class="fa fa-eye"></i>
+                                        <span class="tooltipp">quick view</span></a>
+                                        </button>
                                     </div>
                                 </div>
                                 <div class="add-to-cart">

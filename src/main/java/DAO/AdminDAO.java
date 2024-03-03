@@ -111,6 +111,23 @@ public class AdminDAO {
 		return admin;
 	}
 	
+	// get by name
+		public Admin getByEmail(String email) throws SQLException {
+			Admin admin = new Admin();
+			String query = "SELECT * FROM admin WHERE email = ?" ;
+			stmt = con.prepareStatement(query);
+			stmt.setString(1, email);
+			resultset = stmt.executeQuery();
+			if(resultset.next()) {
+				admin.setId(resultset.getInt("id"));
+				admin.setName(resultset.getString("name"));
+				admin.setEmail(resultset.getString("email"));
+				admin.setPhone(resultset.getString("phone"));
+				admin.setImage(resultset.getString("image"));
+			}
+			return admin;
+		}
+	
 	// create admin
 	public boolean create(Admin admin) throws SQLException {
 		boolean flag = false;
@@ -136,7 +153,6 @@ public class AdminDAO {
 		resultset = stmt.executeQuery();
 		while(resultset.next()) {
 			admin = new Admin();
-			admin.setEmail(resultset.getString("email"));
 			admin.setId(resultset.getInt("id"));
 			admin.setName(resultset.getString("name"));
 			admin.setEmail(resultset.getString("email"));

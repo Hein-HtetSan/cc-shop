@@ -7,9 +7,7 @@
 <%@ page import="DAO.WhistlistDAO" %>
 
 
-<%@ include file="/views/user/layout/header.jsp" %>
-
-<%@ include file="/views/user/layout/navbar.jsp" %>
+<%@ include file="/views/user/layout/withoutSearchBar.jsp" %>
 
 
 <style>
@@ -44,6 +42,25 @@
 						</div>
 					</c:if>
 				<!-- alert -->
+				
+				<!-- BREADCRUMB -->
+		<div id="breadcrumb" class="section">
+			<!-- container -->
+			<div class="container">
+				<!-- row -->
+				<div class="row">
+					<div class="col-md-12">
+						<ul class="breadcrumb-tree">
+							<li><a href="${pageContext.request.contextPath}/UserController?page=main">Back</a></li>
+							<li class="active">Wishlist</li>
+						</ul>
+					</div>
+				</div>
+				<!-- /row -->
+			</div>
+			<!-- /container -->
+		</div>
+		<!-- /BREADCRUMB -->
 			
 				<!-- row -->
 				<div class="row">
@@ -73,32 +90,8 @@
 				
 				
 					<c:if test="${products.size() == 0}">
-						<h3>No product avilable!</h3>
+						<h3>No wishlist product!</h3>
 					</c:if>
-				
-					<!-- store bottom filter -->
-						<div class="store-filter clearfix">
-							<span class="store-qty">Showing ${products.size()} Products</span>
-							<ul class="store-pagination">
-								<c:if test="${currentPage != 1}">
-									<li><a href="${pageContext.request.contextPath}/UserController?page=main&page_number=${currentPage - 1}"><i class="fa fa-angle-left"></i></a></li>
-								</c:if>
-								<c:forEach begin="1" end="${noOfPages}" var="i"> 
-									<c:choose> 
-								       <c:when test="${currentPage eq i}"> 
-								       		<li class="active" ><a style="color: white !important;" class="text-light" href="${pageContext.request.contextPath}/UserController?page=main&page_number=${i}">${i}</a></li>
-								       </c:when>
-								       <c:otherwise> 
-								       		<li class=""><a href="${pageContext.request.contextPath}/UserController?page=main&page_number=${i}">${i}</a></li>
-								       </c:otherwise>
-								    </c:choose>
-								</c:forEach>
-								<c:if test="${currentPage lt noOfPages}">
-									<li><a href="${pageContext.request.contextPath}/UserController?page=main&page_number=${currentPage + 1}"><i class="fa fa-angle-right"></i></a></li>
-								</c:if>
-							</ul>
-						</div>
-						<!-- /store bottom filter -->
 
 					<!-- Products tab & slick -->
 					<div class="col-md-12">
@@ -118,7 +111,7 @@
 												<h4 class="product-price">${product.price}MMKs</h4>
 												<div class="product-btns">
 													
-													<c:set var="product_id" value="${product.id}" />
+												<c:set var="product_id" value="${product.id}" />
 												<c:set var="customer_id" value="${customer.id}" />
 												
 												<%
@@ -128,25 +121,17 @@
 												
 												<% if (whist_id != 0) { %>
 												    <button class="add-to-wishlist">
-												        <a id="remove-from-wishlist-btn" class="" href="${pageContext.request.contextPath}/WhistlistController?action=removeFromWhistList&product_id=${product.id}&category_id=${param.category_id}&user_id=${customer.id}&wish_id=<%= whist_id %>&where=category">
+												        <a id="remove-from-wishlist-btn" class="" href="${pageContext.request.contextPath}/WhistlistController?action=removeFromWhistList&product_id=${product.id}&user_id=${customer.id}&wish_id=<%= whist_id %>&where=wishlist">
 												            <i class="fa fa-heart text-danger"></i><span class="tooltipp">Remove</span>
 												        </a>
 												    </button>
-												<% } else { %>
-												    <button class="add-to-wishlist">
-												        <a id="add-to-wishlist-btn" class="" href="${pageContext.request.contextPath}/WhistlistController?action=addToWhistList&product_id=${product.id}&category_id=${param.category_id}&user_id=${customer.id}&where=category">
-												            <i class="fa-regular fa-heart"></i><span class="tooltipp">Add to wishlist</span>
-												        </a>
-												    </button>
 												<% } %>
-
-													
-													
+												
 													<button class="quick-view"><a class="" href="${pageContext.request.contextPath}/UserController?page=productDetail&product_id=${product.id}"><i class="fa fa-eye"></i><span class="tooltipp">quick view</span></a></button>
 												</div>
 											</div>
 											<div class="add-to-cart">
-												<a href="${pageContext.request.contextPath}/CartController?action=addToCart&user_id=${customer.id}&product_id=${product.id}&category_id=${category_id}">
+												<a href="${pageContext.request.contextPath}/CartController?action=addToCart&user_id=${customer.id}&product_id=${product.id}">
 													<button class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i> add to cart</button>			
 												</a>
 											</div>

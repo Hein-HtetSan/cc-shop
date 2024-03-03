@@ -108,7 +108,7 @@
 
 								<!-- Wishlist -->
 								<div>
-									<a href="#">
+									<a href="${pageContext.request.contextPath}/WhistlistController?action=wishlistPage&user_id=${customer.id}">
 										<i class="fa fa-heart-o"></i>
 										<span>Your Wishlist</span>
 										<div class="qty">${whistlist_count}</div>

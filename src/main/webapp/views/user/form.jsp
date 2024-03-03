@@ -46,9 +46,15 @@
 </style>
 <body>
 
-	<c:if test="${!empty error}">
+	<c:if test="${not empty error}">
     <div class="alert alert-danger d-flex justify-content-between"  role="error" id="errorAlert">
   		${error}
+	</div>
+	</c:if>
+	
+	<c:if test="${not empty success}">
+    <div class="alert alert-success d-flex justify-content-between"  role="error" id="errorAlert">
+  		${success}
 	</div>
 	</c:if>
   
@@ -79,7 +85,7 @@
             </form>
             <hr>
             <a href="${pageContext.request.contextPath}/RegisterController?page=userRegisterPage" class="btn btn-link " style="display: block; text-align: center;">Register here, if don't have an account!</a>
-              <a href="" class="btn btn-link btn-primary" style="display: block; text-align: center;">Forgot Password?</a>
+              <a href="${pageContext.request.contextPath}/views/user/profile/forgotPassword.jsp" class="btn btn-link btn-primary" style="display: block; text-align: center;">Forgot Password?</a>
               <a href="${pageContext.request.contextPath}/views/index.jsp" class="btn btn-link " style="display: block; text-align: center;">Back</a>
           </div>
         </div>
