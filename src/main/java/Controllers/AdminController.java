@@ -58,6 +58,7 @@ public class AdminController extends HttpServlet {
         HttpSession session = request.getSession();
         // Retrieve the object from the session
         Admin admin = (Admin) session.getAttribute("admin");
+
     	
         if(admin != null) {
         	
@@ -353,7 +354,8 @@ public class AdminController extends HttpServlet {
         		}
         	}
         }else {
-        	response.sendRedirect("views/admin/form.jsp");
+            dispatcher = request.getRequestDispatcher("/views/admin/index.jsp");
+            dispatcher.forward(request, response);
         }
     }
     

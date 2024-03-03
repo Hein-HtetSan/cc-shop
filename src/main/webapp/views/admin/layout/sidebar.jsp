@@ -27,7 +27,7 @@
 					</div>
 					<ul class="nav">
 						<li class="nav-item ${param.page == 'dashboard' ? 'active' : ''}">
-							<a href="${pageContext.request.contextPath}/AdminController?page=dashboard&filter_value=today">
+							<a href="${pageContext.request.contextPath}/AdminController?page=dashboard&filter_value=all">
 								<i class="la la-dashboard"></i>
 								<p>Dashboard</p>
 							</a>

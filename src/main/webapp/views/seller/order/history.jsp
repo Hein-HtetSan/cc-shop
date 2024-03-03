@@ -87,7 +87,7 @@
 					  <tbody>
 					    <c:forEach items="${orders}" var="order">
 					    	<tr>
-						      <td><a href="${pageContext.request.contextPath}/OrderController?page=detailOfHistory&seller_id=${seller.id}&order_code=${order.order_code}" class="btn btn-link fw-bold">${order.order_code}</a></td>
+						      <td><a href="${pageContext.request.contextPath}/OrderController?page=detailOfHistory&seller_id=${seller.id}&order_code=${order.order_code}&status=${order.status}" class="btn btn-link fw-bold">${order.order_code}</a></td>
 						      <td>${order.customer_name}</td>
 						      <td class="fw-bold text-danger" >${order.product_name}</td>
 						      <td class="">${order.price} MMKs</td>
@@ -96,7 +96,8 @@
 						      <td>${order.updated_at}</td>
 						      <td class="text-warning">
 						      <c:choose>
-						      	<c:when test="${order.status==1}"><span class="text-success fw-bold">Complete</span></c:when>
+						      	<c:when test="${order.status==1}"><span class="text-primary fw-bold">At Headquarter</span></c:when>
+						      	<c:when test="${order.status==2}"><span class="text-success fw-bold">On the way</span></c:when>
 						      </c:choose>
 						      </td>
 						    </tr>

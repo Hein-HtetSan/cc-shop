@@ -223,7 +223,7 @@ public class OrderController extends HttpServlet {
 		String seller_id = request.getParameter("seller_id");
 		String order_code = request.getParameter("order_code");
 		
-		List<Orders> orders = orderDAO.getByOrderCodeWithComplete(order_code, Integer.parseInt(seller_id)); // get the order code by seller id where the status 0
+		List<Orders> orders = orderDAO.getByOrderCodeWithComplete(order_code, Integer.parseInt(seller_id)); // get the order code by seller id where the status 
 		
 		System.out.println(orders);
 		// Get the first order in the list
@@ -314,7 +314,7 @@ public class OrderController extends HttpServlet {
 					+ "<p style='display: block;'>Date: " + currentDate.toString()  + "</p>"
 					+ "<b style='display: block;'>Product : " + order.getProduct_name() + "</b>"
 					+ "<b style='display: block;'>Count : " + order.getCount() + "</b>"
-					+ "<b style='display: block;'>Price : " + order.getPrice() + "</b>"
+					+ "<b style='display: block;'>Price : " + order.getPrice() + " MMKs</b>"
 					+ "<p>Notification: your package is successfully transfer to headquarter. The package will be arrived to you soon. "
 					+ "The headquarter is packaging the order and send to you soon.</p>";
 			Config.mail.sendEmail(customerDAO.getEamilByID(order.getCustomer_id()), "Your package is transfer to Headquarter", html);

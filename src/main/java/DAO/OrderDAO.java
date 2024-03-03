@@ -1,6 +1,8 @@
 package DAO;
 
 import java.sql.*;
+import java.time.LocalDate;
+
 import Models.*;
 
 import java.util.*;
@@ -631,6 +633,38 @@ public class OrderDAO {
 					return orders;
 				}
 		
+				public List<Orders> getForChartPastWeek(int seller_id) {
+				    List<Orders> orders = new ArrayList<>();
+				    // Get the date for one week ago
+				    LocalDate oneWeekAgo = LocalDate.now().minusWeeks(1);
+				    // Format the date to fit in the SQL query
+				    String formattedDate = oneWeekAgo.toString();
+
+				    String query = "SELECT orders.updated_at as updated_at, COUNT(*) AS order_count " +
+				                   "FROM orders " +
+				                   "LEFT JOIN products ON products.id = orders.product_id " +
+				                   "WHERE products.seller_id = " + seller_id + 
+				                   " AND orders.updated_at >= '" + formattedDate + "' " +
+				                   "GROUP BY orders.updated_at " +
+				                   "ORDER BY orders.updated_at;";
+				    try {
+				        stmt = con.createStatement();
+				        rs = stmt.executeQuery(query);
+				        while(rs.next()) {
+				            Orders order = new Orders();
+				            // Assuming you have setters in your Orders class for the following properties
+				            order.setUpdated_at(rs.getString("updated_at"));
+				            order.setCount(rs.getInt("order_count"));
+				            orders.add(order);
+				        }
+				    } catch (SQLException e) {
+				        e.printStackTrace();
+				    }
+				    return orders;
+				}
+
+				
+		
 		// get order with status 1
 		public List<Orders> getBySellerWithPaginationWithComplete(int seller_id, int offset, int noOfRecords){
 			List<Orders> orders = new ArrayList<Orders>();
@@ -639,7 +673,7 @@ public class OrderDAO {
 					+ "LEFT JOIN products ON orders.product_id = products.id "
 					+ "LEFT JOIN addresses ON orders.shipping_id = addresses.id "
 					+ "LEFT JOIN customers ON customers.id = orders.customer_id "
-					+ "WHERE orders.status = 1 AND products.seller_id = " + seller_id  + " ORDER BY updated_at DESC limit "+ offset + ", " + noOfRecords;
+					+ "WHERE orders.status IN (1,2,-1,-2) AND products.seller_id = " + seller_id  + " ORDER BY updated_at DESC limit "+ offset + ", " + noOfRecords;
 			try {
 				stmt = con.createStatement();
 				rs = stmt.executeQuery(query);
@@ -657,7 +691,6 @@ public class OrderDAO {
 					order.setProduct_name(rs.getString("product_name"));
 					order.setUpdated_at(rs.getString("updated_at"));
 					orders.add(order);
-					
 				}
 				rs.close();
 				rs = stmt.executeQuery("SELECT FOUND_ROWS()");
