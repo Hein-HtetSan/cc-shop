@@ -2,12 +2,15 @@
     pageEncoding="ISO-8859-1"%>
 
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-
+<%@ page import="java.util.*" %>
+<%@ page import="Models.Whistlist" %>
+<%@ page import="DAO.WhistlistDAO" %>
 
 
 <%@ include file="/views/user/layout/withoutSearchBar.jsp" %>
 
 <%@ include file="/views/user/layout/navbar.jsp" %>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
 
 		<!-- BREADCRUMB -->
@@ -106,18 +109,31 @@
 										<span class="qty-down">-</span>
 									</div>
 								</div>
-								
-								
+											
 									<button class="add-to-cart-btn main-add-to-cart-btn">
 									<i class="fa fa-shopping-cart"></i> add to cart
 									</button>
-								
-								
 							</div>
 
-							<ul class="product-btns">
-								<li><a href="#"><i class="fa fa-heart-o"></i> add to wishlist</a></li>
-							</ul>
+												<c:set var="product_id" value="${product.id}" />
+												<c:set var="customer_id" value="${customer.id}" />
+												
+												<%
+												    WhistlistDAO whistlistDAO = new WhistlistDAO();
+												    int whist_id = whistlistDAO.get_by_customer_id_and_product_id((int) pageContext.getAttribute("product_id"), (int) pageContext.getAttribute("customer_id"));
+												%>
+												
+												<% if (whist_id != 0) { %>
+												<ul class="product-btns">
+													<li><a href="${pageContext.request.contextPath}/WhistlistController?action=removeFromWhistList&product_id=${product.id}&user_id=${customer.id}&wish_id=<%= whist_id %>&where=detail"><i class="fas fa-heart text-danger"></i> 
+													remove from wishlist</a></li>
+												</ul>
+												<% } else { %>
+												<ul class="product-btns">
+													<li><a href="${pageContext.request.contextPath}/WhistlistController?action=addToWhistList&product_id=${product.id}&user_id=${customer.id}&where=detail"><i class="fa-regular fa-heart"></i> add to wishlist</a></li>
+												</ul>
+												<% } %>
+
 
 							<ul class="product-links">
 								<li>Category:</li>
@@ -126,10 +142,10 @@
 
 							<ul class="product-links">
 								<li>Share:</li>
-								<li><a href="#"><i class="fa fa-facebook"></i></a></li>
-								<li><a href="#"><i class="fa fa-twitter"></i></a></li>
-								<li><a href="#"><i class="fa fa-google-plus"></i></a></li>
-								<li><a href="#"><i class="fa fa-envelope"></i></a></li>
+								<li><a href="#"><i class="fab fa-facebook"></i></a></li>
+								<li><a href="#"><i class="fab fa-twitter"></i></a></li>
+								<li><a href="#"><i class="fab fa-google-plus"></i></a></li>
+								<li><a href="#"><i class="fas fa-envelope"></i></a></li>
 							</ul>
 
 						</div>
@@ -199,7 +215,28 @@
 								<h4 class="product-price">${product.price} MMKs</h4>
 
 								<div class="product-btns">
-									<button class="add-to-wishlist"><i class="fa fa-heart-o"></i><span class="tooltipp">add to wishlist</span></button>
+									
+									<c:set var="product_id" value="${product.id}" />
+									<c:set var="customer_id" value="${customer.id}" />
+												
+												<%
+												    int id = whistlistDAO.get_by_customer_id_and_product_id((int) pageContext.getAttribute("product_id"), (int) pageContext.getAttribute("customer_id"));
+												%>
+												
+												<% if (id != 0) { %>
+												    <button class="add-to-wishlist">
+												        <a id="remove-from-wishlist-btn" class="" href="${pageContext.request.contextPath}/WhistlistController?action=removeFromWhistList&product_id=${product.id}&user_id=${customer.id}&wish_id=<%= whist_id %>&where=detail">
+												            <i class="fa fa-heart text-danger"></i><span class="tooltipp">Remove</span>
+												        </a>
+												    </button>
+												<% } else { %>
+												    <button class="add-to-wishlist">
+												        <a id="add-to-wishlist-btn" class="" href="${pageContext.request.contextPath}/WhistlistController?action=addToWhistList&product_id=${product.id}&user_id=${customer.id}&where=detail">
+												            <i class="fa-regular fa-heart"></i><span class="tooltipp">Add to wishlist</span>
+												        </a>
+												    </button>
+												<% } %>
+									
 									<button class="quick-view"><a class="" href="${pageContext.request.contextPath}/UserController?page=productDetail&product_id=${product.id}"><i class="fa fa-eye"></i><span class="tooltipp">quick view</span></a></button>
 								</div>
 							</div>

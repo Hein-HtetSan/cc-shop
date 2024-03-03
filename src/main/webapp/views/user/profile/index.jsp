@@ -107,7 +107,7 @@
 							</div>
 							<hr>
 							<a href="${pageContext.request.contextPath}/UserController?page=changePassword&user_id=${user.id}" style="display: block; text-align:center; margin-bottom: .9rem;">Change Password</a>
-							<a href="" style="display: block; text-align:center;">Forget Password?</a>
+							<a href="${pageContext.request.contextPath}/views/user/profile/forgotPassword.jsp" style="display: block; text-align:center;">Forget Password?</a>
 						</div>
 					</div>
 					<!-- /user profile -->

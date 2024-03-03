@@ -36,8 +36,8 @@ public class WhistlistDAO {
 	}
 	
 	// get by customer id and product_id
-	public boolean get_by_customer_id_and_product_id(int product_id, int customer_id) {
-		boolean flag = false;
+	public int get_by_customer_id_and_product_id(int product_id, int customer_id) {
+		int flag = 0;
 		String query = "SELECT * FROM whistlists WHERE product_id = ? AND customer_id = ?";
 		try {
 			pst = con.prepareStatement(query);
@@ -45,7 +45,7 @@ public class WhistlistDAO {
 			pst.setInt(2, customer_id);
 			rs = pst.executeQuery();
 			if(rs.next()) {
-				flag = true;
+				flag = rs.getInt("id");
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -71,14 +71,48 @@ public class WhistlistDAO {
 		return count;
 	}
 	
-	// get by customer id
+	// delete wishlist
+	public boolean remove(int wish_id) {
+		boolean flag = false;
+		String query = "DELETE FROM whistlists WHERE id =" + wish_id;
+		try {
+			stmt = con.createStatement();
+			int deleted = stmt.executeUpdate(query);
+			if(deleted > 0) flag = true;
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return flag;
+	}
+	
+	// get product id by customer id
+	public List<Integer> getProductIDByUserID(int user_id){
+		List<Integer> list = new ArrayList<Integer>();
+		String query = "SELECT * from whistlists WHERE customer_id = " + user_id;
+		try {
+			stmt = con.createStatement();
+			rs = stmt.executeQuery(query);
+			while(rs.next()) {
+				list.add(rs.getInt("product_id"));
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}	
+		return list;
+	}
+	
+	// get wishlist product by customer id
 	public List<Product> getByCustomerID(int customer_id) {
 		List<Product> products = new ArrayList<Product>();
 		String query = "SELECT products.*, categories.name AS category_name, MIN(images.name) AS image_name, sellers.name AS seller_name FROM products "
 	             + "LEFT JOIN categories ON products.category_id = categories.id "
 	             + "LEFT JOIN sellers ON products.seller_id = sellers.id "
-	             + "LEFT JOIN whistlists ON products.id = whistlists.product_id AND whistlists.customer_id = " + customer_id + " "
-	             + "LEFT JOIN images ON images.product_id = products.id GROUP BY products.id";
+	             + "LEFT JOIN images ON images.product_id = products.id "
+	             + "WHERE EXISTS (SELECT 1 FROM whistlists WHERE whistlists.product_id = products.id AND whistlists.customer_id = " + customer_id + ") "
+	             + "GROUP BY products.id";
 
 		try {
 			stmt = con.createStatement();
@@ -96,6 +130,8 @@ public class WhistlistDAO {
 		            product.setSeller_name(rs.getString("seller_name"));
 		            product.setCategory_name(rs.getString("category_name"));
 		            product.setImage(rs.getString("image_name"));
+		            
+		         products.add(product);
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -103,5 +139,7 @@ public class WhistlistDAO {
 		}
 		return products;
 	}
+	
+	
 	
 }

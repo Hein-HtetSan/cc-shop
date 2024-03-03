@@ -30,10 +30,33 @@
     	color: #fff;
     	margin-bottom: .6rem !important;
     }
+    #loading-wrapper{
+			position: absolute;
+			top: 0;
+			right: 0;
+			width: 100%;
+			height: 100vh;
+			 /* Adjust the alpha value (0.5 in this case) to control transparency */
+			z-index: 100;
+			display: flex;
+			overflow: hidden;
+			align-items: center;
+			justify-content: center;
+		}
+		#loading{
+			border: none;
+			box-shadow: 1px 1px 5px #ccc;
+			border-radius: 10px;
+			z-index: 100;
+			width: 60px;
+		}
+		.d-none{
+			display: none !important;
+		}
   </style>
   
   
-  
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
   <!-- SECTION NEW elect-->
 		<div class="section search-section">
 			<!-- container -->
@@ -73,6 +96,12 @@
 						</div>
 					</c:if>
 				<!-- alert -->
+				
+				<!-- loading  -->
+		<div id="loading-wrapper" class="d-none">
+			<img src="${pageContext.request.contextPath}/assets/loading.gif" id="loading">
+		</div>
+		<!-- end of loading -->
 			
 				<!-- row -->
 				<div class="row">
@@ -84,7 +113,7 @@
 							</div>
 							<div class="shop-body">
 								<h3>Electronic<br>Collection</h3>
-								<a href="#" class="cta-btn">Shop now <i class="fa fa-arrow-circle-right"></i></a>
+								<a href="${pageContext.request.contextPath}/UserController?page=fetchByCategory&category_id=24&user_id=${customer.id}" class="cta-btn">Shop now <i class="fa fa-arrow-circle-right"></i></a>
 							</div>
 						</div>
 					</div>
@@ -98,7 +127,7 @@
 							</div>
 							<div class="shop-body">
 								<h3>Cosmetics<br>Collection</h3>
-								<a href="#" class="cta-btn">Shop now <i class="fa fa-arrow-circle-right"></i></a>
+								<a href="${pageContext.request.contextPath}/UserController?page=fetchByCategory&category_id=2&user_id=${customer.id}" class="cta-btn">Shop now <i class="fa fa-arrow-circle-right"></i></a>
 							</div>
 						</div>
 					</div>
@@ -112,7 +141,7 @@
 							</div>
 							<div class="shop-body">
 								<h3>Fashion<br>Collection</h3>
-								<a href="#" class="cta-btn">Shop now <i class="fa fa-arrow-circle-right"></i></a>
+								<a href="${pageContext.request.contextPath}/UserController?page=fetchByCategory&category_id=31&user_id=${customer.id}" class="cta-btn">Shop now <i class="fa fa-arrow-circle-right"></i></a>
 							</div>
 						</div>
 					</div>
@@ -180,31 +209,36 @@
 												<h3 class="product-name"><a href="#">${product.name}</a></h3>
 												<h4 class="product-price">${product.price}MMKs</h4>
 												<div class="product-btns" style="margin-top: 10px !important;">
-												<!-- check the wishlist table -->
-							                    <c:set var="is_whistlist_exsit" value="${whistlistDAO.get_by_customer_id_and_product_id(product.id, customer.id)}"/>
-							                    
-							                    <c:choose>
-							                        <c:when test="${is_whistlist_exsit}">
-							                            <button class="add-to-wishlist">
-							                                <a class="" href="${pageContext.request.contextPath}/WhistlistController?action=removeFromWhistList&product_id=${product.id}&user_id=${customer.id}">
-							                                    <i class="fa fa-heart"></i><span class="tooltipp">Remove from wishlist </span>
-							                                </a>
-							                            </button>
-							                        </c:when>
-							                        <c:otherwise>
-							                            <button class="add-to-wishlist">
-							                                <a class="" href="${pageContext.request.contextPath}/WhistlistController?action=addToWhistList&product_id=${product.id}&user_id=${customer.id}">
-							                                    <i class="fa fa-heart-o"></i><span class="tooltipp">add to wishlist</span>
-							                                </a>
-							                            </button>
-							                        </c:otherwise>
-							                    </c:choose>
-													<button class="quick-view"><a class="" href="${pageContext.request.contextPath}/UserController?page=productDetail&product_id=${product.id}"><i class="fa fa-eye"></i><span class="tooltipp">quick view</span></a></button>
+												<c:set var="product_id" value="${product.id}" />
+												<c:set var="customer_id" value="${customer.id}" />
+												
+												<%
+												    WhistlistDAO whistlistDAO = new WhistlistDAO();
+												    int whist_id = whistlistDAO.get_by_customer_id_and_product_id((int) pageContext.getAttribute("product_id"), (int) pageContext.getAttribute("customer_id"));
+												%>
+												
+												<% if (whist_id != 0) { %>
+												    <button class="add-to-wishlist">
+												        <a id="remove-from-wishlist-btn" class="" href="${pageContext.request.contextPath}/WhistlistController?action=removeFromWhistList&product_id=${product.id}&user_id=${customer.id}&wish_id=<%= whist_id %>">
+												            <i class="fa fa-heart text-danger"></i><span class="tooltipp">Remove</span>
+												        </a>
+												    </button>
+												<% } else { %>
+												    <button class="add-to-wishlist">
+												        <a id="add-to-wishlist-btn" class="" href="${pageContext.request.contextPath}/WhistlistController?action=addToWhistList&product_id=${product.id}&user_id=${customer.id}">
+												            <i class="fa-regular fa-heart"></i><span class="tooltipp">Add to wishlist</span>
+												        </a>
+												    </button>
+												<% } %>
+
+
+
+													<button class="quick-view"><a id="quick-view-btn" class="" href="${pageContext.request.contextPath}/UserController?page=productDetail&product_id=${product.id}"><i class="fa fa-eye"></i><span class="tooltipp">quick view</span></a></button>
 												</div>
 											</div>
 											<div class="add-to-cart">
 												<c:if test="${product.count > 0 }">
-													<a href="${pageContext.request.contextPath}/CartController?action=addToCart&user_id=${customer.id}&product_id=${product.id}">
+													<a id="add-to-cart-btn" href="${pageContext.request.contextPath}/CartController?action=addToCart&user_id=${customer.id}&product_id=${product.id}">
 														<button  class="add-to-cart-btn">
 															<i class="fa fa-shopping-cart"></i> add to cart
 														</button>
@@ -233,10 +267,18 @@
 		
 		<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 		<script>
+		
 		    // Wait for the document to be ready
 		    $(document).ready(function() {
 		        // Find the error alert element
 		        var $errorAlert = $('#errorAlert');
+		        
+		        $("#add-to-cart-btn, #add-to-wishlist-btn, #remove-from-wishlist-btn, #quick-view-btn").click(function(event) {
+		            console.log("clicked");
+		            $("#loading-wrapper").removeClass("d-none");
+		        });
+		        
+		        
 		        
 		        // If the alert element exists
 		        if ($errorAlert.length) {
