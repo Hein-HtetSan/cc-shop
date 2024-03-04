@@ -185,6 +185,14 @@ public class SellerController extends HttpServlet {
 			case "fetchForChart":
 				fetchForChart(request, response);
 				break;
+				
+			case "history":
+				historyFilter(request, response);
+				break;
+				
+			case "orderFilter":
+				orderFilter(request, response);
+				break;
 			
 			}
 		}
@@ -296,6 +304,8 @@ public class SellerController extends HttpServlet {
 		String success = request.getParameter("success");
     	String error = request.getParameter("error");
     	String seller_id = request.getParameter("seller_id");
+    	String filter = request.getParameter("filter");
+    	
     	int page_number = 1;
         int recordsPerPage = 10;
      // Get counts from utility method
@@ -303,9 +313,15 @@ public class SellerController extends HttpServlet {
         	page_number = Integer.parseInt(request.getParameter("page_number")); 
         }
 		try {
+			List<Orders> orders = null;
 			Seller seller = sellerDAO.getById(Integer.parseInt(seller_id));
-			List<Orders> orders = orderDAO.getBySellerWithPaginationWithComplete(Integer.parseInt(seller_id), (page_number-1)*recordsPerPage,
-                    recordsPerPage);
+			if(filter.equals("")) {
+				orders = orderDAO.getBySellerWithPaginationWithComplete(Integer.parseInt(seller_id), (page_number-1)*recordsPerPage,
+	                    recordsPerPage, "all");
+			}else {
+				orders = orderDAO.getBySellerWithPaginationWithComplete(Integer.parseInt(seller_id), (page_number-1)*recordsPerPage,
+	                    recordsPerPage, filter);
+			}
 			List<Orders> total_order = orderDAO.getBySeller(Integer.parseInt(seller_id));
 		       
 	        int noOfRecords = orderDAO.getNoOfRecords();
@@ -326,6 +342,20 @@ public class SellerController extends HttpServlet {
 			e.printStackTrace();
 		}
 	}
+	
+	// history page
+		private void historyFilter(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	    	String seller_id = request.getParameter("seller_id");
+	    	String filter = request.getParameter("filter");
+	        response.sendRedirect(request.getContextPath() + "/SellerController?page=history&seller_id="+seller_id+"&filter="+filter);
+		}
+		
+	// order filter
+		private void orderFilter(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	    	String seller_id = request.getParameter("seller_id");
+	    	String date = request.getParameter("date");
+	        response.sendRedirect(request.getContextPath() + "/SellerController?page=order&seller_id="+seller_id+"&date="+date);
+		}
 	
 	
 	// get all product with one image
@@ -548,6 +578,7 @@ public class SellerController extends HttpServlet {
     	String success = request.getParameter("success");
     	String error = request.getParameter("error");
     	String seller_id = request.getParameter("seller_id");
+    	String date = request.getParameter("date");
     	int page_number = 1;
         int recordsPerPage = 10;
      // Get counts from utility method
@@ -555,8 +586,9 @@ public class SellerController extends HttpServlet {
         	page_number = Integer.parseInt(request.getParameter("page_number")); 
         }
 		try {
+			List<Orders> orders  = null;
 			Seller seller = sellerDAO.getById(Integer.parseInt(seller_id));
-			List<Orders> orders = orderDAO.getBySellerWithPaginationWithPending(Integer.parseInt(seller_id), (page_number-1)*recordsPerPage,
+			orders = orderDAO.getBySellerWithPaginationWithPending(Integer.parseInt(seller_id), (page_number-1)*recordsPerPage,
                     recordsPerPage);
 			List<Orders> total_order = orderDAO.getBySeller(Integer.parseInt(seller_id));
 		       

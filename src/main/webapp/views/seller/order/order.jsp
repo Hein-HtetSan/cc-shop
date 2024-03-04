@@ -36,6 +36,9 @@
 		.d-none{
 			display: none !important;
 		}
+		select{
+		width: 200px !important;
+	}
 </style>
 
 	<div class="wrapper">
@@ -94,7 +97,17 @@
 						  </ul>
 						</nav>
 
-
+						<form class="d-flex align-items-center justify-content-center" action="${pageContext.request.contextPath}/SellerController?action=history" method="POST">
+							<input type="hidden" value="${seller.id}" name="seller_id">
+							<input type="hidden" value="orderFilter" name="action">
+							<select class="form-control" name="date">
+								<option value="all" <c:if test="${param.date == 'all'}">selected</c:if>>All</option>
+								<option value="today"  <c:if test="${param.date == 'today'}">selected</c:if>>today</option>
+								<option value="lastday"  <c:if test="${param.date == 'lastday'}">selected</c:if>>last day</option>
+							</select>
+							<button type="submit" class="btn btn-primary">Filter</button>
+						</form>
+						
 						<span class="fw-bold">Total Order: ${total_order}</span>
 
 				</div>

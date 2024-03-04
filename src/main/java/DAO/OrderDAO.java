@@ -442,14 +442,17 @@ public class OrderDAO {
 	        return noOfRecords;
 	    }
 		
-		public List<Orders> getBySellerWithPaginationWithPending(int seller_id, int offset, int noOfRecords){
+		public List<Orders> getBySellerWithPaginationWithPending(int seller_id, int offset, int noOfRecords, String date){
 			List<Orders> orders = new ArrayList<Orders>();
-			String query = "SELECT SQL_CALC_FOUND_ROWS orders.*,products.name as product_name, customers.name as customer_name "
-					+ "FROM orders "
-					+ "LEFT JOIN products ON orders.product_id = products.id "
-					+ "LEFT JOIN addresses ON orders.shipping_id = addresses.id "
-					+ "LEFT JOIN customers ON customers.id = orders.customer_id "
-					+ "WHERE orders.status = 0 AND products.seller_id = " + seller_id  + " ORDER BY updated_at DESC limit "+ offset + ", " + noOfRecords;
+			String query = null;
+			if(date.equals("all")) {
+				query = "SELECT SQL_CALC_FOUND_ROWS orders.*,products.name as product_name, customers.name as customer_name "
+						+ "FROM orders "
+						+ "LEFT JOIN products ON orders.product_id = products.id "
+						+ "LEFT JOIN addresses ON orders.shipping_id = addresses.id "
+						+ "LEFT JOIN customers ON customers.id = orders.customer_id "
+						+ "WHERE orders.status = 0 AND products.seller_id = " + seller_id  + " ORDER BY updated_at DESC limit "+ offset + ", " + noOfRecords;
+			}
 			try {
 				stmt = con.createStatement();
 				rs = stmt.executeQuery(query);
@@ -666,14 +669,26 @@ public class OrderDAO {
 				
 		
 		// get order with status 1
-		public List<Orders> getBySellerWithPaginationWithComplete(int seller_id, int offset, int noOfRecords){
+		public List<Orders> getBySellerWithPaginationWithComplete(int seller_id, int offset, int noOfRecords, String filter){
 			List<Orders> orders = new ArrayList<Orders>();
-			String query = "SELECT SQL_CALC_FOUND_ROWS orders.*,products.name as product_name, customers.name as customer_name "
-					+ "FROM orders "
-					+ "LEFT JOIN products ON orders.product_id = products.id "
-					+ "LEFT JOIN addresses ON orders.shipping_id = addresses.id "
-					+ "LEFT JOIN customers ON customers.id = orders.customer_id "
-					+ "WHERE orders.status IN (1,2,-1,-2) AND products.seller_id = " + seller_id  + " ORDER BY updated_at DESC limit "+ offset + ", " + noOfRecords;
+			String query = null;
+			if (filter.equals("all")) {
+		        query = "SELECT SQL_CALC_FOUND_ROWS orders.*, products.name as product_name, customers.name as customer_name " +
+		                "FROM orders " +
+		                "LEFT JOIN products ON orders.product_id = products.id " +
+		                "LEFT JOIN addresses ON orders.shipping_id = addresses.id " +
+		                "LEFT JOIN customers ON customers.id = orders.customer_id " +
+		                "WHERE orders.status IN (1, 2, -1, -2) AND products.seller_id = " + seller_id + 
+		                " ORDER BY updated_at DESC LIMIT " + offset + ", " + noOfRecords;
+		    } else {
+		        query = "SELECT SQL_CALC_FOUND_ROWS orders.*, products.name as product_name, customers.name as customer_name " +
+		                "FROM orders " +
+		                "LEFT JOIN products ON orders.product_id = products.id " +
+		                "LEFT JOIN addresses ON orders.shipping_id = addresses.id " +
+		                "LEFT JOIN customers ON customers.id = orders.customer_id " +
+		                "WHERE orders.status = "+Integer.parseInt(filter)+" AND products.seller_id = " + seller_id + 
+		                " ORDER BY updated_at DESC LIMIT " + offset + ", " + noOfRecords;
+		    }
 			try {
 				stmt = con.createStatement();
 				rs = stmt.executeQuery(query);

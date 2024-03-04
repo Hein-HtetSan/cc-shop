@@ -134,9 +134,10 @@
 	
 	<!-- Include Chart.js library from CDN -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <!-- ajax for chart and top selling -->
     <script>
 
-    
  // Define sellerID after the DOM has loaded
     document.addEventListener("DOMContentLoaded", function() {
         var sellerID = document.getElementById("seller_id").value;
@@ -147,6 +148,7 @@
         function fetchChartData() {
             const url = "http://localhost:9095/shop-dot-com/SellerController?action=fetchForChart";
             var ctx = document.getElementById('myLineChart').getContext('2d');
+            
             const dataToSend = {
                 seller_id: sellerID,
             };
@@ -168,9 +170,17 @@
                 	// Arrays to store dates and counts
                 	const datesArray = [];
                 	const countsArray = [];
+                	console.log(orders);
+                	const ordersArray = Object.entries(orders);
 
+                	// Sort the ordersArray by date (key)
+                	ordersArray.sort(([dateA], [dateB]) => {
+                	    // Compare the dates (keys)
+                	    return new Date(dateA) - new Date(dateB);
+                	});
+                	console.log(ordersArray);
                 	// Iterate over key-value pairs in dates_with_total_order
-                	Object.entries(orders).forEach(([date, count]) => {
+                	ordersArray.forEach(([date, count]) => {
                 	    datesArray.push(date);
                 	    countsArray.push(count);
                 	});
