@@ -192,7 +192,13 @@ public class PasswordController extends HttpServlet {
 			HttpSession session = request.getSession();
 			String seller_id = request.getParameter("seller_id");
 			
-			Admin fetch_seller = adminDAO.getById(Integer.parseInt(seller_id));
+			Seller fetch_seller = null;
+			try {
+				fetch_seller = sellerDAO.getById(Integer.parseInt(seller_id));
+			} catch (NumberFormatException | SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			String current_password = request.getParameter("current_password");
 			String new_password = request.getParameter("new_password");
 			String confirm_new_password = request.getParameter("confirm_new_password");

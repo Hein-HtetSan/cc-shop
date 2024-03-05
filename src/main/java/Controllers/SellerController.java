@@ -8,10 +8,13 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
+
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -26,11 +29,21 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.servlet.http.Part;
 
+
+import org.json.JSONObject;
+
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.mysql.cj.x.protobuf.MysqlxCrud.Order;
+import com.google.gson.JsonObject;
+
+
 import DAO.*;
 import Models.*;
 
 import java.util.*;
 
+@PostMapping
 @MultipartConfig
 @WebServlet("/SellerController")
 public class SellerController extends HttpServlet {
@@ -42,6 +55,8 @@ public class SellerController extends HttpServlet {
     ProductDAO productDAO = null;
     OrderDAO orderDAO = null;
     RequestDispatcher dispatcher = null;
+    
+    Seller seller = null;
 	
     public SellerController() throws ClassNotFoundException, SQLException {
         super();
@@ -59,25 +74,18 @@ public class SellerController extends HttpServlet {
     	String success = request.getParameter("success");
     	HttpSession session = request.getSession();
     	
-    	Seller seller = (Seller) session.getAttribute("seller");
-    	int seller_id  = seller.getId();
-
+    	seller = (Seller) session.getAttribute("seller");
+    	request.setAttribute("seller", seller);
     	
-    		request.setAttribute("seller", seller);
+    	if(seller == null) {
+    		response.sendRedirect(request.getContextPath() + "/views/seller/form.jsp");;
+    	}else {
     		if(page != null) {
     			switch(page) {
     			
     			// seller main page --> redirect
     			case "dashboard":
-					try {
-						Seller seller2 = sellerDAO.getById(seller_id);
-						request.setAttribute("seller", seller2);
-	    				dispatcher = request.getRequestDispatcher("/views/seller/dashboard.jsp");
-	    				dispatcher.forward(request, response);
-					} catch (SQLException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
+					dashboard(request, response);
     				break;
 
     			case "product":
@@ -110,7 +118,59 @@ public class SellerController extends HttpServlet {
     				break;
     			}
     		}
+    	}
     	
+    }
+    
+    // dashboard page
+    private void dashboard(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
+    	// get customer count by product id
+    	List<Orders> orders = productDAO.getOrderByProductAndSellerID(seller.getId());
+    	
+    	// get total price where status 2
+    	long total_sale = 0;
+    	for(Orders order : orders) {
+    		System.out.println("order exist");
+    		if(order.getStatus() == 2 || order.getStatus() == 3) {
+    			System.out.println("temp _toal : " + order.getCount() * order.getPrice());
+    			long temp_total = order.getCount() * order.getPrice();
+    			total_sale += temp_total;
+    		}
+    	}
+    	
+    	// get total orders
+    	long total_order = 0;
+    	for(Orders order : orders) {
+    		if(order.getStatus() >= 1 ) {
+    			total_order++;
+    		}
+    	}
+    	
+    	// get total product
+    	List<Product> products = new ArrayList<Product>();
+		try {
+			products = productDAO.getProductBySellerId(seller.getId());
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		// get total customer
+		List<Integer> users = new ArrayList<Integer>();
+		for(Orders order : orders) {
+			if(!users.contains(order.getCustomer_id())) {
+				users.add(order.getCustomer_id());
+			}
+		}
+		
+
+    	
+		request.setAttribute("total_user", users.size());
+    	request.setAttribute("total_product", products.size());
+    	request.setAttribute("total_order", total_order);
+    	request.setAttribute("total_sale", total_sale);
+		dispatcher = request.getRequestDispatcher("/views/seller/dashboard.jsp");
+		dispatcher.forward(request, response);
     }
     
     
@@ -123,9 +183,126 @@ public class SellerController extends HttpServlet {
 			case "updateProfile":
 				updateProfile(request, response);
 				break;
+				
+			case "fetchRealData":
+				fetchRealDataBySeller(request, response);
+				break;
+				
+			case "fetchForChart":
+				fetchForChart(request, response);
+				break;
+				
+			case "history":
+				historyFilter(request, response);
+				break;
+				
+			case "orderFilter":
+				orderFilter(request, response);
+				break;
 			
 			}
 		}
+	}
+	
+	private void fetchForChart(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	    // Read the JSON data from the request body
+	    BufferedReader reader = request.getReader();
+	    StringBuilder jsonBuilder = new StringBuilder();
+	    String line;
+	    while ((line = reader.readLine()) != null) {
+	        jsonBuilder.append(line);
+	    }
+	    reader.close();
+
+	    String jsonString = jsonBuilder.toString();
+	    Gson gson = new Gson();
+	    JsonObject jsonObject = gson.fromJson(jsonString, JsonObject.class);
+	    String sellerId = jsonObject.get("seller_id").getAsString();
+	    System.out.println("Seller ID for chart : " + sellerId);
+	    JsonObject responseObject = new JsonObject();
+	    
+	 // get the weekly data for chart
+	    List<Orders> orders = orderDAO.getForChartPastWeek(Integer.parseInt(sellerId));
+	    Map<String, Integer> dates_with_total_order = new HashMap<String, Integer>();
+
+	    for (Orders order : orders) {
+	        // Parse the updated_at timestamp into a LocalDate object
+	        String date = order.getUpdated_at().substring(0, 10); // Extract the date part only
+
+	        // If the date is already in the map, update the total count
+	        if (dates_with_total_order.containsKey(date)) {
+	            dates_with_total_order.put(date, dates_with_total_order.get(date) + order.getCount());
+	        } else { // If the date is not in the map, add it with the count
+	            dates_with_total_order.put(date, order.getCount());
+	        }
+	    }
+
+	    System.out.println("Size: " + dates_with_total_order.size());
+
+
+	 // Convert the map into a JsonObject
+	    JsonObject dataObject = new JsonObject();
+	    for (Map.Entry<String, Integer> entry : dates_with_total_order.entrySet()) {
+	        dataObject.addProperty(entry.getKey(), entry.getValue());
+	    }
+	    responseObject.add("data_array", dataObject);
+	    responseObject.addProperty("status", "success");
+	    responseObject.addProperty("seller_id", sellerId);
+	    responseObject.addProperty("message", "Data fetched successfully");
+	    response.setContentType("application/json");
+	    PrintWriter out = response.getWriter();
+	    out.print(responseObject.toString());
+	    out.flush();
+	}
+	
+	private void fetchRealDataBySeller(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	    // Read the JSON data from the request body
+	    BufferedReader reader = request.getReader();
+	    StringBuilder jsonBuilder = new StringBuilder();
+	    String line;
+	    while ((line = reader.readLine()) != null) {
+	        jsonBuilder.append(line);
+	    }
+	    reader.close();
+
+	    String jsonString = jsonBuilder.toString();
+
+	    // Parse the JSON string using Gson
+	    Gson gson = new Gson();
+	    JsonObject jsonObject = gson.fromJson(jsonString, JsonObject.class);
+
+	    // Extract the seller_id from the JsonObject
+	    String sellerId = jsonObject.get("seller_id").getAsString();
+	    System.out.println("Seller ID: " + sellerId);
+	    
+	 // get the top selling product
+	    Map<String, Integer> top_products = productDAO.getTopSellingProductNames(Integer.parseInt(sellerId));
+
+	    // Convert the map to a JSON array using Gson
+	    JsonArray topProductsArray = new JsonArray();
+	    for (Map.Entry<String, Integer> entry : top_products.entrySet()) {
+	        JsonObject productObject = new JsonObject();
+	        productObject.addProperty("product_name", entry.getKey());
+	        productObject.addProperty("price", entry.getValue());
+	        topProductsArray.add(productObject);
+	    }
+
+	    // Create a JSON object to hold the response data
+	    JsonObject responseObject = new JsonObject();
+
+	    // Add the JSON array to the response object with a custom key
+	    responseObject.add("top_products", topProductsArray);
+	    responseObject.addProperty("status", "success");
+	    responseObject.addProperty("seller_id", sellerId);
+	    responseObject.addProperty("message", "Data fetched successfully");
+
+	    // Set response content type to JSON
+	    response.setContentType("application/json");
+
+	    // Send the response JSON object back to the client
+	    PrintWriter out = response.getWriter();
+	    out.print(responseObject.toString());
+	    out.flush();
 	}
 	
 	// history page
@@ -133,6 +310,8 @@ public class SellerController extends HttpServlet {
 		String success = request.getParameter("success");
     	String error = request.getParameter("error");
     	String seller_id = request.getParameter("seller_id");
+    	String filter = request.getParameter("filter");
+    	
     	int page_number = 1;
         int recordsPerPage = 10;
      // Get counts from utility method
@@ -140,9 +319,15 @@ public class SellerController extends HttpServlet {
         	page_number = Integer.parseInt(request.getParameter("page_number")); 
         }
 		try {
+			List<Orders> orders = null;
 			Seller seller = sellerDAO.getById(Integer.parseInt(seller_id));
-			List<Orders> orders = orderDAO.getBySellerWithPaginationWithComplete(Integer.parseInt(seller_id), (page_number-1)*recordsPerPage,
-                    recordsPerPage);
+			if(filter.equals("")) {
+				orders = orderDAO.getBySellerWithPaginationWithComplete(Integer.parseInt(seller_id), (page_number-1)*recordsPerPage,
+	                    recordsPerPage, "all");
+			}else {
+				orders = orderDAO.getBySellerWithPaginationWithComplete(Integer.parseInt(seller_id), (page_number-1)*recordsPerPage,
+	                    recordsPerPage, filter);
+			}
 			List<Orders> total_order = orderDAO.getBySeller(Integer.parseInt(seller_id));
 		       
 	        int noOfRecords = orderDAO.getNoOfRecords();
@@ -163,6 +348,20 @@ public class SellerController extends HttpServlet {
 			e.printStackTrace();
 		}
 	}
+	
+	// history page
+		private void historyFilter(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	    	String seller_id = request.getParameter("seller_id");
+	    	String filter = request.getParameter("filter");
+	        response.sendRedirect(request.getContextPath() + "/SellerController?page=history&seller_id="+seller_id+"&filter="+filter);
+		}
+		
+	// order filter
+		private void orderFilter(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	    	String seller_id = request.getParameter("seller_id");
+	    	String date = request.getParameter("date");
+	        response.sendRedirect(request.getContextPath() + "/SellerController?page=order&seller_id="+seller_id+"&date="+date);
+		}
 	
 	
 	// get all product with one image
@@ -327,32 +526,7 @@ public class SellerController extends HttpServlet {
 		    updated_filename = random_number + "_" + fileName;
 		    System.out.println("File Name: " + fileName);
 
-		    //Define destination directory
-	        String uploadDir = "C:\\Users\\acer\\Desktop\\cc-shop\\src\\main\\webapp\\assets\\images\\seller"; // Example: "C:/eclipse_workspace/upload"
-	        
-	        // Write file to the destination directory
-	        OutputStream out = null;
-	        InputStream fileContent = null;
-	        try {
-	            out = new FileOutputStream(new File(uploadDir + File.separator + updated_filename));
-	            fileContent = image.getInputStream();
-
-	            int read;
-	            final byte[] bytes = new byte[1024];
-	            while ((read = fileContent.read(bytes)) != -1) {
-	                out.write(bytes, 0, read);
-	            }
-	        } catch (FileNotFoundException fne) {
-	            // Handle file not found exception
-	            fne.printStackTrace();
-	        } finally {
-	            if (out != null) {
-	                out.close();
-	            }
-	            if (fileContent != null) {
-	                fileContent.close();
-	            }
-	        }
+		    Config.ImageUtil.saveImage(image, "seller", updated_filename);
 		}
         
         Seller seller_image = new Seller();
@@ -385,6 +559,8 @@ public class SellerController extends HttpServlet {
     	String success = request.getParameter("success");
     	String error = request.getParameter("error");
     	String seller_id = request.getParameter("seller_id");
+    	String date = request.getParameter("date");
+    	
     	int page_number = 1;
         int recordsPerPage = 10;
      // Get counts from utility method
@@ -392,9 +568,15 @@ public class SellerController extends HttpServlet {
         	page_number = Integer.parseInt(request.getParameter("page_number")); 
         }
 		try {
+			List<Orders> orders  = null; // declaration
 			Seller seller = sellerDAO.getById(Integer.parseInt(seller_id));
-			List<Orders> orders = orderDAO.getBySellerWithPaginationWithPending(Integer.parseInt(seller_id), (page_number-1)*recordsPerPage,
-                    recordsPerPage);
+			if(date.equals("") || date == null) {
+				orders = orderDAO.getBySellerWithPaginationWithPending(Integer.parseInt(seller_id), (page_number-1)*recordsPerPage,
+	                    recordsPerPage, "all");
+			}else {
+				orders = orderDAO.getBySellerWithPaginationWithPending(Integer.parseInt(seller_id), (page_number-1)*recordsPerPage,
+	                    recordsPerPage, date);
+			}
 			List<Orders> total_order = orderDAO.getBySeller(Integer.parseInt(seller_id));
 		       
 	        int noOfRecords = orderDAO.getNoOfRecords();

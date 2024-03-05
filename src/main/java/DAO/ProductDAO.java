@@ -5,6 +5,7 @@ import java.sql.*;
 import java.util.*;
 
 import Models.Image;
+import Models.Orders;
 import Models.Product;
 import Models.Seller;
 
@@ -110,6 +111,57 @@ public class ProductDAO {
 		if(insertedRow > 0) flag = true;
 		return flag;
 	}
+	
+	// get customer by product and seller id
+	public List<Orders> getOrderByProductAndSellerID(int seller_id) {
+		List<Orders> orders = new ArrayList<Orders>();
+		String query = "SELECT * FROM orders LEFT JOIN products ON products.id = orders.product_id WHERE products.seller_id = " + seller_id;
+		try {
+			Statement stmt = con.createStatement();
+			ResultSet rs = stmt.executeQuery(query);
+			while(rs.next()) {
+				Orders order = new Orders();
+				order.setPrice(rs.getInt("price"));
+				order.setCount(rs.getInt("count"));
+				order.setStatus(rs.getInt("status"));
+				order.setProduct_id(rs.getInt("product_id"));
+				order.setCustomer_id(rs.getInt("customer_id"));
+				orders.add(order);
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return orders;
+	}
+	
+	public Map<String, Integer> getTopSellingProductNames(int seller_id) {
+	    Map<String, Integer> topSellingProductNames = new HashMap<>();
+
+	    // Construct the SQL query with double quotes
+	    String query = "SELECT products.name AS product_name, orders.price as price " +
+	                   "FROM orders " +
+	                   "LEFT JOIN products ON products.id = orders.product_id " +
+	                   "WHERE products.seller_id = " + seller_id +
+	                   " ORDER BY (orders.count * orders.price) DESC " +
+	                   "LIMIT 5";
+
+	    try {
+	        statement = con.createStatement();
+	        ResultSet rs = statement.executeQuery(query);
+	        while (rs.next()) {
+	            String productName = rs.getString("product_name");
+	            int price = rs.getInt("price");
+	            topSellingProductNames.put(productName, price);
+	        }
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
+	    return topSellingProductNames;
+	}
+
+
+
 	
 	// update product
 	public boolean updateProductContent(Product product) throws SQLException {

@@ -83,7 +83,7 @@
             <hr>
             <a href="${pageContext.request.contextPath}/views/admin/register.jsp" class="btn btn-link " style="display: block; text-align: center;">Register account</a>
               <a href="${pageContext.request.contextPath}/views/admin/profile/forgotPassword.jsp" class="btn btn-link btn-primary" style="display: block; text-align: center;">Forgot Password?</a>
-              <a href="${pageContext.request.contextPath}/views/index.jsp" class="btn btn-link " style="display: block; text-align: center;">Back</a>
+              <a href="${pageContext.request.contextPath}/views/admin/index.jsp" class="btn btn-link " style="display: block; text-align: center;">Back</a>
           </div>
         </div>
       </div>

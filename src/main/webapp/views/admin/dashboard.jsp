@@ -1,8 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-    
-    
+
     
     <%@ include file="./layout/header.jsp" %>
     
@@ -243,6 +242,56 @@
 							</div>
 							
 							
+							<!-- message section -->
+							<div class="col-md-6" style="width: 100%; height: 90vh !important; overflow: hidden; overflow-y: scroll;">
+								<div class="d-flex aling-items-center justify-content-between">
+									<h5 class="fw-bold">Messages <i class="las la-track"></i></h5>		
+								</div>
+								
+								<c:forEach items="${messages}" var="msg">
+								<div class="card mt-2">
+									    <div class="card-body">
+									        <!-- Grid layout for name, date, and email/phone -->
+									        <div class="row mb-3">
+									            <div class="col">
+									                <h6 class="card-title">${msg.name}</h6>
+									            </div>
+									            <div class="col text-end">
+									                <p class="card-subtitle mb-1 text-muted d-block fw-bold" style="text-align: end;">March 12, 2022</p>
+									            </div>
+									        </div>
+									        <div class="row">
+									            <div class="col">
+									                <p class="card-text">${msg.email}</p>
+									            </div>
+									            <div class="col text-end">
+									                <p class="card-text" style="text-align: end;">${msg.phone}</p>
+									            </div>
+									        </div>
+									        <!-- Divider -->
+									        <hr class="my-3">
+									        <!-- Messages section -->
+									        <p class="card-subtitle mb-2 text-muted">${msg.message}</p>
+									        <!-- Action buttons -->
+									        <div class="d-flex justify-content-between align-items-center">
+									            <div>
+									                <!-- Delete button -->
+									                <a href="${pageContext.request.contextPath}/MessageController?action=delete&id=${msg.id}"  class="btn btn-danger me-2">Delete</a>
+									                <!-- Send button -->
+									                <button class="btn btn-primary reply-btn" data-msg-id="${msg.id }">Reply</button>
+
+									            </div>
+									        </div>
+									    </div>
+									</div>
+								</c:forEach>
+								
+							</div>
+							<!-- end of message session -->
+							
+							
+							
+							
 														
 						</div>
 						
@@ -252,8 +301,32 @@
 				</div>
 				
 			</div>
-
-
+			
+			<form action="${pageContext.request.contextPath}/MessageController" method="GET">
+				<input type="hidden" name="action" value="sendMsgToUser">
+				<input type="hidden" name="email" value="" id="senderEmail">
+				<input type="hidden" name="id" value="" id="senderID">
+				<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+				  <div class="modal-dialog">
+				    <div class="modal-content">
+				      <div class="modal-header">
+				        <h5 class="modal-title" id="exampleModalLabel">Reply to Message</h5>
+				      </div>
+				      <div class="modal-body">
+				        <!-- Your modal content goes here -->
+				        Email: <b id="msgIdSpan"></b><br>
+				        Phone: <b id="phoneSpan"></b><br>
+				        Message : <p id="messageSpan"></p> <br>
+				        
+				        <textarea class="form-control" name="text" rows="6"></textarea>
+				      </div>
+				      <div class="modal-footer">
+				        <button type="submit" class="btn btn-primary" id="sendBtn">Send</button>
+				      </div>
+				    </div>
+				  </div>
+				</div>
+			</form>
 
 
 <script src="https://cdn.jsdelivr.net/npm/loading-bar/dist/loading-bar.min.js"></script>
@@ -278,6 +351,57 @@
 	    });
 	    
 	    console.log("loading bar is ready");
+	</script>
+	
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+	<script>
+    $(document).ready(function() {
+    	
+    	// Add a click event listener to the button
+        $("#sendBtn").click(function(event) {
+            // Change the button content to a Bootstrap spinner
+            $(this).html(`
+                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                <span class="visually-hidden">Sending...</span>
+            `);
+        });
+    	
+    	$("#ship-now").on("click", function(event) {
+            console.log("clicked");
+            $("#loading-wrapper").removeClass("d-none");
+        });
+    	
+    	console.log("clicked");
+        $('.reply-btn').click(function() {
+            var msgId = $(this).data('msg-id');
+
+            // AJAX request to fetch message details
+            $.ajax({
+                url: 'http://localhost:9095/shop-dot-com/MessageController?action=getMsg', // Replace 'YourServletURL' with the actual URL of your servlet
+                method: 'GET',
+                data: { id: msgId },
+                success: function(response) {
+                	var msg = JSON.parse(response.message);
+                    console.log(msg['name']);
+                    
+                    // show in model
+                    $("#msgIdSpan").html(msg.email);
+                    $("#phoneSpan").html(msg.phone);
+                    $("#messageSpan").html(msg.message);
+                    $("#senderEmail").val(msg.email);
+                    $("#senderID").val(msg.id);
+                    // Display the modal
+                    $('#exampleModal').modal('show');
+
+                },
+                error: function(xhr, status, error) {
+                    console.error(xhr.responseText);
+                }
+            });
+        });
+    });
+</script>
+
 	</script>
 
 </body>

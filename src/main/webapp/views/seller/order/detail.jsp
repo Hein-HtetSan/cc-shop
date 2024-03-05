@@ -31,7 +31,7 @@
 								</div>
 							</c:if>
 
-        <div class="row d-flex align-items-center justify-content-center mt-5">
+        <div class="row d-flex align-items-center justify-content-center mt-5" style="margin-top: 3rem;">
         	
 			<div class="col-md-6 flex-column d-flex align-items-center justify-content-center mt-4">
 			
@@ -47,25 +47,21 @@
 				</div>
 				
 				<!-- notes -->
-				<div class="card shadow rounded">
-					<div class="card-header">
-						<h5  class="w-bold text-primary"><i class="las la-file"></i> Note</h5>
-					</div>
 					<c:choose>
-						<c:when test="${note != null }">
+						<c:when test="${note.text != ''  }">
+						<div class="card shadow rounded">
+							<div class="card-header">
+								<h5  class="w-bold text-primary"><i class="las la-file"></i> Note</h5>
+							</div>
 							<div class="card-body">
 								<p>${note.text }</p>
 							</div>
+						</div>
 						</c:when>
-						<c:otherwise>
-							<div class="card-body">
-								<p>No note for this order</p>
-							</div>
-						</c:otherwise>
 					</c:choose>
-				</div>
 				
-				<a class="btn btn-primary " href="${pageContext.request.contextPath}/SellerController?page=order&seller_id=${seller.id}">Understand</a>
+				
+				<a class="btn btn-primary " href="${pageContext.request.contextPath}/SellerController?page=order&seller_id=${seller.id}&date=${param.date}">Understand</a>
 			</div>
 			
 			<div class="row d-flex align-items-center justify-content-start ">

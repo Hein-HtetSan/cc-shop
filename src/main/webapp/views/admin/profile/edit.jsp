@@ -76,46 +76,49 @@
 						<h5 class="text-muted fw-bold text-center">  <i class="las la-edit"></i> Edit Profile</h5>
 					</div>
 					<div class="card-body">
-						<div class="row">
-                            <div class="col-12">
-                                <form method="post" action="${pageContext.request.contextPath}/AdminController">
+						<div class="row" style="margin-top: 1rem !important;">
+                            <div class="col-12" >
+                                <form method="post" action="${pageContext.request.contextPath}/AdminController" enctype="multipart/form-data">
                                 	<input type="hidden" name="action" value="updateProfile" >
                                 	<input type="hidden" name="admin_id" value="${admin.id}" >
-                                	
-                                	<div class="d-flex justify-content-center  align-items-center flex-column">
-                                	<c:if test="${admin.image == 'assets/images/troll.jpg'}">
-                                		<img src="${pageContext.request.contextPath}/assets/images/troll.jpg" class="rounded border p-2 <c:if test='${admin.image != "assets/images/troll.jpg"}'> d-none </c:if>" style="width: 120px !important; height: 100px !important;">
-                                	</c:if>
-                                	<c:if test="${admin.image != null}">
-                                		<img src="${pageContext.request.contextPath}/assets/images/admin/${admin.image}" class="rounded border p-2 <c:if test='${admin.image == "assets/images/troll.jpg"}'> d-none </c:if>" style="width: 120px !important; height: 100px !important;">
-                                	</c:if>
-                                	<input type="file" name="image" class="form-control mt-2" style="width: 120px !important;">
-                                	</div>
-                                	
-                                	
-                                	<div class="form-group">
+                                	<div class="col-12 d-flex align-items-center justify-content-center">
+		                            	<c:choose>
+		                            		<c:when test="${admin.image == 'assets/images/troll.jpg'}">
+		                            			<img src="${admin.image}" style="width: 150px !important;">
+		                            		</c:when>
+		                            		<c:otherwise>
+		                            			<img src="${pageContext.request.contextPath}/assets/images/admin/${admin.image}" style="width: 100px !important;">
+		                            		</c:otherwise>
+		                            	</c:choose>
+		                            </div>
+                                	<div class="form-group" style="margin-bottom: -1rem !important;">
                                 		<lable class="form-label" for="name">Name</lable>
                                 		<input type="text" name="name" value="${admin.name }" class="form-control">
                                 	</div>	
-                                	<div class="form-group">
+                                	<div class="form-group" style="margin-bottom: -1rem !important;">
                                 		<lable class="form-label" for="email">Email</lable>
                                 		<input type="email" name="email" value="${admin.email }" class="form-control">
                                 	</div>
-                                	<div class="form-group">
+                                	<div class="form-group" style="margin-bottom: -1rem !important;">
                                 		<lable class="form-label" for="phone">Phone</lable>
                                 		<input type="text" name="phone" value="${admin.phone }" class="form-control">
                                 	</div>		
-                                	<div class="form-group">
+                                	<div class="form-group" style="margin-bottom: -1rem !important;">
+                                		<lable class="form-label" for="image">Image</lable>
+                                		<input type="file" name="file" class="form-control mt-2">
+                                	</div>
+                                	<div class="form-group" style="margin-bottom: -1rem !important;">
                                 		<button class="btn btn-primary"> <i class="las la-save"></i> Update </button>
                                 	</div>	
                                 </form>
                                 <!-- #### Button group ####  -->
-                                <div class="form-group text-center">
-                                    <a class="btn btn-link  d-block " href="${pageContext.request.contextPath}/AdminController?page=user" >  Back to Dashboard </a> 
+                                <div class="form-group text-center" style="margin-bottom: -1rem !important;">
+                                    <a class="btn btn-link  d-block " href="${pageContext.request.contextPath}/AdminController?page=profile&admin_id=${admin.id}" >  Back to Profile </a> 
                                 </div>
                             </div>
                         </div>
 					</div>
+					
 				</div>
 			</div>
 		</div>

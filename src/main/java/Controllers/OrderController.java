@@ -142,6 +142,7 @@ public class OrderController extends HttpServlet {
 		String filter_value = request.getParameter("filter_value");
 		String order_code = request.getParameter("order_code");
 		String product_id = request.getParameter("product_id");
+		int order_count = 0;
 		// send mail to seller
 		Customer customer;
 		Orders order;
@@ -150,6 +151,7 @@ public class OrderController extends HttpServlet {
 		try {
 			customer = customerDAO.getById(Integer.parseInt(user_id)); // get the customer information
 			order = orderDAO.getByCodeAndProductID(order_code, Integer.parseInt(product_id));
+			order_count = order.getCount();
 			String html = "<h4>Order Canceled</h4>"
 					+ "<h5>Order Code: "+ order_code +"</h5>"
 					+ "<p>Name: " + customer.getName() + "</p><br>"
@@ -172,7 +174,7 @@ public class OrderController extends HttpServlet {
 		}
 		
 		// order cancel by user
-		boolean flag = orderDAO.orderCancelByUser(order_code, Integer.parseInt(product_id));
+		boolean flag = orderDAO.orderCancelByUser(order_code, Integer.parseInt(product_id), order_count);
 		if(flag) {
 			String success = "You canceled the order";
 			String encoded = URLEncoder.encode(success, "UTF-8");
@@ -190,6 +192,7 @@ public class OrderController extends HttpServlet {
 	private void detailOfOrder(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String seller_id = request.getParameter("seller_id");
 		String order_code = request.getParameter("order_code");
+		String date = request.getParameter("date");
 		
 		List<Orders> orders = orderDAO.getByOrderCodeWithPending(order_code, Integer.parseInt(seller_id)); // get the order code by seller id where the status 0
 		
@@ -214,7 +217,7 @@ public class OrderController extends HttpServlet {
 		request.setAttribute("address", address);
 		request.setAttribute("orders", orders);
 		request.setAttribute("total", total);
-		
+		request.setAttribute("date", date);
 		dispatcher = request.getRequestDispatcher("/views/seller/order/detail.jsp");
 		dispatcher.forward(request, response);
 	}
@@ -223,7 +226,7 @@ public class OrderController extends HttpServlet {
 		String seller_id = request.getParameter("seller_id");
 		String order_code = request.getParameter("order_code");
 		
-		List<Orders> orders = orderDAO.getByOrderCodeWithComplete(order_code, Integer.parseInt(seller_id)); // get the order code by seller id where the status 0
+		List<Orders> orders = orderDAO.getByOrderCodeWithComplete(order_code, Integer.parseInt(seller_id)); // get the order code by seller id where the status 
 		
 		System.out.println(orders);
 		// Get the first order in the list
@@ -290,11 +293,11 @@ public class OrderController extends HttpServlet {
 		if(flag) {
 			String success = "You've removed order Successfully";
 			String encoded = URLEncoder.encode(success, "UTF-8");
-    		response.sendRedirect(request.getContextPath() + "/SellerController?page=order&success="+encoded+"&seller_id="+seller_id);
+    		response.sendRedirect(request.getContextPath() + "/SellerController?page=order&success="+encoded+"&seller_id="+seller_id+"&date=all");
 		}else {
 			String success = "You've can't remove order.";
 			String encoded = URLEncoder.encode(success, "UTF-8");
-    		response.sendRedirect(request.getContextPath() + "/SellerController?page=order&error="+encoded+"&seller_id="+seller_id);
+    		response.sendRedirect(request.getContextPath() + "/SellerController?page=order&error="+encoded+"&seller_id="+seller_id+"&date=all");
 		}
 	}
 
@@ -314,7 +317,7 @@ public class OrderController extends HttpServlet {
 					+ "<p style='display: block;'>Date: " + currentDate.toString()  + "</p>"
 					+ "<b style='display: block;'>Product : " + order.getProduct_name() + "</b>"
 					+ "<b style='display: block;'>Count : " + order.getCount() + "</b>"
-					+ "<b style='display: block;'>Price : " + order.getPrice() + "</b>"
+					+ "<b style='display: block;'>Price : " + order.getPrice() + " MMKs</b>"
 					+ "<p>Notification: your package is successfully transfer to headquarter. The package will be arrived to you soon. "
 					+ "The headquarter is packaging the order and send to you soon.</p>";
 			Config.mail.sendEmail(customerDAO.getEamilByID(order.getCustomer_id()), "Your package is transfer to Headquarter", html);
@@ -336,11 +339,11 @@ public class OrderController extends HttpServlet {
 		if(flag) {
 			String success = "Successfully transfered to warehouse.";
 			String encoded = URLEncoder.encode(success, "UTF-8");
-    		response.sendRedirect(request.getContextPath() + "/SellerController?page=order&success="+encoded+"&seller_id="+seller_id);
+    		response.sendRedirect(request.getContextPath() + "/SellerController?page=order&success="+encoded+"&seller_id="+seller_id+"&date=all");
 		}else {
 			String success = "Can't transfer to warehouse.";
 			String encoded = URLEncoder.encode(success, "UTF-8");
-    		response.sendRedirect(request.getContextPath() + "/SellerController?page=order&error="+encoded+"&seller_id="+seller_id);
+    		response.sendRedirect(request.getContextPath() + "/SellerController?page=order&error="+encoded+"&seller_id="+seller_id+"&date=all");
 		}
 	}
 

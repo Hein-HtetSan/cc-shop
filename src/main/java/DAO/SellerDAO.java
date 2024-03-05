@@ -97,6 +97,7 @@ public class SellerDAO {
 			seller.setBname(resultset.getString("business"));
 			seller.setImage(resultset.getString("image"));
 			seller.setRating(resultset.getInt("rating"));
+			seller.setPassword(resultset.getString("password"));
 		}
 		return seller;
 	}
@@ -199,6 +200,9 @@ public class SellerDAO {
 		if(updatedRow > 0) flag = true;
 		return flag;
 	}
+	
+	
+		
 	
 	// update image
 	public boolean updateImage(Seller seller) throws SQLException {

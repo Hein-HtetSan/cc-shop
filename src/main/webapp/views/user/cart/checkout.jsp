@@ -275,10 +275,6 @@
 	
 		    // Wait for the document to be ready
 		    $(document).ready(function() {
-		    	
-				$("#order-submit").click(function() {
-					$("#loading-wrapper").removeClass("d-none");
-				});
 		        // Find the error alert element
 		        var $errorAlert = $('#errorAlert');
 		        
@@ -293,6 +289,7 @@
 		        
 		        // Event listener for the button click
 		        $('#order-submit').click(function(e) {
+		        	
 		        	e.preventDefault();
 		            // Find the checked radio button
 		            var selectedAddressId = $('.address-radio:checked').siblings('#address_id').val();
@@ -301,6 +298,7 @@
 
 		            // Check if any radio button is checked
 		            if (selectedAddressId) {
+		            	$("#loading-wrapper").removeClass("d-none");
 		                // Send the selected address ID to the servlet using AJAX
 		                $.ajax({
 		                    url: 'http://localhost:9095/shop-dot-com/CheckoutController?action=order',
