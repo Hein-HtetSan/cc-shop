@@ -7,12 +7,14 @@
 				<div class="scrollbar-inner sidebar-wrapper">
 					<div class="user">
 						<div class="photo">
-						<c:if test="${admin.image == 'assets/images/troll.jpg'}">
-                               <img class="<c:if test='${admin.image != "assets/images/troll.jpg"}'> d-none </c:if>" src="${admin.image}">
-                         </c:if>
-                         <c:if test="${admin.image != null}">
-                              <img class="<c:if test='${admin.image == "assets/images/troll.jpg"}'> d-none </c:if>" src="${pageContext.request.contextPath}/assets/images/admin/${admin.image}" class="rounded border p-2" style="width: 120px !important; height: 100px !important;">
-                         </c:if>
+								<c:choose>
+                            		<c:when test="${admin.image == 'assets/images/troll.jpg'}">
+                            			<img src="${admin.image}" style="">
+                            		</c:when>
+                            		<c:otherwise>
+                            			<img src="${pageContext.request.contextPath}/assets/images/admin/${admin.image}" >
+                            		</c:otherwise>
+                            	</c:choose>
 						</div>
 						<div class="info">
 							<a class="" data-toggle="collapse" href="#collapseExample" aria-expanded="true">

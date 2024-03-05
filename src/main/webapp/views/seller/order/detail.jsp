@@ -61,7 +61,7 @@
 					</c:choose>
 				
 				
-				<a class="btn btn-primary " href="${pageContext.request.contextPath}/SellerController?page=order&seller_id=${seller.id}">Understand</a>
+				<a class="btn btn-primary " href="${pageContext.request.contextPath}/SellerController?page=order&seller_id=${seller.id}&date=${param.date}">Understand</a>
 			</div>
 			
 			<div class="row d-flex align-items-center justify-content-start ">

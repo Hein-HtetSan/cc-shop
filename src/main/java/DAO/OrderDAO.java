@@ -6,6 +6,9 @@ import java.time.LocalDate;
 import Models.*;
 
 import java.util.*;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+
 
 public class OrderDAO {
 	
@@ -209,7 +212,7 @@ public class OrderDAO {
 			             + "LEFT JOIN addresses ON orders.shipping_id = addresses.id "
 			             + "LEFT JOIN customers ON customers.id = orders.customer_id "
 			             + "WHERE orders.status = 1 "
-			             + "AND (DATE(orders.updated_at) = " + yesterday + ") "
+			             + "AND (DATE(orders.updated_at) <= " + yesterday + ") "
 			             + "ORDER BY updated_at DESC LIMIT " + offset + ", " + noOfRecords;
 		}else if(filter_value.equals("lastday")) {
 			// Construct the query
@@ -219,7 +222,7 @@ public class OrderDAO {
 			             + "LEFT JOIN addresses ON orders.shipping_id = addresses.id "
 			             + "LEFT JOIN customers ON customers.id = orders.customer_id "
 			             + "WHERE orders.status = 1 "
-			             + "AND (DATE(orders.updated_at) = " + lastDate +") "
+			             + "AND (DATE(orders.updated_at) <= " + lastDate +") "
 			             + "ORDER BY updated_at DESC LIMIT " + offset + ", " + noOfRecords;
 		}
 		try {
@@ -422,15 +425,23 @@ public class OrderDAO {
 		}
 		
 		// order cancel by user
-		public boolean orderCancelByUser(String order_code, int product_id) {
+		public boolean orderCancelByUser(String order_code, int product_id, int order_count) {
 			boolean flag = false;
+			// for orders code
 			String query = "UPDATE orders SET status = -1, updated_at = current_timestamp WHERE order_code = ? AND product_id = ?";
+			// for product 
+			String reset_product_count = "UPDATE products SET count = count + "+ order_count +" WHERE id = " + product_id;
 			try {
 				pst = con.prepareStatement(query);
+				// for product count
+				Statement st = con.createStatement();
+				
 				pst.setString(1, order_code);
 				pst.setInt(2, product_id);
+				
 				int deleted = pst.executeUpdate();
-				if(deleted > 0) flag = true;
+				int updated_product_count = st.executeUpdate(reset_product_count);
+				if(deleted > 0 && updated_product_count > 0) flag = true;
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -445,13 +456,37 @@ public class OrderDAO {
 		public List<Orders> getBySellerWithPaginationWithPending(int seller_id, int offset, int noOfRecords, String date){
 			List<Orders> orders = new ArrayList<Orders>();
 			String query = null;
-			if(date.equals("all")) {
-				query = "SELECT SQL_CALC_FOUND_ROWS orders.*,products.name as product_name, customers.name as customer_name "
-						+ "FROM orders "
-						+ "LEFT JOIN products ON orders.product_id = products.id "
-						+ "LEFT JOIN addresses ON orders.shipping_id = addresses.id "
-						+ "LEFT JOIN customers ON customers.id = orders.customer_id "
-						+ "WHERE orders.status = 0 AND products.seller_id = " + seller_id  + " ORDER BY updated_at DESC limit "+ offset + ", " + noOfRecords;
+			// Get the current date
+			LocalDate currentDate = LocalDate.now();
+			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+			String todayDate = currentDate.format(formatter);
+
+			// Calculate the date for last day
+			LocalDate lastDayDate = currentDate.minusDays(1);
+			String lastDayDateString = lastDayDate.format(formatter);
+			if (date.equals("all")) {
+			    query = "SELECT SQL_CALC_FOUND_ROWS orders.*,products.name as product_name, customers.name as customer_name "
+			            + "FROM orders "
+			            + "LEFT JOIN products ON orders.product_id = products.id "
+			            + "LEFT JOIN addresses ON orders.shipping_id = addresses.id "
+			            + "LEFT JOIN customers ON customers.id = orders.customer_id "
+			            + "WHERE orders.status = 0 AND products.seller_id = " + seller_id  + " ORDER BY updated_at DESC limit "+ offset + ", " + noOfRecords;
+			} else if (date.equals("today")) {
+			    query = "SELECT SQL_CALC_FOUND_ROWS orders.*,products.name as product_name, customers.name as customer_name "
+			            + "FROM orders "
+			            + "LEFT JOIN products ON orders.product_id = products.id "
+			            + "LEFT JOIN addresses ON orders.shipping_id = addresses.id "
+			            + "LEFT JOIN customers ON customers.id = orders.customer_id "
+			            + "WHERE orders.status = 0 AND products.seller_id = " + seller_id  + " AND DATE(orders.updated_at) = '" + todayDate + "' ORDER BY updated_at DESC limit "+ offset + ", " + noOfRecords;
+			} else if (date.equals("lastday")) {
+			    query = "SELECT SQL_CALC_FOUND_ROWS orders.*,products.name as product_name, customers.name as customer_name "
+			            + "FROM orders "
+			            + "LEFT JOIN products ON orders.product_id = products.id "
+			            + "LEFT JOIN addresses ON orders.shipping_id = addresses.id "
+			            + "LEFT JOIN customers ON customers.id = orders.customer_id "
+			            + "WHERE orders.status = 0 AND products.seller_id = " + seller_id  
+			            + " AND DATE(orders.updated_at) <= DATE_SUB(CURDATE(), INTERVAL 1 DAY) "
+			            + "ORDER BY updated_at DESC LIMIT " + offset + ", " + noOfRecords;
 			}
 			try {
 				stmt = con.createStatement();

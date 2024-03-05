@@ -44,6 +44,10 @@
 
     <!-- Style CSS -->
     <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/landing/style.css">
+    <link type="text/css" rel="stylesheet" href="${pageContext.request.contextPath}/assets/customer/css/style.css"/>
+    
+    <!--sweet alert cdn link-->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 
 </head>
 
@@ -71,8 +75,18 @@
                 <div class="container h-100">
                     <div class="row h-100 align-items-center">
                         <div class="col-12">
-                            <div class="hero-slides-content">
+                            <div class="hero-slides-content" style="display: flex; flex-direction: column; justify-content: center;
+                            align-items: center;">
                                 <h2 data-animation="fadeInUp" data-delay="100ms">Stay Home, Shop Online</h2>
+                                
+                                <div>
+                                	<button style="width: 200px; height: 50px; margin-top: 20px;
+                                	color: #fff; font-weight: 500; border: 2px solid #fff;" id="shopnow">Start Shopping</button>
+                                	
+                                	<button style="width: 200px; height: 50px; margin-top: 20px;
+                                	color: #000; font-weight: 700; border: 2px solid #fff; background-color: #ccc !important;" id="shopnow">Get Started</button>
+                                </div>
+                                
                             </div>
                         </div>
                     </div>
@@ -105,7 +119,77 @@
         </div>
     </section>
     <!-- ##### Hero Area End ##### -->
+    <!--collection start  -->
+    	<div class="section main-section mt-5">
+			<!-- container -->
+			<div class="container">
+			
+				<!-- alert -->
+					<c:if test="${not empty success }">
+						<div class="alert bg-success text-center " role="alert" id="errorAlert">
+							${success}
+						</div>
+					</c:if>
+					<c:if test="${not empty error }">
+						<div class="alert bg-danger text-center " role="alert" id="errorAlert">
+							${error}
+						</div>
+					</c:if>
+				<!-- alert -->
+			
+				<!-- row -->
+				<div class="row">
+					<!-- shop -->
+					<div class="col-md-4 col-xs-6">
+						<div class="shop">
+							<div class="shop-img">
+								<img src="${pageContext.request.contextPath}/assets/customer/img/shop01.png" alt="">
+							</div>
+							<div class="shop-body">
+								<h3>Laptop<br>Collection</h3>
+								<a href="${pageContext.request.contextPath}/views/user/form.jsp" class="cta-btn">Shop now <i class="fa fa-arrow-circle-right"></i></a>
+							</div>
+						</div>
+					</div>
+					<!-- /shop -->
 
+					<!-- shop -->
+					<div class="col-md-4 col-xs-6">
+						<div class="shop">
+							<div class="shop-img">
+								<img src="${pageContext.request.contextPath}/assets/customer/img/shop03.png" alt="">
+							</div>
+							<div class="shop-body">
+								<h3>Electronic<br>Collection</h3>
+								<a href="${pageContext.request.contextPath}/views/user/form.jsp" class="cta-btn">Shop now <i class="fa fa-arrow-circle-right"></i></a>
+							</div>
+						</div>
+					</div>
+					<!-- /shop -->
+
+					<!-- shop -->
+					<div class="col-md-4 col-xs-6">
+						<div class="shop">
+							<div class="shop-img">
+								<img src="${pageContext.request.contextPath}/assets/customer/img/shop02.png"  alt="">
+							</div>
+							<div class="shop-body">
+								<h3>Camera<br>Collection</h3>
+								<a href="${pageContext.request.contextPath}/views/user/form.jsp" class="cta-btn">Shop now <i class="fa fa-arrow-circle-right"></i></a>
+							</div>
+						</div>
+					</div>
+					<!-- /shop -->
+
+				</div>
+				<!-- /row -->
+			</div>
+			<!-- /container -->
+		</div>
+    <!--collection end -->
+    
+	
+	
 
     <!-- ##### Featured Properties Area Start ##### -->
     <section class="featured-properties-area section-padding-100-50">
@@ -114,49 +198,12 @@
                 <div class="col-12">
                     <div class="section-heading wow fadeInUp">
                         <h2>Featured Properties</h2>
-                        <p>Products with perfect quality and efficient quantity!</p>
+                        <p>Keep clam and shop online!</p>
                     </div>
                 </div>
             </div>
 
             <div class="row">
-
-                <!-- Single Featured Property -->
-                <div class="col-12 col-md-6 col-xl-4">
-                    <div class="single-featured-property mb-50 wow fadeInUp" data-wow-delay="100ms">
-                        <!-- Property Thumbnail -->
-                        <div class="property-thumb">
-                            <img src="${pageContext.request.contextPath}/assets/landing/img/feature-img/feature-1.jpg" alt="">
-                        </div>
-                        <!-- Property Content -->
-                        <div class="property-content">
-                            <h5>Best Interaction</h5>
-                            <p class="location">IVA Verified</p>
-                            <p>Simple platform , clear listing , secure transcations - buy confidently.</p>
-                            <div class="property-meta-data d-flex align-items-end justify-content-between">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Single Featured Property -->
-                <div class="col-12 col-md-6 col-xl-4">
-                    <div class="single-featured-property mb-50 wow fadeInUp" data-wow-delay="200ms">
-                        <!-- Property Thumbnail -->
-                        <div class="property-thumb">
-                            <img src="${pageContext.request.contextPath}/assets/landing/img/feature-img/feature-2.jpg" alt="">
-                        </div>
-                        <!-- Property Content -->
-                        <div class="property-content">
-                            <h5>Strong Security</h5>
-                            <p class="location">Security 2.0</p>
-                            <p>Robust measure for safe transactions , ensuring user confidence.</p>
-                            <div class="property-meta-data d-flex align-items-end justify-content-between">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
                 <!-- Single Featured Property -->
                 <div class="col-12 col-md-6 col-xl-4">
                     <div class="single-featured-property mb-50 wow fadeInUp" data-wow-delay="300ms">
@@ -166,7 +213,7 @@
                         </div>
                         <!-- Property Content -->
                         <div class="property-content">
-                            <h5>Online Payment</h5>
+                            <h5>Cash on Delivery</h5>
                             <p class="location">Fast & Flexible</p>
                             <p>Trust in our robust systems for worry-free transactions</p>
                             <div class="property-meta-data d-flex align-items-end justify-content-between">
@@ -210,24 +257,6 @@
                         </div>
                     </div>
                 </div>
-
-                <!-- Single Featured Property -->
-                <div class="col-12 col-md-6 col-xl-4">
-                    <div class="single-featured-property mb-50 wow fadeInUp" data-wow-delay="600ms">
-                        <!-- Property Thumbnail -->
-                        <div class="property-thumb">
-                            <img src="${pageContext.request.contextPath}/assets/landing/img/feature-img/feature-6.jpg" alt="">
-                        </div>
-                        <!-- Property Content -->
-                        <div class="property-content">
-                            <h5>Customer Service</h5>
-                            <p class="location">24 hour Active Agents</p>
-                            <p>Reliable support , anytime , anywhere : We are here for you.</p>
-                            <div class="property-meta-data d-flex align-items-end justify-content-between">
-                            </div>
-                        </div>
-                    </div>
-                </div>
             </div>
         </div>
     </section>
@@ -240,159 +269,14 @@
                 <div class="col-12">
                     <div class="cta-content text-center">
                         <h2 class="wow fadeInUp" data-wow-delay="300ms">Are You Looking For Something To Buy??</h2>
-                        <h6 class="wow fadeInUp" data-wow-delay="400ms">လိုအပ်ချက်တိုင်းပြည့်စုံဖို့ CCShop မှာ ဈေးဝယ်စို့</h6>
+                        <h6 class="wow fadeInUp" data-wow-delay="400ms">For your needs, CC shop is always here.</h6>
                         <a href="#" class="btn south-btn mt-50 wow fadeInUp" data-wow-delay="500ms">Buy Now</a>
                     </div>
                 </div>
             </div>
         </div>
     </section>
-    <!-- ##### Call To Action Area End ##### -->
-
-        <!-- ##### Elements Area Start ##### -->
-        <section class="elements-area section-padding-100-0" id="mile">
-            <div class="container">
-                <div class="row">
-                    <!-- ##### Progress Bars & Accordions ##### -->
-                    <div class="col-12">
-                        <div class="elements-title">
-                            <h2> Goals & Commitment to Customer Satisfaction</h2>
-                        </div>
-                    </div>
-    
-                    <!-- ##### Accordians ##### -->
-                    <div class="col-12 col-lg-6">
-                        <div class="accordions mb-100" id="accordion" role="tablist" aria-multiselectable="true">
-                            <!-- single accordian area -->
-                            <div class="panel single-accordion">
-                                <h6><a role="button" class="" aria-expanded="true" aria-controls="collapseOne" data-toggle="collapse" data-parent="#accordion" href="#collapseOne">Increase Customer Engagement
-                                        <span class="accor-open"><i class="fa fa-plus" aria-hidden="true"></i></span>
-                                        <span class="accor-close"><i class="fa fa-minus" aria-hidden="true"></i></span>
-                                        </a></h6>
-                                <div id="collapseOne" class="accordion-content collapse show">
-                                    <p>We aim to captivate our audience with insightful blog posts, interactive features like polls and quizzes, and by showcasing user-generated content and social media feeds. Our personalized email newsletters keep customers informed and engaged with our brand.</p>
-                                </div>
-                            </div>
-                            <!-- single accordian area -->
-                            <div class="panel single-accordion">
-                                <h6>
-                                    <a role="button" class="collapsed" aria-expanded="true" aria-controls="collapseTwo" data-parent="#accordion" data-toggle="collapse" href="#collapseTwo">Improve Conversion Rate
-                                            <span class="accor-open"><i class="fa fa-plus" aria-hidden="true"></i></span>
-                                            <span class="accor-close"><i class="fa fa-minus" aria-hidden="true"></i></span>
-                                            </a>
-                                </h6>
-                                <div id="collapseTwo" class="accordion-content collapse">
-                                    <p>To drive sales, we focus on compelling product descriptions, professional photography, and authentic customer testimonials. Clear calls-to-action, limited-time offers, and comparison guides help guide customers toward making a purchase decision.</p>
-                                </div>
-                            </div>
-                            <!-- single accordian area -->
-                            <div class="panel single-accordion">
-                                <h6>
-                                    <a role="button" aria-expanded="true" aria-controls="collapseThree" class="collapsed" data-parent="#accordion" data-toggle="collapse" href="#collapseThree">Enhance Customer Loyalty and Retention
-                                            <span class="accor-open"><i class="fa fa-plus" aria-hidden="true"></i></span>
-                                            <span class="accor-close"><i class="fa fa-minus" aria-hidden="true"></i></span>
-                                        </a>
-                                </h6>
-                                <div id="collapseThree" class="accordion-content collapse">
-                                    <p>We prioritize customer loyalty by offering rewards through our loyalty program, providing personalized recommendations, and delivering educational content. Exclusive access to deals, responsive customer support, and targeted email campaigns further nurture our customer relationships, encouraging repeat purchases and brand loyalty.</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-    
-                    <!-- ##### Tabs ##### -->
-                    <div class="col-12 col-lg-6">
-                        <div class="south-tabs-content">
-                            <ul class="nav nav-tabs" id="myTab" role="tablist">
-                                <li class="nav-item">
-                                    <a class="nav-link" id="tab--1" data-toggle="tab" href="#tab1" role="tab" aria-controls="tab1" aria-selected="false">Commitment-1</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link active" id="tab--2" data-toggle="tab" href="#tab2" role="tab" aria-controls="tab2" aria-selected="false">Commitment-2</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" id="tab--3" data-toggle="tab" href="#tab3" role="tab" aria-controls="tab3" aria-selected="true">Commitment-3</a>
-                                </li>
-                            </ul>
-    
-                            <div class="tab-content mb-100" id="myTabContent">
-                                <div class="tab-pane fade" id="tab1" role="tabpanel" aria-labelledby="tab--1">
-                                    <div class="south-tab-content">
-                                        <!-- Tab Text -->
-                                        <div class="south-tab-text">
-                                            <h6>Quality Assurance</h6>
-                                            <p>At Our CC Shop, we're dedicated to providing you with products of the highest quality. Each item in our collection undergoes rigorous testing and inspection to ensure it meets our standards of excellence.</p>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="tab-pane fade show active" id="tab2" role="tabpanel" aria-labelledby="tab--2">
-                                    <div class="south-tab-content">
-                                        <!-- Tab Text -->
-                                        <div class="south-tab-text">
-                                            <h6>Secure Shopping Experience</h6>
-                                            <p>Shop with confidence knowing that your data is protected and your privacy is respected. Your trust is invaluable to us, and we're committed to earning it every time you shop with us.</p>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="tab-pane fade" id="tab3" role="tabpanel" aria-labelledby="tab--3">
-                                    <div class="south-tab-content">
-                                        <!-- Tab Text -->
-                                        <div class="south-tab-text">
-                                            <h6>Hassle-Free Returns and Exchanges</h6>
-                                            <p>Simply contact our customer service team, and we'll guide you through the process of returning or exchanging your item. Your satisfaction is our priority, and we're here to ensure that you have a positive shopping experience with us.</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-    
-                <div class="row">
-                    <!-- ##### Milestones ##### -->
-                    <div class="col-12">
-                        <div class="elements-title">
-                            <h2>Milestones</h2>
-                        </div>
-                    </div>
-    
-                    <!-- Single Cool Fact -->
-                    <div class="col-12 col-sm-6 col-lg-3">
-                        <div class="single-cool-fact-area mb-100">
-                            <img src="img/icons/prize2.png" alt="">
-                            <h2><span class="counter">14</span></h2>
-                            <h6>Achievements</h6>
-                        </div>
-                    </div>
-                    <!-- Single Cool Fact -->
-                    <div class="col-12 col-sm-6 col-lg-3">
-                        <div class="single-cool-fact-area mb-100">
-                            <img src="img/icons/new2.png" alt="">
-                            <h2>+<span class="counter">500</span></h2>
-                            <h6>Happy clients</h6>
-                        </div>
-                    </div>
-                    <!-- Single Cool Fact -->
-                    <div class="col-12 col-sm-6 col-lg-3">
-                        <div class="single-cool-fact-area mb-100">
-                            <img src="img/icons/house2.png" alt="">
-                            <h2><span class="counter">200</span></h2>
-                            <h6>Retailers on Website</h6>
-                        </div>
-                    </div>
-                    <!-- Single Cool Fact -->
-                    <div class="col-12 col-sm-6 col-lg-3">
-                        <div class="single-cool-fact-area mb-100">
-                            <img src="img/icons/house1.png" alt="">
-                            <h2><span class="counter">323</span></h2>
-                            <h6>Finished Dealerships</h6>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-        <!-- ##### Elements Area End ##### -->
-    
+    <!-- ##### Call To Action Area End ##### -->  
 
     <!-- ##### Testimonials Area Start ##### -->
     <section class="south-testimonials-area section-padding-100" id="review">
@@ -449,8 +333,125 @@
     </section>
     <!-- ##### Testimonials Area End ##### -->
 
+    <!-- ##### Elements Area Start ##### -->
+    <section class="call-to-action-area bg-fixed bg-overlay-black" style="background-image: url(${pageContext.request.contextPath}/assets/landing/img/section_bg2.jpg)">
+        <div class="container h-100">
+            <div class="row align-items-center h-100">
+                <div class="col-12">
+                    <div class="cta-content text-center">
+                        <h2 class="wow fadeInUp" data-wow-delay="300ms">If you want to start a Business,then you are in the RIGHT place.</h2>
+                        <h6 class="wow fadeInUp" data-wow-delay="400ms">For your needs, CC shop is always here.</h6>
+                        <a href="#" class="btn south-btn mt-50 wow fadeInUp" data-wow-delay="500ms">Start your own Business.</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- ##### Elements Area End ##### -->
+    <!-- ##### Meet The Team Area Start ##### -->
+    <section class="meet-the-team-area section-padding-100-0" id="aboutus">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <div class="section-heading">
+                        <h1>Meet Our Team</h1>
+                        <p>Together we achieve more</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row justify-content-center">
+                <!-- Single Team Member -->
+                <div class="col-12 col-sm-6 col-lg-3">
+                    <div class="single-team-member mb-100 wow fadeInUp" data-wow-delay="250ms">
+                        <!-- Team Member Thumb -->
+                        <div class="team-member-thumb">
+                            <img src="${pageContext.request.contextPath}/assets/landing/img/bg-img/team8.jpg" alt="">
+                        </div>
+                        <!-- Team Member Info -->
+                        <div class="team-member-info">
+                            <div class="section-heading">
+                                 <img src="${pageContext.request.contextPath}/assets/landing/img/icons/prize.png" alt="">
+                                <h2>Kyaw Thuta Oo</h2>
+                                <p>Realtor</p>
+                            </div>
+                            <div class="address">
+                                <h6><img src="${pageContext.request.contextPath}/assets/landing/img/icons/phone-call.png" alt=""> +95 9691560055</h6>
+                                <h6><img src="${pageContext.request.contextPath}/assets/landing/img/icons/envelope.png" alt=""> kelvingaret@gmail.com</h6>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Single Team Member -->
+                <div class="col-12 col-sm-6 col-lg-3">
+                    <div class="single-team-member mb-100 wow fadeInUp" data-wow-delay="500ms">
+                        <!-- Team Member Thumb -->
+                        <div class="team-member-thumb">
+                            <img src="${pageContext.request.contextPath}/assets/landing/img/bg-img/team7.jpg" alt="">
+                        </div>
+                        <!-- Team Member Info -->
+                        <div class="team-member-info">
+                            <div class="section-heading">
+                                <img src="${pageContext.request.contextPath}/assets/landing/img/icons/prize.png" alt="">
+                                <h2>Hein Htet San</h2>
+                                <p>Realtor</p>
+                            </div>
+                            <div class="address">
+                                <h6><img src="${pageContext.request.contextPath}/assets/landing/img/icons/phone-call.png" alt=""> +95 9934 828 116</h6>
+                                <h6><img src="${pageContext.request.contextPath}/assets/landing/img/icons/envelope.png" alt=""> Thida1908@gmail.com</h6>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Single Team Member -->
+                <div class="col-12 col-sm-6 col-lg-3">
+                    <div class="single-team-member mb-100 wow fadeInUp" data-wow-delay="750ms">
+                        <!-- Team Member Thumb -->
+                        <div class="team-member-thumb">
+                            <img src="${pageContext.request.contextPath}/assets/landing/img/bg-img/team5.jpg" alt="">
+                        </div>
+                        <!-- Team Member Info -->
+                        <div class="team-member-info">
+                            <div class="section-heading">
+                                <img src="${pageContext.request.contextPath}/assets/landing/img/icons/prize.png" alt="">
+                                <h2>Lynn Myat Bhone</h2>
+                                <p>Realtor</p>
+                            </div>
+                            <div class="address">
+                                <h6><img src="${pageContext.request.contextPath}/assets/landing/img/icons/phone-call.png" alt=""> +95 9934 828 116</h6>
+                                <h6><img src="${pageContext.request.contextPath}/assets/landing/img/icons/envelope.png" alt=""> Taungpawtarlay@gmail.com</h6>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Single Team Member -->
+                <div class="col-12 col-sm-6 col-lg-3">
+                    <div class="single-team-member mb-100 wow fadeInUp" data-wow-delay="750ms">
+                        <!-- Team Member Thumb -->
+                        <div class="team-member-thumb">
+                            <img src="${pageContext.request.contextPath}/assets/landing/img/bg-img/team6.jpg" alt="">
+                        </div>
+                        <!-- Team Member Info -->
+                        <div class="team-member-info">
+                            <div class="section-heading">
+                                <img src="${pageContext.request.contextPath}/assets/landing/img/icons/prize.png" alt="">
+                                <h2>Htet Aung Hlyan</h2>
+                                <p>Organizer</p>
+                            </div>
+                            <div class="address">
+                                <h6><img src="${pageContext.request.contextPath}/assets/landing/img/icons/phone-call.png" alt=""> +95 969 156 0055</h6>
+                                <h6><img src="${pageContext.request.contextPath}/assets/landing/img/icons/envelope.png" alt=""> hlyan19@gmail.com</h6>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- ##### Meet The Team Area End ##### -->
+
+
     <!-- Contact Info Start -->
-    
     <section class="south-contact-area section-padding-100" id="contact">
         <div class="container">
             <div class="row">
@@ -484,32 +485,35 @@
                 <!-- Contact Form Area -->
                 <div class="col-12 col-lg-8" >
                     <div class="contact-form">
-                        <form action="#" method="post">
+                        <div action="" method="">
                             <div class="form-group">
-                                <input type="text" class="form-control" name="text" id="contact-name" placeholder="Your Name">
+                                <input type="text" class="form-control" required name="name" id="name" placeholder="Your Name">
                             </div>
                             <div class="form-group">
-                                <input type="number" class="form-control" name="number" id="contact-number" placeholder="Your Phone">
+                                <input type="number" class="form-control" required name="phone" id="number" placeholder="Your Phone">
                             </div>
                             <div class="form-group">
-                                <input type="email" class="form-control" name="email" id="contact-email" placeholder="Your Email">
+                                <input type="email" class="form-control" required name="email" id="email" placeholder="Your Email">
                             </div>
                             <div class="form-group">
-                                <textarea class="form-control" name="message" id="message" cols="30" rows="10" placeholder="Your Message"></textarea>
+                                <textarea class="form-control" name="message" required id="message" cols="30" rows="10" placeholder="Your Message"></textarea>
                             </div>
-                            <button type="submit" class="btn south-btn">Send Message</button>
-                        </form>
+                            <button id="submit-btn" class="btn south-btn">Send Message</button>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
+	<c:if test="${not empty status}"> <input type="hidden" id="status" value="${status}"> </c:if>
     <!-- Contact Info End -->
 
    <!-- ##### Footer Area Start ##### -->
    <%@ include file="./layout/footer.jsp" %>
 <!-- ##### Footer Area End ##### -->
+
+	
 
     <!-- jQuery (Necessary for All JavaScript Plugins) -->
     <script src="${pageContext.request.contextPath}/assets/landing/js/jquery/jquery-2.2.4.min.js"></script>
@@ -523,6 +527,64 @@
     <script src="${pageContext.request.contextPath}/assets/landing/js/jquery-ui.min.js"></script>
     <!-- Active js -->
     <script src="${pageContext.request.contextPath}/assets/landing/js/active.js"></script>
+
+<script>
+$(document).ready(function() {
+    // Add event listener to the submit button
+    $("#submit-btn").click(function() {
+        console.log("clicked");
+
+        // Collect data from the form
+        var name = $("#name").val();
+        var email = $("#email").val();
+        var phone = $("#number").val();
+        var message = $("#message").val();
+
+        // Configure the data object
+        var data = {
+            name: name,
+            email: email,
+            phone: phone,
+            message: message
+        };
+
+        // Send the AJAX request
+        $.ajax({
+            url: "http://localhost:9095/shop-dot-com/MessageController",
+            type: "POST",
+            contentType: "application/json",
+            data: JSON.stringify(data),
+            success: function(response) {
+                console.log(response.status);
+                // Handle success message here if needed
+                if(name === '' || email === '' || phone === '' || message === ''){
+                	Swal.fire({
+                        title: "Wrong",
+                        text: "Please fill all the field",
+                        icon: "error"
+                    });
+                }else{
+                	Swal.fire({
+                        title: "Success",
+                        text: "Message Sent Successfully",
+                        icon: "success"
+                    });
+                	$("#name").val('');
+                   	$("#email").val('');
+                   	$("#number").val('');
+                    $("#message").val('');
+                }
+            },
+            error: function(xhr, status, error) {
+                console.error("AJAX error:", error);
+            }
+        });
+    });
+});
+
+	
+	</script>
+
 
 </body>
 

@@ -520,32 +520,7 @@ public class SellerController extends HttpServlet {
 		    updated_filename = random_number + "_" + fileName;
 		    System.out.println("File Name: " + fileName);
 
-		    //Define destination directory
-	        String uploadDir = "C:\\Users\\acer\\Desktop\\cc-shop\\src\\main\\webapp\\assets\\images\\seller"; // Example: "C:/eclipse_workspace/upload"
-	        
-	        // Write file to the destination directory
-	        OutputStream out = null;
-	        InputStream fileContent = null;
-	        try {
-	            out = new FileOutputStream(new File(uploadDir + File.separator + updated_filename));
-	            fileContent = image.getInputStream();
-
-	            int read;
-	            final byte[] bytes = new byte[1024];
-	            while ((read = fileContent.read(bytes)) != -1) {
-	                out.write(bytes, 0, read);
-	            }
-	        } catch (FileNotFoundException fne) {
-	            // Handle file not found exception
-	            fne.printStackTrace();
-	        } finally {
-	            if (out != null) {
-	                out.close();
-	            }
-	            if (fileContent != null) {
-	                fileContent.close();
-	            }
-	        }
+		    Config.ImageUtil.saveImage(image, "seller", updated_filename);
 		}
         
         Seller seller_image = new Seller();
@@ -579,6 +554,7 @@ public class SellerController extends HttpServlet {
     	String error = request.getParameter("error");
     	String seller_id = request.getParameter("seller_id");
     	String date = request.getParameter("date");
+    	
     	int page_number = 1;
         int recordsPerPage = 10;
      // Get counts from utility method
@@ -586,10 +562,15 @@ public class SellerController extends HttpServlet {
         	page_number = Integer.parseInt(request.getParameter("page_number")); 
         }
 		try {
-			List<Orders> orders  = null;
+			List<Orders> orders  = null; // declaration
 			Seller seller = sellerDAO.getById(Integer.parseInt(seller_id));
-			orders = orderDAO.getBySellerWithPaginationWithPending(Integer.parseInt(seller_id), (page_number-1)*recordsPerPage,
-                    recordsPerPage);
+			if(date.equals("") || date == null) {
+				orders = orderDAO.getBySellerWithPaginationWithPending(Integer.parseInt(seller_id), (page_number-1)*recordsPerPage,
+	                    recordsPerPage, "all");
+			}else {
+				orders = orderDAO.getBySellerWithPaginationWithPending(Integer.parseInt(seller_id), (page_number-1)*recordsPerPage,
+	                    recordsPerPage, date);
+			}
 			List<Orders> total_order = orderDAO.getBySeller(Integer.parseInt(seller_id));
 		       
 	        int noOfRecords = orderDAO.getNoOfRecords();

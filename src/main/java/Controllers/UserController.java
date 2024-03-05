@@ -325,34 +325,9 @@ public class UserController extends HttpServlet {
 		    // Process the file upload
 		    String fileName = extractFileName(image);
 		    updated_filename = random_number + "_" + fileName;
-		    System.out.println("File Name: " + fileName);
+		    System.out.println("File Name: " + updated_filename);
 
-		    //Define destination directory
-	        String uploadDir = "C:\\Users\\acer\\Desktop\\cc-shop\\src\\main\\webapp\\assets\\images\\user"; // Example: "C:/eclipse_workspace/upload"
-	        
-	        // Write file to the destination directory
-	        OutputStream out = null;
-	        InputStream fileContent = null;
-	        try {
-	            out = new FileOutputStream(new File(uploadDir + File.separator + updated_filename));
-	            fileContent = image.getInputStream();
-
-	            int read;
-	            final byte[] bytes = new byte[1024];
-	            while ((read = fileContent.read(bytes)) != -1) {
-	                out.write(bytes, 0, read);
-	            }
-	        } catch (FileNotFoundException fne) {
-	            // Handle file not found exception
-	            fne.printStackTrace();
-	        } finally {
-	            if (out != null) {
-	                out.close();
-	            }
-	            if (fileContent != null) {
-	                fileContent.close();
-	            }
-	        }
+		    Config.ImageUtil.saveImage(image, "user", updated_filename);
 		}
         
         Customer customer_image = new Customer();

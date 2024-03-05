@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintWriter;
+import java.net.URLEncoder;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -35,6 +36,7 @@ public class AdminController extends HttpServlet {
     CategoryDAO categoryDAO = null;
     BusinessDAO businessDAO = null;
     OrderDAO orderDAO = null;
+    MessageDAO msgDAO = null;
   
     RequestDispatcher dispatcher = null;
 	
@@ -47,6 +49,7 @@ public class AdminController extends HttpServlet {
         categoryDAO = new CategoryDAO();
         businessDAO = new BusinessDAO();
         orderDAO = new OrderDAO();
+        msgDAO = new MessageDAO();
     }
     
     // do get
@@ -370,7 +373,7 @@ public class AdminController extends HttpServlet {
 		try {
 			// get all count for sidebar
 			counts = getAllCount();
-	        request.setAttribute("counts", counts);
+	        
 	        if (request.getParameter("page_number") != null) {
 	        	page_number = Integer.parseInt(request.getParameter("page_number")); 
 	        }
@@ -380,6 +383,8 @@ public class AdminController extends HttpServlet {
 	        }else {
 	        	orders = orderDAO.getOrderWithStatusOne((page_number - 1) * recordsPerPage, recordsPerPage, filter_value);
 	        }
+	        // get message
+	        List<Message> messages = msgDAO.get();
 	        int noOfRecords = orderDAO.getNoOfRecords();
 	        int noOfPages = (int) Math.ceil(noOfRecords * 1.0 / recordsPerPage);
 	       
@@ -389,9 +394,10 @@ public class AdminController extends HttpServlet {
 	        if(success != null) request.setAttribute("success", success);
 	        request.setAttribute("noOfPages", noOfPages);
 	        request.setAttribute("currentPage", page_number);
-			
+	        request.setAttribute("counts", counts);
 			request.setAttribute("orders", orders);
 			request.setAttribute("counts", counts);
+			request.setAttribute("messages", messages);
 			dispatcher = request.getRequestDispatcher("views/admin/dashboard.jsp");
 			dispatcher.forward(request, response);
 		} catch (SQLException e) {
@@ -632,68 +638,81 @@ public class AdminController extends HttpServlet {
     			
     		// update profile
         	case "updateProfile":
-        			String admin_Id = request.getParameter("admin_id");
-        			System.out.println(admin_Id);
-        		try {
-        			Admin updatedAdmin = new Admin();
-        			updatedAdmin.setId(Integer.parseInt(admin_Id));
-        			updatedAdmin.setName(request.getParameter("name"));
-        			updatedAdmin.setEmail(request.getParameter("email"));
-        			updatedAdmin.setPhone(request.getParameter("phone"));
-        			
-        			Part image = request.getPart("file");
-        			
-        			int min = 1000;
-				    int max = 10000;
-				    int random_number = (int) (Math.random()*(max-min+1)+min);  
-				    // Process the file upload
-				    String fileName = extractFileName(image);
-				    String updated_filename = random_number + "_" + fileName;
-				    System.out.println("File Name: " + fileName);
-
-				    //Define destination directory
-			        String uploadDir = "C:\\Users\\acer\\Desktop\\cc-shop\\src\\main\\webapp\\assets\\images\\admin"; // Example: "C:/eclipse_workspace/upload"
-			        
-			        // Write file to the destination directory
-			        OutputStream out = null;
-			        InputStream fileContent = null;
-			        try {
-			            out = new FileOutputStream(new File(uploadDir + File.separator + updated_filename));
-			            fileContent = image.getInputStream();
-
-			            int read;
-			            final byte[] bytes = new byte[1024];
-			            while ((read = fileContent.read(bytes)) != -1) {
-			                out.write(bytes, 0, read);
-			            }
-			        } catch (FileNotFoundException fne) {
-			            // Handle file not found exception
-			            fne.printStackTrace();
-			        } finally {
-			            if (out != null) {
-			                out.close();
-			            }
-			            if (fileContent != null) {
-			                fileContent.close();
-			            }
-			        }
-			        
-					if(adminDAO.update(updatedAdmin)) {
-						Admin re_get_admin = adminDAO.getById(Integer.parseInt(admin_Id));
-						session.setAttribute("admin", re_get_admin);
-						response.sendRedirect(request.getContextPath()+"/AdminController?page=user");
-				}
-						
-				} catch (NumberFormatException | SQLException e) {
-					e.printStackTrace();
-				}
-        	break;
-    			
+        			updateAdminProfile(request, response);
+        			break;
     			
 			}
 		}
 	}
 
+	private void updateAdminProfile(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		String name = request.getParameter("name");
+		String id = request.getParameter("admin_id");
+		String email = request.getParameter("email");
+		String phone = request.getParameter("phone");
+		Part image = request.getPart("file");
+		boolean hasFileUpload = false;
+		String updated_filename = "assets/images/troll.jpg";
+		
+		// Iterate through the parts
+		for (Part part : request.getParts()) {
+		  // Check if the part is a file upload
+		   if (part.getSubmittedFileName() != null && !part.getSubmittedFileName().isEmpty()) {
+		        hasFileUpload = true;
+		        break; // No need to check further, we found at least one file upload
+		   }
+		}
+		
+		Admin admin = new Admin();
+		admin.setName(name);
+		admin.setEmail(email);
+		admin.setPhone(phone);
+		admin.setId(Integer.parseInt(id));
+		
+		// update into database
+		boolean flag = false;
+		try {
+			flag = adminDAO.update(admin);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		if(hasFileUpload) {
+			int min = 1000;
+		    int max = 10000;
+		    int random_number = (int) (Math.random()*(max-min+1)+min);  
+		    // Process the file upload
+		    String fileName = extractFileName(image);
+		    updated_filename = random_number + "_" + fileName;
+		    System.out.println("File Name: " + fileName);
+
+		    Config.ImageUtil.saveImage(image, "admin", updated_filename);
+		}
+        
+        Admin admin_image = new Admin();
+        // check whether the image is exist or not
+        if(hasFileUpload) {
+        	admin_image.setImage(updated_filename);
+        	admin_image.setId(Integer.parseInt(id));
+		}
+        boolean update_image;
+		try {
+			update_image = adminDAO.updateImage(admin_image);
+			 if(flag || update_image) {
+		        	String success = "Updated Profile Successfully";
+					String encoded = URLEncoder.encode(success, "UTF-8");
+		    		response.sendRedirect(request.getContextPath() + "/AdminController?page=profile&success="+encoded+"&admin_id="+id);
+		        }else {
+		        	String error = "Can't update the profile";
+					String encoded = URLEncoder.encode(error, "UTF-8");
+		    		response.sendRedirect(request.getContextPath() + "/AdminController?page=profile&error="+encoded+"&admin_id="+id);
+		        }
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 	
 	private String extractFileName(Part part) {
         String contentDisp = part.getHeader("content-disposition");

@@ -122,7 +122,7 @@
                                         <a href="${pageContext.request.contextPath}/LoginController?page=adminLogout" class="btn btn-danger w-100"> <i class="las la-power-off"></i> Logout </a>
                                     </div>
                                     <hr>
-                                    <a href="${pageContext.request.contextPath}/PasswordController?page=adminPasswordChange&admin_id=${admin.id}" class="btn btn-link">Change Password?</a> | <a href="" class="btn btn-link btn-danger">Forget Password?</a> 
+                                    <a href="${pageContext.request.contextPath}/PasswordController?page=adminPasswordChange&admin_id=${admin.id}" class="btn btn-link">Change Password?</a>
                                     <a class="btn btn-link  d-block " href="${pageContext.request.contextPath}/AdminController?page=user" >  Back to Dashboard </a> 
                                 </div>
                             </div>

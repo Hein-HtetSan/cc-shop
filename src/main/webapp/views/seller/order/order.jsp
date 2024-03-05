@@ -97,7 +97,7 @@
 						  </ul>
 						</nav>
 
-						<form class="d-flex align-items-center justify-content-center" action="${pageContext.request.contextPath}/SellerController?action=history" method="POST">
+						<form class="d-flex align-items-center justify-content-center" action="${pageContext.request.contextPath}/SellerController" method="POST">
 							<input type="hidden" value="${seller.id}" name="seller_id">
 							<input type="hidden" value="orderFilter" name="action">
 							<select class="form-control" name="date">
@@ -130,7 +130,7 @@
 					  <tbody>
 					    <c:forEach items="${orders}" var="order">
 					    	<tr>
-						      <td><a href="${pageContext.request.contextPath}/OrderController?page=detail&seller_id=${seller.id}&order_code=${order.order_code}" class="btn btn-link fw-bold">${order.order_code}</a></td>
+						      <td><a href="${pageContext.request.contextPath}/OrderController?page=detail&seller_id=${seller.id}&order_code=${order.order_code}&date=${param.date}" class="btn btn-link fw-bold">${order.order_code}</a></td>
 						      <td>${order.customer_name}</td>
 						      <td class="fw-bold text-danger" >${order.product_name}</td>
 						      <td class="">${order.price} MMKs</td>
