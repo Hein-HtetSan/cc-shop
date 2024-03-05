@@ -44,8 +44,10 @@
 
     <!-- Style CSS -->
     <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/landing/style.css">
+
     <link type="text/css" rel="stylesheet" href="${pageContext.request.contextPath}/assets/customer/css/style.css"/>
-    
+
+
     <!--sweet alert cdn link-->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 
@@ -485,12 +487,21 @@
                 <!-- Contact Form Area -->
                 <div class="col-12 col-lg-8" >
                     <div class="contact-form">
+
                         <div action="" method="">
                             <div class="form-group">
                                 <input type="text" class="form-control" required name="name" id="name" placeholder="Your Name">
                             </div>
                             <div class="form-group">
                                 <input type="number" class="form-control" required name="phone" id="number" placeholder="Your Phone">
+
+                        <form action="${pageContext.request.contextPath}/MessageController?action=sendMessage" method="post">
+                            <div class="form-group">
+                                <input type="text" class="form-control" name="name" id="contact-name" placeholder="Your Name">
+                            </div>
+                            <div class="form-group">
+                                <input type="number" class="form-control" name="phone" id="contact-number" placeholder="Your Phone">
+
                             </div>
                             <div class="form-group">
                                 <input type="email" class="form-control" required name="email" id="email" placeholder="Your Email">
@@ -513,7 +524,20 @@
    <%@ include file="./layout/footer.jsp" %>
 <!-- ##### Footer Area End ##### -->
 
+
+
+	<script>
+	var status=document.getElementById("status").value;
+	if(status=="Message Sent Successfully"){
+		Swal.fire({
+			  title: "Success",
+			  text: "Message Sent Successfully",
+			  icon: "success"
+			});
+	}
 	
+	</script>
+
 
     <!-- jQuery (Necessary for All JavaScript Plugins) -->
     <script src="${pageContext.request.contextPath}/assets/landing/js/jquery/jquery-2.2.4.min.js"></script>
@@ -527,6 +551,7 @@
     <script src="${pageContext.request.contextPath}/assets/landing/js/jquery-ui.min.js"></script>
     <!-- Active js -->
     <script src="${pageContext.request.contextPath}/assets/landing/js/active.js"></script>
+
 
 <script>
 $(document).ready(function() {
@@ -584,6 +609,8 @@ $(document).ready(function() {
 
 	
 	</script>
+
+
 
 
 </body>

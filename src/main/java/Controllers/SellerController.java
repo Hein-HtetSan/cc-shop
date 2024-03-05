@@ -1,5 +1,4 @@
 package Controllers;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -30,12 +29,14 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.servlet.http.Part;
 
+
 import org.json.JSONObject;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.mysql.cj.x.protobuf.MysqlxCrud.Order;
 import com.google.gson.JsonObject;
+
 
 import DAO.*;
 import Models.*;
@@ -93,7 +94,12 @@ public class SellerController extends HttpServlet {
 					} catch (ServletException | IOException | SQLException e) {
 						e.printStackTrace();
 					}
+    				break;	
+    			case "detailPage":
+    				dispatcher = request.getRequestDispatcher("/views/seller/detail/detail.jsp");
+    				dispatcher.forward(request, response);
     				break;
+    				
     			
     			case "order":
 					orderPage(request, response);
