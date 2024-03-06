@@ -389,6 +389,40 @@ public class OrderDAO {
 			return orders;
 		}
 		
+		public List<Orders> getByOrderCodeToShip(String order_code){
+			List<Orders> orders = new ArrayList<Orders>();
+			String query = "SELECT orders.*,products.name as product_name, customers.name as customer_name "
+					+ "FROM orders "
+					+ "LEFT JOIN products ON orders.product_id = products.id "
+					+ "LEFT JOIN addresses ON orders.shipping_id = addresses.id "
+					+ "LEFT JOIN customers ON customers.id = orders.customer_id "
+					+ "WHERE orders.status = 2 AND orders.order_code = ?";
+			try {
+				pst = con.prepareStatement(query);
+				pst.setString(1, order_code);
+				rs = pst.executeQuery();
+				while(rs.next()) {
+					Orders order = new Orders();
+					order.setId(rs.getInt("id"));
+					order.setCustomer_id(rs.getInt("customer_id"));
+					order.setOrder_code(rs.getString("order_code"));
+					order.setPrice(rs.getInt("price"));
+					order.setCount(rs.getInt("count"));
+					order.setProduct_id(rs.getInt("product_id"));
+					order.setShipping_id(rs.getInt("shipping_id"));
+					order.setStatus(rs.getInt("status"));
+					order.setCustomer_name(rs.getString("customer_name"));
+					order.setProduct_name(rs.getString("product_name"));
+					order.setUpdated_at(rs.getString("updated_at"));
+					orders.add(order);
+				}
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			return orders;
+		}
+		
 		public List<Orders> getByOrderCodeWithComplete(String order_code, int seller_id){
 			List<Orders> orders = new ArrayList<Orders>();
 			String query = "SELECT orders.*,products.name as product_name, customers.name as customer_name "

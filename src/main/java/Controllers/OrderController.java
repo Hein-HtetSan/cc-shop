@@ -50,6 +50,10 @@ public class OrderController extends HttpServlet {
 				detailOfOrder(request, response);
 				break;
 				
+			case "detailToShip":
+				detailToShip(request, response);
+				break;
+				
 			case "detailOfHistory":
 				detailOfOrderCompleted(request, response);
 				break;
@@ -189,12 +193,11 @@ public class OrderController extends HttpServlet {
 	}
 	
 	// order detail
-	private void detailOfOrder(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String seller_id = request.getParameter("seller_id");
+	private void detailToShip(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String order_code = request.getParameter("order_code");
 		String date = request.getParameter("date");
 		
-		List<Orders> orders = orderDAO.getByOrderCodeWithPending(order_code, Integer.parseInt(seller_id)); // get the order code by seller id where the status 0
+		List<Orders> orders = orderDAO.getByOrderCodeToShip(order_code); // get the order code by seller id where the status 0
 		
 		System.out.println(orders);
 		// Get the first order in the list
@@ -218,9 +221,43 @@ public class OrderController extends HttpServlet {
 		request.setAttribute("orders", orders);
 		request.setAttribute("total", total);
 		request.setAttribute("date", date);
-		dispatcher = request.getRequestDispatcher("/views/seller/order/detail.jsp");
+		dispatcher = request.getRequestDispatcher("/views/admin/orderDetail.jsp");
 		dispatcher.forward(request, response);
 	}
+	
+	// order detail
+		private void detailOfOrder(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+			String seller_id = request.getParameter("seller_id");
+			String order_code = request.getParameter("order_code");
+			String date = request.getParameter("date");
+			
+			List<Orders> orders = orderDAO.getByOrderCodeWithPending(order_code, Integer.parseInt(seller_id)); // get the order code by seller id where the status 0
+			
+			System.out.println(orders);
+			// Get the first order in the list
+		    Orders firstOrder = orders.get(0);
+		    // Get the shipping ID of the first order
+		    int shipping_id = firstOrder.getShipping_id();
+		    // Retrieve the address associated with the shipping ID
+		    Address address = addressDAO.getById(shipping_id);
+		    
+		    double total = 0.0;
+		    for(Orders o : orders) {
+		    	double temp = o.getPrice() * o.getCount();
+		    	total += temp;
+		    }
+		    
+		    // get the note
+		    Note note = noteDAO.getByOrderCode(order_code);
+			
+		    request.setAttribute("note", note);
+			request.setAttribute("address", address);
+			request.setAttribute("orders", orders);
+			request.setAttribute("total", total);
+			request.setAttribute("date", date);
+			dispatcher = request.getRequestDispatcher("/views/seller/order/detail.jsp");
+			dispatcher.forward(request, response);
+		}
 	
 	private void detailOfOrderCompleted(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String seller_id = request.getParameter("seller_id");
