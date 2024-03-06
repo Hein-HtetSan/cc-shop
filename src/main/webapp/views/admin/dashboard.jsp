@@ -203,7 +203,7 @@
 										<c:forEach items="${orders}" var="order">
 											<tr>
 												<td>
-													<a class="fw-bold text-primary fs-5" href="">${order.order_code}</a>
+													<a class="fw-bold text-primary fs-5" href="${pageContext.request.contextPath}/OrderController?page=detailToShip&order_code=${order.order_code}">${order.order_code}</a>
 												</td>
 												<td class="text-secondary fw-bold">Ready to ship?</td>
 												<td> ${order.updated_at}</td>
@@ -247,6 +247,10 @@
 								<div class="d-flex aling-items-center justify-content-between">
 									<h5 class="fw-bold">Messages <i class="las la-track"></i></h5>		
 								</div>
+								
+								<c:if test="${messages.size() == 0 }">
+								<h5>No messages!</h5>
+								</c:if>
 								
 								<c:forEach items="${messages}" var="msg">
 								<div class="card mt-2">
