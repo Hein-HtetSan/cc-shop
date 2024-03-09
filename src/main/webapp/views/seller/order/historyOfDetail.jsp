@@ -88,23 +88,18 @@
 				</div>
 				
 				<!-- notes -->
-				<div class="card shadow rounded">
-					<div class="card-header">
-						<h5  class="w-bold text-primary"><i class="las la-file"></i> Note</h5>
-					</div>
-					<c:choose>
-						<c:when test="${note != null }">
+				<c:choose>
+						<c:when test="${note.text != ''  }">
+						<div class="card shadow rounded">
+							<div class="card-header">
+								<h5  class="w-bold text-primary"><i class="las la-file"></i> Note</h5>
+							</div>
 							<div class="card-body">
 								<p>${note.text }</p>
 							</div>
+						</div>
 						</c:when>
-						<c:otherwise>
-							<div class="card-body">
-								<p>No note for this order</p>
-							</div>
-						</c:otherwise>
 					</c:choose>
-				</div>
 			
 				<a class="btn btn-primary " href="${pageContext.request.contextPath}/SellerController?page=history&seller_id=${seller.id}">Understand</a>
 			</div>

@@ -195,9 +195,10 @@ public class OrderController extends HttpServlet {
 	// order detail
 	private void detailToShip(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String order_code = request.getParameter("order_code");
+		String product_id = request.getParameter("product_id");
 		String date = request.getParameter("date");
 		
-		List<Orders> orders = orderDAO.getByOrderCodeToShip(order_code); // get the order code by seller id where the status 0
+		List<Orders> orders = orderDAO.getByOrderCodeToShip(order_code, Integer.parseInt(product_id)); // get the order code by seller id where the status 0
 		
 		System.out.println(orders);
 		// Get the first order in the list
@@ -282,7 +283,6 @@ public class OrderController extends HttpServlet {
 	    Note note = noteDAO.getByOrderCode(order_code);
 		
 	    request.setAttribute("note", note);
-		
 		request.setAttribute("address", address);
 		request.setAttribute("orders", orders);
 		request.setAttribute("total", total);

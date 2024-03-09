@@ -78,7 +78,7 @@
 									</div>
 									<div class="form-group">
 										<label class="form-label">Email</label>
-										<input class="form-control" name="email" type="email" value="${user.email}">
+										<input class="form-control" name="email" type="email" value="${user.email}" >
 									</div>
 									<div class="form-group">
 										<label class="form-label">Phone</label>
