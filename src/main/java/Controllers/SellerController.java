@@ -321,7 +321,7 @@ public class SellerController extends HttpServlet {
 		try {
 			List<Orders> orders = null;
 			Seller seller = sellerDAO.getById(Integer.parseInt(seller_id));
-			if(filter.equals("")) {
+			if(filter == null || filter.equals("")) {
 				orders = orderDAO.getBySellerWithPaginationWithComplete(Integer.parseInt(seller_id), (page_number-1)*recordsPerPage,
 	                    recordsPerPage, "all");
 			}else {
@@ -340,7 +340,7 @@ public class SellerController extends HttpServlet {
 			request.setAttribute("seller", seller);
 			request.setAttribute("orders", orders);
 			request.setAttribute("total_order", total_order.size());
-			
+			request.setAttribute("filter", filter);
 			dispatcher = request.getRequestDispatcher("/views/seller/order/history.jsp");
 			dispatcher.forward(request, response);
 		} catch (NumberFormatException | SQLException e) {

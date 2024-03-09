@@ -389,17 +389,18 @@ public class OrderDAO {
 			return orders;
 		}
 		
-		public List<Orders> getByOrderCodeToShip(String order_code){
+		public List<Orders> getByOrderCodeToShip(String order_code, int product_id){
 			List<Orders> orders = new ArrayList<Orders>();
 			String query = "SELECT orders.*,products.name as product_name, customers.name as customer_name "
 					+ "FROM orders "
 					+ "LEFT JOIN products ON orders.product_id = products.id "
 					+ "LEFT JOIN addresses ON orders.shipping_id = addresses.id "
 					+ "LEFT JOIN customers ON customers.id = orders.customer_id "
-					+ "WHERE orders.status = 2 AND orders.order_code = ?";
+					+ "WHERE orders.order_code = ? AND orders.product_id = ?";
 			try {
 				pst = con.prepareStatement(query);
 				pst.setString(1, order_code);
+				pst.setInt(2, product_id);
 				rs = pst.executeQuery();
 				while(rs.next()) {
 					Orders order = new Orders();
@@ -430,7 +431,7 @@ public class OrderDAO {
 					+ "LEFT JOIN products ON orders.product_id = products.id "
 					+ "LEFT JOIN addresses ON orders.shipping_id = addresses.id "
 					+ "LEFT JOIN customers ON customers.id = orders.customer_id "
-					+ "WHERE orders.status = 1 AND orders.order_code = ? AND products.seller_id = ?";
+					+ "WHERE orders.order_code = ? AND products.seller_id = ?";
 			try {
 				pst = con.prepareStatement(query);
 				pst.setString(1, order_code);

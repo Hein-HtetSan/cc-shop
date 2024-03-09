@@ -159,7 +159,7 @@
 										            <span class="">Postal Code - ${address.postal_code}</span>
 										        </div>
 										    </div>
-										    <a href="${pageContext.request.contextPath}/AddressController?action=delete&id=${address.id}&user_id=${customer.id}" class="remove-btn" style="">Remove</a>
+										    <!-- <a href="${pageContext.request.contextPath}/AddressController?action=delete&id=${address.id}&user_id=${customer.id}" class="remove-btn" style="">Remove</a> -->
 										</div>
 										</c:forEach>
 										<!-- end of address card -->

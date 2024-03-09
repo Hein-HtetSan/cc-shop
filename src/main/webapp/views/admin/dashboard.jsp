@@ -203,7 +203,7 @@
 										<c:forEach items="${orders}" var="order">
 											<tr>
 												<td>
-													<a class="fw-bold text-primary fs-5" href="${pageContext.request.contextPath}/OrderController?page=detailToShip&order_code=${order.order_code}">${order.order_code}</a>
+													<a class="fw-bold text-primary fs-5" href="${pageContext.request.contextPath}/OrderController?page=detailToShip&order_code=${order.order_code}&product_id=${order.product_id}">${order.order_code}</a>
 												</td>
 												<td class="text-secondary fw-bold">Ready to ship?</td>
 												<td> ${order.updated_at}</td>

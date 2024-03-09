@@ -97,7 +97,7 @@
                                 	</div>	
                                 	<div class="form-group" style="margin-bottom: -1rem !important;">
                                 		<lable class="form-label" for="email">Email</lable>
-                                		<input type="email" name="email" value="${seller.email }" class="form-control">
+                                		<input type="email" name="email" value="${seller.email }" class="form-control" >
                                 	</div>
                                 	<div class="form-group" style="margin-bottom: -1rem !important;">
                                 		<lable class="form-label" for="phone">Phone</lable>

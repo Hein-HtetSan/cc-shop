@@ -53,9 +53,6 @@
 						<div class="d-flex align-items-center justify-content-between mb-2">
 							Name: <span class="fw-bold text-secondary">${orders[0].customer_name}</span>
 						</div>
-						<div class="d-flex align-items-center justify-content-between mb-2">
-							Seller: <span class="fw-bold text-secondary">${seller.name}</span>
-						</div>
 						<div class="d-flex align-items-center justify-content-between ">
 							Order Code:  <span class="fw-bold text-info">${orders[0].order_code}</span>
 						</div>

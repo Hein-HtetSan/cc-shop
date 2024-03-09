@@ -80,15 +80,7 @@
                             <div class="hero-slides-content" style="display: flex; flex-direction: column; justify-content: center;
                             align-items: center;">
                                 <h2 data-animation="fadeInUp" data-delay="100ms">Stay Home, Shop Online</h2>
-                                
-                                <div>
-                                	<button style="width: 200px; height: 50px; margin-top: 20px;
-                                	color: #fff; font-weight: 500; border: 2px solid #fff;" id="shopnow">Start Shopping</button>
-                                	
-                                	<button style="width: 200px; height: 50px; margin-top: 20px;
-                                	color: #000; font-weight: 700; border: 2px solid #fff; background-color: #ccc !important;" id="shopnow">Get Started</button>
-                                </div>
-                                
+                                                         
                             </div>
                         </div>
                     </div>
