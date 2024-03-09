@@ -21,10 +21,10 @@ Let me explain,
 - order the product with a note, shipping address
 - review the history of the package and order detail in real time ( success, pending, at headquarters, on the way, arrived )
 
-  ### Admin
-  - review user, seller, and product count in admin dashboard
-  - manage product category and business type for seller account creating
-  - review real-time dashboard
+### Admin
+- review user, seller, and product count in admin dashboard
+- manage product category and business type for seller account creating
+- review real-time dashboard
  
 ## Project Flow and Database Diagram
 
