@@ -22,7 +22,7 @@
 			<div class="main-panel">
 				<div class="content">
 					<div class="container-fluid">
-						<h4 class="page-title">   Businesses</h4>
+						<h4 class="page-title">Commercial Types</h4>
 						
 						<c:if test="${not empty success }">
 						<div class="alert alert-success text-center " role="alert" id="errorAlert">
@@ -40,7 +40,7 @@
 	                        <div class="col-12 col-md-5">
 	                            	<div class="card shadow">
 	                            		<div class="card-header">
-	                            			<h6 class="text-center fw-semibold"> <i class="las la-list"></i> Add Business</h6>
+	                            			<h6 class="text-center fw-semibold"> <i class="las la-list"></i> Add Commercial Type</h6>
 	                            		</div>
 	                            		<div class="card-body">
 	                            			<form method="post" action="${pageContext.request.contextPath}/BusinessController?action=addBusiness">
@@ -48,7 +48,7 @@
 	                            				<input type="hidden" name="action" value="saveCategory">
                             					<label class="form-label" for="name">Name</label>
                             					<input type="text" placeholder="Enter business name" name="name" class="form-control mb-4" required>
-                            					<button class="btn btn-primary"> <i class="las la-save"></i> Add Business</button>
+                            					<button class="btn btn-primary"> <i class="las la-save"></i> Add Commercial</button>
                             				</div>
                             			</form>
                             		</div>
@@ -113,7 +113,7 @@
 														</c:forEach>
 													</c:if>
 													<c:if test="${businessList == null}">
-												        <p class="text-danger fw-semibold fs-5 text-center">No Business here.</p>
+												        <p class="text-danger fw-semibold fs-5 text-center">No Commercial Types here.</p>
 												    </c:if>
 													<!-- #### Table body ####  -->
 												</tbody>

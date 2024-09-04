@@ -3,20 +3,6 @@ package Models;
 public class Message {
 
 
-	private int id;
-	private String name;
-	private String email;
-	private String phone;
-	private String message;
-	private String updated_at;
-	
-	public String getUpdated_at() {
-		return updated_at;
-	}
-	public void setUpdated_at(String updated_at) {
-		this.updated_at = updated_at;
-	}
-
 	
 	private int id;
 	private String name;
@@ -25,6 +11,15 @@ public class Message {
 	private String message;
 	private String createdAt;
 	private String updatedAt;
+	
+	private String updated_at;
+	
+	public String getUpdated_at() {
+		return updated_at;
+	}
+	public void setUpdated_at(String updated_at) {
+		this.updated_at = updated_at;
+	}
 	
 
 	public int getId() {
@@ -52,13 +47,6 @@ public class Message {
 	}
 	public void setPhone(String phone) {
 		this.phone = phone;
-	}
-
-	public String getEmail() {
-		return email;
-	}
-	public void setEmail(String email) {
-		this.email = email;
 	}
 
 	public String getMessage() {

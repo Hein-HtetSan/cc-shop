@@ -22,14 +22,14 @@
 			<div class="main-panel">
 				<div class="content">
 					<div class="container-fluid">
-						<h4 class="page-title">  Edit Business</h4>
+						<h4 class="page-title">  Edit Commercial Type</h4>
 
                         <!-- Content goes here  -->
                         <div class="row">
 	                        <div class="col-12 col-md-5 offset-md-3">
 	                            	<div class="card shadow">
 	                            		<div class="card-header">
-	                            			<h6 class="text-center fw-semibold"> <i class="las la-edit"></i> Edit Business</h6>
+	                            			<h6 class="text-center fw-semibold"> <i class="las la-edit"></i> Edit Commercial Type</h6>
 	                            		</div>
 	                            		<div class="card-body">
 	                            			<form method="post" action="${pageContext.request.contextPath}/BusinessController?action=updateBusiness">
@@ -38,7 +38,7 @@
                             					<input type="hidden" name="business_id" value="${business.id}">
                             					<input type="text" placeholder="Enter business name" name="name" value="${business.name}" class="form-control mb-4" required>
                             					<a href="${pageContext.request.contextPath}/AdminController?page=business" class="btn btn-secondary"> <i class="las la-arrow-left"></i> Cancel</a>
-                            					<button class="btn btn-primary"> <i class="las la-save"></i> Update Business</button>
+                            					<button class="btn btn-primary"> <i class="las la-save"></i> Update Commercial Type</button>
                             				</div>
                             			</form>
                             		</div>
