@@ -30,25 +30,3 @@ Let me explain,
 
 
 
-## Snapshot of our product
-
-### Customer pages
-
-| ![image](https://github.com/Hein-HtetSan/cc-shop/assets/99192842/7e8fdcfb-5c3b-4c9d-a6fa-359973389f49) | ![image](https://github.com/Hein-HtetSan/cc-shop/assets/99192842/8028f49b-29cd-4b18-820c-64881926042d) |
-|----|----|
-| ![image](https://github.com/Hein-HtetSan/cc-shop/assets/99192842/555ac0b0-8770-40a2-b60f-0e91f65380d7) | ![image](https://github.com/Hein-HtetSan/cc-shop/assets/99192842/3b36d87e-12e0-472f-9eab-23ff29f27e7f) |
-|----|----|
-| ![image](https://github.com/Hein-HtetSan/cc-shop/assets/99192842/3a4fd8ea-38d9-4b19-99d7-332383eae1a7) | ![image](https://github.com/Hein-HtetSan/cc-shop/assets/99192842/f172136f-d7ed-40de-a4a3-becfa3f94593) |
-|----|----|
-| ![image](https://github.com/Hein-HtetSan/cc-shop/assets/99192842/05ec3a6f-70b9-4d55-b09b-c45f8427fad4) | ![image](https://github.com/Hein-HtetSan/cc-shop/assets/99192842/6d40fa6e-a23e-4627-9ffe-eccf949c8b25) |
-|----|----|
-| ![image](https://github.com/Hein-HtetSan/cc-shop/assets/99192842/7cc09710-55a4-4a46-8d09-f13b15b1340d) | ![image](https://github.com/Hein-HtetSan/cc-shop/assets/99192842/75252e0f-7c11-4b73-8e93-614b6db6c7c0) |
-|----|----|
-
-### Seller pages
-
-|---|---|
-|   |   |
-|---|---|
-|   |   |
-|---|---|
