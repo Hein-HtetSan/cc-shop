@@ -1,9 +1,26 @@
-## CC-shop Online Shopping Project
+# CC-shop Online Shopping Project
+
+## Contributers
+
+- Hein Htet San
+- Kyaw Thuta Oo
+- Htet Aung Hlyang
+- Lynn Myat Bhone
+
+## Insitute
+
+- University of Computer Studies, Yangon (UCSY)
+
+## Supervisor
+
+- Tr. Dr. Daw Aye Mya Hlaing
+
 
 We built this project because we want to create the POS system using J2EE technologies which consist of many tech stacks - JDBC, JavaServlet, JSP, and other Java libraries. In this UI design, we reference some online sources.
 We gained a lot of experience in building this project, we have to consider the complex structure of how to make the interaction between User > Seller > Admin. In this project we use 
 the **javax.mail** for real-time notification and other js libs like sweertalert and chart.js for real-time analysis. We also use the **OTP system for password changing and saving the password in the format of BCrypt** 
-Let me explain, 
+
+## Breaking down of the structure
 
 ### Seller 
 - login or register seller account
