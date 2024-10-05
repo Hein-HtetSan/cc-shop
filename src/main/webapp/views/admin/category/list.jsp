@@ -46,6 +46,16 @@
 	                            			<form method="post" action="${pageContext.request.contextPath}/CategoryController?action=addCategory">
 	                            				<div class="form-group">
 	                            				<input type="hidden" name="action" value="saveCategory">
+	                            				<div class="form-group">
+									                <label for="" class="form-label">Commercial Type(*)</label>
+									                <select name="business" class="form-control">
+									                	<option value="" selected>Choose Commercial Type</option>
+									                	<c:forEach items="${businesses}" var="business">
+									                		<option value="${business.id}">${business.name}</option>
+									                	</c:forEach>
+									                </select>
+									              </div>
+                            					
                             					<label class="form-label" for="name">Name</label>
                             					<input type="text" placeholder="Enter category name" name="name" class="form-control mb-4" required>
                             					<button class="btn btn-primary"> <i class="las la-save"></i> Add Category</button>
@@ -76,6 +86,7 @@
 														</th>
 														<th>ID</th>
 														<th>Name</th>
+														<th>Type<th>
 														<th>Action</th>
 													</tr>
 												</thead>
@@ -95,6 +106,7 @@
 															</td>
 															<td>${category.id}#</td>
 															<td>${category.name}</td>
+															<td>${category.business_id }</td>
 															<td class="td-actions">
 																<div class="form-button-action">
 																	<a href="${pageContext.request.contextPath}/AdminController?action=editCategory&category_id=${category.id}">

@@ -72,7 +72,7 @@
 						<li class="nav-item ${param.page == 'business' ? 'active' : ''}">
 							<a href="${pageContext.request.contextPath}/AdminController?page=business">
 								<i class="las la-building"></i>
-								<p>Business Type</p>
+								<p>Commercial Type</p>
 								<span class="badge badge-count">${counts.business_count}</span>
 							</a>
 						</li>

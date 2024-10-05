@@ -17,27 +17,34 @@ public class CategoryDAO {
 		con = Config.config.getConnections();
 	}
 	
-	// get all category
-	public List<Category> getAll(int offset, int noOfRecords) throws SQLException{
-		List<Category> categories = null;  // create empty admin list to store admins
-		Category category = null; // create admin object which is from model
-		categories = new ArrayList<Category>(); // create ArrayList admin object
-		String query = "select SQL_CALC_FOUND_ROWS * from categories ORDER BY updated_at DESC limit " + offset + ", " + noOfRecords;
-		statement = con.createStatement(); // create statement
-		resultset = statement.executeQuery(query); // execute that query and store that into resultset variable
-		while(resultset.next()) {  // until end
-			category = new Category(); // create admin object
-			category.setId(resultset.getInt("id"));  // set admin id from admin table's data
-			category.setName(resultset.getString("name"));
-			categories.add(category);
-		}
-		resultset.close();
-		resultset = statement.executeQuery("SELECT FOUND_ROWS()");
-        if(resultset.next()) {
-        	 this.noOfRecords = resultset.getInt(1);
-        }
-		return categories; // return that list
+	public List<Category> getAll(int offset, int noOfRecords) throws SQLException {
+	    List<Category> categories = new ArrayList<Category>(); // create ArrayList to store categories
+	    Category category = null; // create a category object which is from the model
+	    String query = "SELECT SQL_CALC_FOUND_ROWS c.*, b.name as business_name " +
+	                   "FROM categories c " +
+	                   "JOIN businesses b ON c.business_id = b.id " +
+	                   "ORDER BY c.updated_at DESC " +
+	                   "LIMIT " + offset + ", " + noOfRecords;
+	    statement = con.createStatement(); // create statement
+	    resultset = statement.executeQuery(query); // execute the query and store the result in the resultset
+
+	    while(resultset.next()) {  // iterate through the resultset
+	        category = new Category(); // create a new Category object
+	        category.setId(resultset.getInt("id"));  // set category id
+	        category.setName(resultset.getString("name")); // set category name
+	        category.setBusiness_name(resultset.getString("business_name")); // set business name
+	        categories.add(category); // add category to the list
+	    }
+	    
+	    resultset.close();
+	    resultset = statement.executeQuery("SELECT FOUND_ROWS()");
+	    if(resultset.next()) {
+	        this.noOfRecords = resultset.getInt(1); // get the number of records found
+	    }
+
+	    return categories; // return the list of categories
 	}
+
 	
 	// get all businesses
 		public List<Category> get() throws SQLException{

@@ -568,9 +568,13 @@ public class AdminController extends HttpServlet {
         if(error != null) request.setAttribute("error", error);
         if(success != null) request.setAttribute("success", success);
         
+        // also get the business or commercial types
+        List<Business> businesses = businessDAO.get();
+        
         request.setAttribute("categoryList", list);
         request.setAttribute("noOfPages", noOfPages);
         request.setAttribute("currentPage", page_number);
+        request.setAttribute("businesses", businesses);
         dispatcher = request.getRequestDispatcher("views/admin/category/list.jsp"); 
         dispatcher.forward(request, response);
 	}
