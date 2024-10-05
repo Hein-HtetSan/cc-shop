@@ -1,6 +1,9 @@
 # YaungWal Web Application
 
 ## Semseter 3 (winter semester project)
+## Project Introduction
+
+The POS system is designed to facilitate seamless interactions between Users, Sellers, and Admins. By utilizing J2EE frameworks, we created a robust and secure platform that integrates modern user interface elements and real-time data analysis tools.
 
 ## Contributers
 
@@ -17,10 +20,9 @@
 
 - Tr. Dr. Daw Aye Mya Hlaing
 
+## Project Overview
 
-We built this project because we want to create the POS system using J2EE technologies which consist of many tech stacks - JDBC, JavaServlet, JSP, and other Java libraries. In this UI design, we reference some online sources.
-We gained a lot of experience in building this project, we have to consider the complex structure of how to make the interaction between User > Seller > Admin. In this project we use 
-the **javax.mail** for real-time notification and other js libs like sweertalert and chart.js for real-time analysis. We also use the **OTP system for password changing and saving the password in the format of BCrypt** 
+This project focuses on developing a Point of Sale (POS) system using J2EE technologies, including JDBC, JavaServlet, JSP, and additional Java libraries. It offers key features such as real-time notifications through javax.mail, dynamic data analysis using SweetAlert and Chart.js, and an OTP system for secure password changes, with passwords stored in BCrypt format.
 
 ## Breaking down of the structure
 
