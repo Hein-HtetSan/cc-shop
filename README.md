@@ -1,4 +1,6 @@
-# CC-shop Online Shopping Project
+# YaungWal Web Application
+
+## Semseter 3 (winter semester project)
 
 ## Contributers
 
